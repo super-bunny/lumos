@@ -44,6 +44,6 @@ jobs:
         run: yarn install
 
       - name: Build binaries (will create GitHub release)
-        run: yarn build --publish always
+        run: yarn run publish
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
