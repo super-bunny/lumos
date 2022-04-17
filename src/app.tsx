@@ -1,14 +1,11 @@
-import * as React from 'react'
-import { createRoot } from 'react-dom/client'
-import { CssBaseline, ThemeProvider } from '@mui/material'
-import theme from './theme'
+import React from 'react'
+import { Box } from '@mui/material'
+import { Outlet } from 'react-router-dom'
 
-const root = createRoot(document.getElementById('root')!)
-
-root.render(
-  <ThemeProvider theme={ theme }>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */ }
-    <CssBaseline/>
-    <h2>Hello from React!</h2>
-  </ThemeProvider>,
-)
+export default function app() {
+  return (
+    <Box height={ 1 } overflow={ 'auto' }>
+      <Outlet/>
+    </Box>
+  )
+}
