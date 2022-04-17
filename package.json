@@ -63,6 +63,15 @@
               ]
             }
           }
+        ],
+        [
+          "@timfish/forge-externals-plugin",
+          {
+            "externals": [
+              "ddc-enhanced-rs"
+            ],
+            "includeDeps": true
+          }
         ]
       ],
       "publishers": [
@@ -84,13 +93,14 @@
     }
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.54",
-    "@electron-forge/maker-deb": "^6.0.0-beta.54",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
-    "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.54",
+    "@electron-forge/cli": "^6.0.0-beta.63",
+    "@electron-forge/maker-deb": "^6.0.0-beta.63",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+    "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "@electron-forge/plugin-webpack": "6.0.0-beta.63",
     "@electron-forge/publisher-github": "^6.0.0-beta.63",
+    "@timfish/forge-externals-plugin": "^0.1.2",
     "@types/react": "^18.0.4",
     "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
@@ -100,7 +110,8 @@
     "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.20.0",
     "fork-ts-checker-webpack-plugin": "^5.0.14",
-    "node-loader": "0.6.0",
+    "node-loader": "^2.0.0",
+    "path-browserify": "^1.0.1",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",
     "typescript": "^4.0.2"

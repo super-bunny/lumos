@@ -1,10 +1,10 @@
-const rules = require('./webpack.rules');
-const plugins = require('./webpack.plugins');
+const rules = require('./webpack.rules')
+const plugins = require('./webpack.plugins')
 
 rules.push({
   test: /\.css$/,
   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
-});
+})
 
 module.exports = {
   module: {
@@ -12,6 +12,10 @@ module.exports = {
   },
   plugins: plugins,
   resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css']
+    fallback: { 'path': require.resolve('path-browserify') },
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
   },
-};
+  externals: {
+    'ddc-enhanced-rs': 'commonjs2 ddc-enhanced-rs',
+  },
+}
