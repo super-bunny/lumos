@@ -64,6 +64,22 @@
             }
           }
         ]
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "platforms": [
+            "win32",
+            "darwin",
+            "linux"
+          ],
+          "config": {
+            "repository": {
+              "owner": "super-bunny",
+              "name": "lumos"
+            }
+          }
+        }
       ]
     }
   },
@@ -74,6 +90,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "@electron-forge/plugin-webpack": "6.0.0-beta.54",
+    "@electron-forge/publisher-github": "^6.0.0-beta.63",
     "@types/react": "^18.0.4",
     "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
