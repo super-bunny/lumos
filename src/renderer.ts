@@ -28,6 +28,12 @@
 
 import './index.css'
 import './root.tsx'
+import { mockDisplayLib } from './mockDisplayLib'
+
+if (process.env.MOCK_DISPLAY_LIB === 'true') {
+  console.info('Mocking Display lib')
+  mockDisplayLib()
+}
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack')
 
