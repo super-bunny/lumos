@@ -14,6 +14,13 @@ jobs:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
 
     steps:
+      - name: Install libudev-dev on Linux
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+               sudo apt-get install libudev-dev -y
+          fi
+        shell: bash
+
       - name: Set git to use LF
         run: |
           git config --global core.autocrlf false
