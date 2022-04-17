@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import theme from './theme'
 
-const root = createRoot(document.getElementById('root'))
+const root = createRoot(document.getElementById('root')!)
 
 root.render(
   <ThemeProvider theme={ theme }>
