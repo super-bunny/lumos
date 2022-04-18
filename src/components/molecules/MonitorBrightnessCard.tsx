@@ -32,7 +32,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
   // Retrieve monitor brightness
   useEffect(() => {
-    setBrightness(new DisplayEnhanced(monitor.uuid).getBrightnessPercentage())
+    setBrightness(new DisplayEnhanced(monitor.id).getBrightnessPercentage())
     setLoading(false)
   }, [])
 
@@ -40,7 +40,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   useEffect(() => {
     console.info(`Set ${ monitor.model_name } monitor brightness to:`, brightness)
     try {
-      new DisplayEnhanced(monitor.uuid).setBrightnessPercentage(brightness)
+      new DisplayEnhanced(monitor.id).setBrightnessPercentage(brightness)
     } catch (e) {
       console.error(e)
     }

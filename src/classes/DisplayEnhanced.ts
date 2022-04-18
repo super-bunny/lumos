@@ -1,8 +1,8 @@
 import Display from 'ddc-enhanced-rs'
 
 export default class DisplayEnhanced extends Display {
-  constructor(uuid: string) {
-    super(uuid)
+  constructor(id: number) {
+    super(id)
   }
 
   getBrightnessPercentage(): number {
