@@ -21,7 +21,7 @@ export default function MonitorList({ sx }: Props) {
     >
       { monitors.map(monitor => <MonitorBrightnessCard key={ monitor.id } monitor={ monitor }/>) }
       { monitors.length === 0 &&
-        <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>No monitors found</Typography> }
+        <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>No supported monitors found</Typography> }
     </Stack>
   )
 }

@@ -19,6 +19,7 @@ const StyledInput = styled(Input)({
 })
 
 export default function MonitorBrightnessCard({ monitor }: Props) {
+  const [supportDDC, setSupportDDC] = useState<boolean>()
   const [brightness, setBrightness] = useState(0)
   const [loading, setLoading] = useState(true)
 
@@ -30,9 +31,17 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
     setBrightness(brightness => Math.max(0, Math.min(100, (brightness + valueToAdd) || 0)))
   }, [setBrightness])
 
-  // Retrieve monitor brightness
+  // Check if monitor support DDC protocol and retrieve monitor brightness if supported
   useEffect(() => {
-    setBrightness(new DisplayEnhanced(monitor.id).getBrightnessPercentage())
+    const display = new DisplayEnhanced(monitor.id)
+    const supportDDC = display.does_support_ddc()
+
+    if (!supportDDC) {
+      setSupportDDC(false)
+      return
+    }
+
+    setBrightness(display.getBrightnessPercentage())
     setLoading(false)
   }, [])
 
@@ -55,26 +64,34 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
       <Divider sx={ { my: 1 } }/>
 
-      <Typography variant={ 'overline' } fontSize={ '1.2em' } textAlign={ 'center' }>Brightness</Typography>
+      { !supportDDC && (
+        <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>Monitor not supported</Typography>
+      ) }
 
-      <StyledInput
-        disabled={ loading }
-        value={ brightness.toString() }
-        onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
-        inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
-        endAdornment={ <Typography variant={ 'caption' } color={ 'initial' } fontSize={ 20 }>%</Typography> }
-        color={ 'primary' }
-        sx={ { fontSize: 80, color: theme => theme.palette.primary.main } }
-      />
+      { supportDDC && (
+        <>
+          <Typography variant={ 'overline' } fontSize={ '1.2em' } textAlign={ 'center' }>Brightness</Typography>
 
-      <Stack mt={ 2 } direction="row" alignItems={ 'center' } spacing={ 2 } sx={ { mb: 1 } }>
-        <Slider
-          disabled={ loading }
-          value={ brightness }
-          onChange={ (event, value) => setBrightness(value as number) }
-          valueLabelDisplay="auto"
-        />
-      </Stack>
+          <StyledInput
+            disabled={ loading }
+            value={ brightness.toString() }
+            onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
+            inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
+            endAdornment={ <Typography variant={ 'caption' } color={ 'initial' } fontSize={ 20 }>%</Typography> }
+            color={ 'primary' }
+            sx={ { fontSize: 80, color: theme => theme.palette.primary.main } }
+          />
+
+          <Stack mt={ 2 } direction="row" alignItems={ 'center' } spacing={ 2 } sx={ { mb: 1 } }>
+            <Slider
+              disabled={ loading }
+              value={ brightness }
+              onChange={ (event, value) => setBrightness(value as number) }
+              valueLabelDisplay="auto"
+            />
+          </Stack>
+        </>
+      ) }
     </Paper>
   )
 }
