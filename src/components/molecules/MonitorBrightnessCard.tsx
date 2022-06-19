@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { DisplayInfo } from 'ddc-enhanced-rs'
 import { Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
 import DisplayEnhanced from '../../classes/DisplayEnhanced'
+import Center from '../atoms/Center'
 
 export type Monitor = DisplayInfo
 
@@ -34,13 +35,14 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   // Check if monitor support DDC protocol and retrieve monitor brightness if supported
   useEffect(() => {
     const display = new DisplayEnhanced(monitor.id)
-    const supportDDC = display.does_support_ddc()
+    const supportDDC = monitor.mccs_version !== undefined
 
     if (!supportDDC) {
       setSupportDDC(false)
       return
     }
 
+    setSupportDDC(true)
     setBrightness(display.getBrightnessPercentage())
     setLoading(false)
   }, [])
@@ -58,40 +60,44 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   return (
     <Paper
       onWheel={ event => addBrightnessInRange(Math.sign(event.deltaY) * BRIGHTNESS_STEP) }
-      sx={ { width: 300, p: 2, textAlign: 'center' } }
+      sx={ { width: 320, height: 320, p: 2, textAlign: 'center' } }
     >
-      <Typography variant={ 'h4' } textAlign={ 'center' } noWrap>{ monitor.model_name }</Typography>
+      <Stack height={ 1 } direction={ 'column' }>
+        <Typography variant={ 'h4' } textAlign={ 'center' } noWrap>{ monitor.model_name }</Typography>
 
-      <Divider sx={ { my: 1 } }/>
+        <Divider sx={ { my: 1 } }/>
 
-      { !supportDDC && (
-        <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>Monitor not supported</Typography>
-      ) }
+        { !supportDDC && (
+          <Center>
+            <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>Monitor not supported</Typography>
+          </Center>
+        ) }
 
-      { supportDDC && (
-        <>
-          <Typography variant={ 'overline' } fontSize={ '1.2em' } textAlign={ 'center' }>Brightness</Typography>
+        { supportDDC && (
+          <>
+            <Typography variant={ 'overline' } fontSize={ '1.2em' } textAlign={ 'center' }>Brightness</Typography>
 
-          <StyledInput
-            disabled={ loading }
-            value={ brightness.toString() }
-            onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
-            inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
-            endAdornment={ <Typography variant={ 'caption' } color={ 'initial' } fontSize={ 20 }>%</Typography> }
-            color={ 'primary' }
-            sx={ { fontSize: 80, color: theme => theme.palette.primary.main } }
-          />
-
-          <Stack mt={ 2 } direction="row" alignItems={ 'center' } spacing={ 2 } sx={ { mb: 1 } }>
-            <Slider
+            <StyledInput
               disabled={ loading }
-              value={ brightness }
-              onChange={ (event, value) => setBrightness(value as number) }
-              valueLabelDisplay="auto"
+              value={ brightness.toString() }
+              onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
+              inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
+              endAdornment={ <Typography variant={ 'caption' } color={ 'initial' } fontSize={ 20 }>%</Typography> }
+              color={ 'primary' }
+              sx={ { fontSize: 80, color: theme => theme.palette.primary.main } }
             />
-          </Stack>
-        </>
-      ) }
+
+            <Stack mt={ 2 } direction="row" alignItems={ 'center' } spacing={ 2 } sx={ { mb: 1 } }>
+              <Slider
+                disabled={ loading }
+                value={ brightness }
+                onChange={ (event, value) => setBrightness(value as number) }
+                valueLabelDisplay="auto"
+              />
+            </Stack>
+          </>
+        ) }
+      </Stack>
     </Paper>
   )
 }

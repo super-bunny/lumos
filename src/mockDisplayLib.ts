@@ -8,6 +8,8 @@ export function mockDisplayLib() {
       manufacturer_id: 'AOC_994368003',
       serial_number: '0589524898840054',
       model_name: 'AOC 25JTD',
+      mccs_version: '1',
+      backend: 'test_backend',
     },
     {
       id: 98600229770079,
@@ -15,6 +17,8 @@ export function mockDisplayLib() {
       manufacturer_id: 'ASUS_00556883357',
       serial_number: '0089481423986830651',
       model_name: 'ASUS JKUI87',
+      mccs_version: '1',
+      backend: 'test_backend',
     },
     {
       id: 813300800873,
@@ -22,6 +26,8 @@ export function mockDisplayLib() {
       manufacturer_id: 'ASUS_00556883357',
       serial_number: '0089481423986830651',
       model_name: 'ASUS JKUI87',
+      mccs_version: '1',
+      backend: 'test_backend',
     },
     {
       id: 989051972131,
@@ -29,6 +35,8 @@ export function mockDisplayLib() {
       manufacturer_id: 'ASUS_00556883357',
       serial_number: '0089481423986830651',
       model_name: 'ASUS JKUI87',
+      mccs_version: '1',
+      backend: 'test_backend',
     },
     {
       id: 97341900966898,
@@ -36,6 +44,8 @@ export function mockDisplayLib() {
       manufacturer_id: 'ASUS_00556883357',
       serial_number: '0089481423986830651',
       model_name: 'ASUS JKUI87',
+      mccs_version: '1',
+      backend: 'test_backend',
     },
     {
       id: 88723538990,
@@ -43,6 +53,7 @@ export function mockDisplayLib() {
       manufacturer_id: 'ASUS_00556883357',
       serial_number: '0089481423986830651',
       model_name: 'ASUS JKUI87',
+      backend: 'test_backend',
     },
   ]
 

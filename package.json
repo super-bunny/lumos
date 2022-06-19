@@ -122,7 +122,7 @@
     "@mui/icons-material": "^5.6.1",
     "@mui/lab": "^5.0.0-alpha.77",
     "@mui/material": "^5.6.1",
-    "ddc-enhanced-rs": "^1.2.6",
+    "ddc-enhanced-rs": "^1.2.7",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
