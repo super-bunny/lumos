@@ -2268,10 +2268,10 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-ddc-enhanced-rs@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/ddc-enhanced-rs/-/ddc-enhanced-rs-1.1.2.tgz#e2f6e3f4b680c31b40654df3b83bd82a3cbfbda3"
-  integrity sha512-85KU0gpryDV1WfYCTAbtoPeLUESH88ea7BT3DluF1ciMIFsppESkUMQcp8Vh5cx9HPtIuhygo4ZIQfUYW0ichQ==
+ddc-enhanced-rs@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ddc-enhanced-rs/-/ddc-enhanced-rs-1.2.0.tgz#ef5f278d5743d2278f6d58ddaba1d38ce8f8e6c1"
+  integrity sha512-VHktjtrYpFwBWO8K1CMIzdKlVLiKKgMzVOlB27lSl1SllE8G08/XT3xaEIFV1ovx749wnuKhZhUl6isN/MpAew==
   dependencies:
     cargo-cp-artifact "^0.1"
 
