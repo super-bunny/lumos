@@ -1,4 +1,4 @@
-import { Continuous, Display, VCPFeatures, VCPValueType } from 'ddc-rs'
+import { Continuous, Display, VCPFeatures, VCPValue, VCPValueType } from 'ddc-rs'
 
 export interface DisplayInfo {
   index: number
@@ -17,6 +17,8 @@ export interface DisplayInfo {
 }
 
 export default class EnhancedDisplay {
+  cache: Record<number, VCPValue | undefined> = {}
+
   constructor(readonly display: Display) {
   }
 
@@ -51,8 +53,22 @@ export default class EnhancedDisplay {
     return this.info.modelName ?? this.display.displayId
   }
 
-  getVcpLuminance(): Continuous {
-    const value = this.display.getVcpFeature(VCPFeatures.ImageAdjustment.Luminance)
+  getVcpValueFromCache(featureCode: number, forceRefresh = false): VCPValue {
+    const cachedValue = this.cache[featureCode]
+
+    if (cachedValue && !forceRefresh) {
+      return cachedValue
+    }
+
+    const value = this.display.getVcpFeature(featureCode)
+
+    this.cache[featureCode] = value
+
+    return value
+  }
+
+  getVcpLuminance(useCache = false): Continuous {
+    const value = this.getVcpValueFromCache(VCPFeatures.ImageAdjustment.Luminance, !useCache)
 
     if (value.type !== VCPValueType.CONTINUOUS) {
       throw new Error('VCP Luminance (brightness) value type not supported')
@@ -68,8 +84,12 @@ export default class EnhancedDisplay {
   }
 
   setBrightnessPercentage(value: number): void {
-    const { maximumValue } = this.getVcpLuminance()
+    const { maximumValue } = this.getVcpLuminance(true)
 
     this.display.setVcpFeature(VCPFeatures.ImageAdjustment.Luminance, Math.round(value * maximumValue / 100))
+  }
+
+  clearCache(): void {
+    this.cache = {}
   }
 }
