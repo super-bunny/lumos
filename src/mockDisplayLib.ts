@@ -1,69 +1,49 @@
-import Display from 'ddc-enhanced-rs'
+import { Display, VCPValueType } from 'ddc-rs'
 
-export function mockDisplayLib() {
-  Display.info = () => [
-    {
-      id: 5637997970,
-      display_id: 'pojaojda79jononzdoz753poa',
-      manufacturer_id: 'AOC_994368003',
-      serial_number: '0589524898840054',
-      model_name: 'AOC 25JTD',
-      mccs_version: '1',
-      backend: 'test_backend',
-    },
-    {
-      id: 98600229770079,
-      display_id: 'xln95k68KNJYTdks25',
-      manufacturer_id: 'ASUS_00556883357',
-      serial_number: '0089481423986830651',
-      model_name: 'ASUS JKUI87',
-      mccs_version: '1',
-      backend: 'test_backend',
-    },
-    {
-      id: 813300800873,
-      display_id: 'opjaoinfoief8798peonnanda',
-      manufacturer_id: 'ASUS_00556883357',
-      serial_number: '0089481423986830651',
-      model_name: 'ASUS JKUI87',
-      mccs_version: '1',
-      backend: 'test_backend',
-    },
-    {
-      id: 989051972131,
-      display_id: 'ltj64kdo9bck3324odk097',
-      manufacturer_id: 'ASUS_00556883357',
-      serial_number: '0089481423986830651',
-      model_name: 'ASUS JKUI87',
-      mccs_version: '1',
-      backend: 'test_backend',
-    },
-    {
-      id: 97341900966898,
-      display_id: 'ltj64kdo9bck3324odk097',
-      manufacturer_id: 'ASUS_00556883357',
-      serial_number: '0089481423986830651',
-      model_name: 'ASUS JKUI87',
-      mccs_version: '1',
-      backend: 'test_backend',
-    },
-    {
-      id: 88723538990,
-      display_id: 'pqppo74dpadoa08dzaoidnia764598',
-      manufacturer_id: 'ASUS_00556883357',
-      serial_number: '0089481423986830651',
-      model_name: 'ASUS JKUI87',
-      backend: 'test_backend',
-    },
-  ]
+export function mockDisplayLib(): void {
+  // DisplayManager.prototype.list = () => [
+  //   {
+  //     index: 0,
+  //     backend: 'test_backend_1',
+  //     displayId: '097JKTT6YDtcnonzdoz753poa',
+  //   },
+  //   {
+  //     index: 1,
+  //     backend: 'test_backend_1',
+  //     displayId: 'pojaojda79jononzdoz753poa',
+  //   },
+  //   {
+  //     index: 2,
+  //     backend: 'test_backend_1',
+  //     displayId: 'pod8KD9da79j9nf6zdoz753poa',
+  //   },
+  //   {
+  //     index: 3,
+  //     backend: 'test_backend_2',
+  //     displayId: 'K96G7jda79KL9JIY56D5753poa',
+  //   },
+  //   {
+  //     index: 4,
+  //     backend: 'test_backend_2',
+  //     displayId: 'K96G7jda79KL9JIY56D5753poa',
+  //   },
+  //   {
+  //     index: 5,
+  //     backend: 'test_backend_2',
+  //     displayId: 'K96G7jda79KL9JIY56D5753poa',
+  //   },
+  // ]
 
-  Display.prototype.set_brightness = () => undefined
-  Display.prototype.get_brightness = () => {
+  Display.prototype.setTableVcpFeature = () => undefined
+  Display.prototype.setVcpFeature = () => undefined
+  Display.prototype.getVcpFeature = () => {
     const maximum = Math.round(Math.random() * 1000)
 
     return {
+      type: VCPValueType.CONTINUOUS,
+      currentValue: Math.round(Math.random() * maximum),
       value: Math.round(Math.random() * maximum),
-      maximum,
+      maximumValue: maximum,
     }
   }
 }

@@ -68,7 +68,7 @@
           "@timfish/forge-externals-plugin",
           {
             "externals": [
-              "ddc-enhanced-rs"
+              "ddc-rs"
             ],
             "includeDeps": true
           }
@@ -114,7 +114,7 @@
     "path-browserify": "^1.0.1",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",
-    "typescript": "^4.0.2"
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -122,7 +122,7 @@
     "@mui/icons-material": "^5.6.1",
     "@mui/lab": "^5.0.0-alpha.77",
     "@mui/material": "^5.6.1",
-    "ddc-enhanced-rs": "^1.2.7",
+    "ddc-rs": "^0.1.3",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

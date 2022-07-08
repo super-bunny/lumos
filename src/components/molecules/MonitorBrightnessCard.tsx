@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { DisplayInfo } from 'ddc-enhanced-rs'
 import { Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
-import DisplayEnhanced from '../../classes/DisplayEnhanced'
+import EnhancedDisplay from '../../classes/EnhancedDisplay'
 import Center from '../atoms/Center'
 
-export type Monitor = DisplayInfo
+export type Monitor = EnhancedDisplay
 
 export interface Props {
   monitor: Monitor
@@ -34,8 +33,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
   // Check if monitor support DDC protocol and retrieve monitor brightness if supported
   useEffect(() => {
-    const display = new DisplayEnhanced(monitor.id)
-    const supportDDC = monitor.mccs_version !== undefined
+    const supportDDC = monitor.supportDDC()
 
     if (!supportDDC) {
       setSupportDDC(false)
@@ -43,15 +41,15 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
     }
 
     setSupportDDC(true)
-    setBrightness(display.getBrightnessPercentage())
+    setBrightness(monitor.getBrightnessPercentage())
     setLoading(false)
   }, [])
 
   // Set monitor brightness
   useEffect(() => {
-    console.info(`Set ${ monitor.model_name } monitor brightness to:`, brightness)
+    console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightness)
     try {
-      new DisplayEnhanced(monitor.id).setBrightnessPercentage(brightness)
+      monitor.setBrightnessPercentage(brightness)
     } catch (e) {
       console.error(e)
     }
@@ -63,7 +61,11 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
       sx={ { width: 320, height: 320, p: 2, textAlign: 'center' } }
     >
       <Stack height={ 1 } direction={ 'column' }>
-        <Typography variant={ 'h4' } textAlign={ 'center' } noWrap>{ monitor.model_name }</Typography>
+        <Typography
+          variant={ 'h4' }
+          textAlign={ 'center' }
+          noWrap
+        >{ monitor.getDisplayName() }</Typography>
 
         <Divider sx={ { my: 1 } }/>
 

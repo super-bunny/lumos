@@ -16,6 +16,6 @@ module.exports = {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
   },
   externals: {
-    'ddc-enhanced-rs': 'commonjs2 ddc-enhanced-rs',
+    'ddc-rs': 'commonjs2 ddc-rs',
   },
 }

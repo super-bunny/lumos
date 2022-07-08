@@ -29,14 +29,14 @@
 import './index.css'
 import './root.tsx'
 import { mockDisplayLib } from './mockDisplayLib'
-import Display from 'ddc-enhanced-rs'
+import { DisplayManager } from 'ddc-rs'
 
 if (process.env.MOCK_DISPLAY_LIB === 'true') {
   console.info('Mocking Display lib')
   mockDisplayLib()
 }
 
-console.info('Monitors:', Display.info())
+console.info('Monitors:', new DisplayManager().list())
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack')
 

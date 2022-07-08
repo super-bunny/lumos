@@ -1,14 +1,15 @@
 import React from 'react'
-import Display from 'ddc-enhanced-rs'
+import { DisplayManager } from 'ddc-rs'
 import { Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from './molecules/MonitorBrightnessCard'
+import EnhancedDisplay from '../classes/EnhancedDisplay'
 
 export interface Props {
   sx?: SxProps
 }
 
 export default function MonitorList({ sx }: Props) {
-  const monitors = Display.info()
+  const monitors = new DisplayManager().list()
 
   return (
     <Stack
@@ -19,7 +20,10 @@ export default function MonitorList({ sx }: Props) {
       gap={ 4 }
       sx={ sx }
     >
-      { monitors.map(monitor => <MonitorBrightnessCard key={ monitor.id } monitor={ monitor }/>) }
+      { monitors.map(monitor => <MonitorBrightnessCard
+        key={ monitor.index }
+        monitor={ new EnhancedDisplay(monitor) }
+      />) }
       { monitors.length === 0 &&
         <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>No supported monitors found</Typography> }
     </Stack>
