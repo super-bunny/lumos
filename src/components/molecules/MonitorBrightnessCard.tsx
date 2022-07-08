@@ -62,7 +62,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
   return (
     <Paper
-      onWheel={ event => addBrightnessInRange(Math.sign(event.deltaY) * BRIGHTNESS_STEP) }
+      onWheel={ event => addBrightnessInRange(Math.sign(event.deltaY) * BRIGHTNESS_STEP * -1) }
       sx={ { width: 320, height: 320, p: 2, textAlign: 'center' } }
     >
       <Stack height={ 1 } direction={ 'column' }>
