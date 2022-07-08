@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
 import EnhancedDisplay from '../../classes/EnhancedDisplay'
 import Center from '../atoms/Center'
+import Loader from '../atoms/Loader'
 
 export type Monitor = EnhancedDisplay
 
@@ -72,13 +73,15 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
         <Divider sx={ { my: 1 } }/>
 
-        { !supportDDC && (
+        { loading && <Loader title={ 'Loading monitor brightness...' }/> }
+
+        { !loading && !supportDDC && (
           <Center>
             <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>Monitor not supported</Typography>
           </Center>
         ) }
 
-        { supportDDC && (
+        { !loading && supportDDC && (
           <>
             <Typography variant={ 'overline' } fontSize={ '1.2em' } textAlign={ 'center' }>Brightness</Typography>
 
