@@ -20,7 +20,7 @@ const StyledInput = styled(Input)({
 
 export default function MonitorBrightnessCard({ monitor }: Props) {
   const [supportDDC, setSupportDDC] = useState<boolean>()
-  const [brightness, setBrightness] = useState(0)
+  const [brightness, setBrightness] = useState<number>(0)
   const [loading, setLoading] = useState(true)
 
   const setBrightnessInRange = useCallback((value: number) => {
@@ -40,20 +40,23 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
       return
     }
 
-    setSupportDDC(true)
     setBrightness(monitor.getBrightnessPercentage())
+    setSupportDDC(true)
     setLoading(false)
   }, [])
 
-  // Set monitor brightness
+  // Set monitor brightness on state change
   useEffect(() => {
+    if (loading || !supportDDC) return
+
     console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightness)
+
     try {
       monitor.setBrightnessPercentage(brightness)
     } catch (e) {
       console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, e)
     }
-  }, [brightness])
+  }, [brightness, loading, supportDDC])
 
   return (
     <Paper
