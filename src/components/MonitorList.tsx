@@ -4,6 +4,7 @@ import { Alert, Button, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from './molecules/MonitorBrightnessCard'
 import EnhancedDisplay from '../classes/EnhancedDisplay'
 import Loader from './atoms/Loader'
+import Center from './atoms/Center'
 
 export interface Props {
   sx?: SxProps
@@ -12,11 +13,12 @@ export interface Props {
 export default function MonitorList({ sx }: Props) {
   const [monitors, setMonitors] = useState<Array<EnhancedDisplay>>()
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string>()
+  const [error, setError] = useState<string | null>()
 
   const getMonitors = useCallback(() => {
     console.info('Getting monitor list...')
     setLoading(true)
+    setError(null)
 
     try {
       const monitors = new DisplayManager().list()
@@ -35,34 +37,35 @@ export default function MonitorList({ sx }: Props) {
   }, [])
 
   return (
-    <Stack
-      direction={ 'row' }
-      alignItems={ 'center' }
-      justifyContent={ 'center' }
-      flexWrap={ 'wrap' }
-      gap={ 4 }
-      sx={ sx }
-    >
-      { loading && <Loader title={ 'Loading monitor list' }/> }
+    <Center sx={ sx }>
+      <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 }>
+        { loading && <Loader title={ 'Loading monitor list' }/> }
 
-      { !loading && monitors?.map(monitor => <MonitorBrightnessCard
-        key={ monitor.info.index }
-        monitor={ monitor }
-      />) }
+        { !loading && (
+          <Stack
+            direction={ 'row' }
+            alignItems={ 'center' }
+            justifyContent={ 'center' }
+            flexWrap={ 'wrap' }
+            gap={ 4 }
+          >
+            { monitors?.map(monitor => <MonitorBrightnessCard
+              key={ monitor.info.index }
+              monitor={ monitor }
+            />) }
+          </Stack>
+        ) }
 
-      { !loading && monitors?.length === 0 && (
-        <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 }>
+        { !loading && monitors?.length === 0 && (
           <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>No supported monitors found</Typography>
-          <Button onClick={ getMonitors } variant={ 'text' }>Refresh</Button>
-        </Stack>
-      ) }
+        ) }
 
-      { !loading && error && (
-        <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 }>
+        { !loading && error && (
           <Alert severity={ 'error' }>{ error }</Alert>
-          <Button onClick={ getMonitors } variant={ 'text' }>Retry</Button>
-        </Stack>
-      ) }
-    </Stack>
+        ) }
+
+        { !loading && <Button onClick={ getMonitors } variant={ 'text' }>{ error ? 'Retry' : 'Refresh' }</Button> }
+      </Stack>
+    </Center>
   )
 }
