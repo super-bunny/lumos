@@ -51,7 +51,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
     try {
       monitor.setBrightnessPercentage(brightness)
     } catch (e) {
-      console.error(e)
+      console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, e)
     }
   }, [brightness])
 
