@@ -38,6 +38,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
     if (!supportDDC) {
       setSupportDDC(false)
+      setLoading(false)
       return
     }
 
@@ -73,7 +74,11 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
         <Divider sx={ { my: 1 } }/>
 
-        { loading && <Loader title={ 'Loading monitor brightness...' }/> }
+        { loading && (
+          <Center>
+            <Loader title={ 'Loading monitor brightness...' }/>
+          </Center>
+        ) }
 
         { !loading && !supportDDC && (
           <Center>
