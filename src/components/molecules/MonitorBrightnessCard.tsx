@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
 import EnhancedDisplay from '../../classes/EnhancedDisplay'
 import Center from '../atoms/Center'
@@ -20,6 +20,8 @@ const StyledInput = styled(Input)({
 })
 
 export default function MonitorBrightnessCard({ monitor }: Props) {
+  const ref = useRef<HTMLDivElement>(null)
+
   const [supportDDC, setSupportDDC] = useState<boolean>()
   const [brightness, setBrightness] = useState<number>(0)
   const [loading, setLoading] = useState(true)
@@ -60,11 +62,21 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
     }
   }, [monitor, brightness, loading, supportDDC])
 
+  // Register scroll event to set monitor brightness
+  useEffect(() => {
+    const callback = (event: WheelEvent) => {
+      if (loading || !supportDDC) return
+      event.preventDefault()
+      addBrightnessInRange(Math.sign(event.deltaY) * BRIGHTNESS_STEP * -1)
+    }
+
+    ref.current?.addEventListener('wheel', callback)
+
+    return () => ref.current?.removeEventListener('wheel', callback)
+  }, [loading, supportDDC, addBrightnessInRange])
+
   return (
-    <Paper
-      onWheel={ event => addBrightnessInRange(Math.sign(event.deltaY) * BRIGHTNESS_STEP * -1) }
-      sx={ { width: 320, height: 320, p: 2, textAlign: 'center' } }
-    >
+    <Paper ref={ ref } sx={ { width: 320, height: 320, p: 2, textAlign: 'center' } }>
       <Stack height={ 1 } direction={ 'column' }>
         <Typography
           variant={ 'h4' }
