@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
+import { Box, Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
 import EnhancedDisplay from '../../classes/EnhancedDisplay'
 import Center from '../atoms/Center'
 import Loader from '../atoms/Loader'
@@ -76,7 +76,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   }, [loading, supportDDC, addBrightnessInRange])
 
   return (
-    <Paper ref={ ref } sx={ { width: 320, height: 320, p: 2, textAlign: 'center' } }>
+    <Paper ref={ ref } sx={ { width: 320, height: 320, p: 2, pb: 1, textAlign: 'center' } }>
       <Stack height={ 1 } direction={ 'column' }>
         <Typography
           variant={ 'h4' }
@@ -100,7 +100,13 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
         { !loading && supportDDC && (
           <>
-            <Typography variant={ 'overline' } fontSize={ '1.2em' } textAlign={ 'center' }>Brightness</Typography>
+            <Typography
+              mt={ 1 }
+              variant={ 'overline' }
+              fontSize={ '1.2em' }
+              lineHeight={ '1.2em' }
+              textAlign={ 'center' }
+            >Brightness</Typography>
 
             <StyledInput
               disabled={ loading }
@@ -112,14 +118,20 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
               sx={ { fontSize: 80, color: theme => theme.palette.primary.main } }
             />
 
-            <Stack mt={ 2 } direction="row" alignItems={ 'center' } spacing={ 2 } sx={ { mb: 1 } }>
+            <Box mt={ 2 } mb={ 1 }>
               <Slider
                 disabled={ loading }
                 value={ brightness }
                 onChange={ (event, value) => setBrightness(value as number) }
                 valueLabelDisplay="auto"
               />
-            </Stack>
+            </Box>
+
+            <Typography
+              variant={ 'body2' }
+              fontSize={ '0.8em' }
+              color={ 'gray' }
+            >{ monitor.info.backend.toUpperCase() }</Typography>
           </>
         ) }
       </Stack>
