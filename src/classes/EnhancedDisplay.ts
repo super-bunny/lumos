@@ -1,5 +1,12 @@
 import { Continuous, Display, VCPFeatures, VCPValue, VCPValueType } from 'ddc-rs'
 
+export enum Backend {
+  WIN_API = 'winapi',
+  NV_API = 'nvapi',
+  I2C = 'i2c-dev',
+  MAC_OS = 'macos',
+}
+
 export interface DisplayInfo {
   index: number
   backend: string
