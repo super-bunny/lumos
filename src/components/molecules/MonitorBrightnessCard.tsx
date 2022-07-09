@@ -45,7 +45,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
     setBrightness(monitor.getBrightnessPercentage())
     setSupportDDC(true)
     setLoading(false)
-  }, [])
+  }, [monitor])
 
   // Set monitor brightness on state change
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
     } catch (e) {
       console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, e)
     }
-  }, [brightness, loading, supportDDC])
+  }, [monitor, brightness, loading, supportDDC])
 
   return (
     <Paper
