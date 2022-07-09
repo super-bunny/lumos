@@ -22,6 +22,7 @@ export default function MonitorList({ sx }: Props) {
 
     try {
       const monitors = new DisplayManager().list()
+      console.info('Monitor list:', monitors)
       setMonitors(monitors.map(display => new EnhancedDisplay(display)))
     } catch (e) {
       console.error(e)
