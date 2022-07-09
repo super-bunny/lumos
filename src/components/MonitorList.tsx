@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { DisplayManager } from 'ddc-rs'
 import { Alert, Button, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from './molecules/MonitorBrightnessCard'
-import EnhancedDisplay from '../classes/EnhancedDisplay'
+import EnhancedDisplay, { Backends } from '../classes/EnhancedDisplay'
 import Loader from './atoms/Loader'
 import Center from './atoms/Center'
 
@@ -23,7 +23,18 @@ export default function MonitorList({ sx }: Props) {
     try {
       const monitors = new DisplayManager().list()
       console.info('Monitor list:', monitors)
-      setMonitors(monitors.map(display => new EnhancedDisplay(display)))
+      const backendList = monitors.map(display => display.backend)
+
+      // If nvapi backend is detected filter out all other backend to avoid duplicate monitors
+      if (backendList.includes(Backends.NV_API)) {
+        const filteredMonitors = monitors
+          .filter(display => display.backend === Backends.NV_API)
+          .map(display => new EnhancedDisplay(display))
+
+        setMonitors(filteredMonitors)
+      } else {
+        setMonitors(monitors.map(display => new EnhancedDisplay(display)))
+      }
     } catch (e) {
       console.error(e)
       setError('An error occurred during the monitor list retrieval')
