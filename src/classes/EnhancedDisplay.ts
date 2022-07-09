@@ -1,6 +1,6 @@
 import { Continuous, Display, VCPFeatures, VCPValue, VCPValueType } from 'ddc-rs'
 
-export enum Backend {
+export enum Backends {
   WIN_API = 'winapi',
   NV_API = 'nvapi',
   I2C = 'i2c-dev',
