@@ -32,7 +32,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "iconUrl": "./src/assets/icons/lumos_icon.ico",
+            "iconUrl": "https://github.com/super-bunny/lumos/raw/dev/src/assets/icons/lumos_icon.ico",
             "setupIcon": "./src/assets/icons/lumos_icon.ico"
           }
         },
