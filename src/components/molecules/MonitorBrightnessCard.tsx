@@ -64,15 +64,17 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
   // Register scroll event to set monitor brightness
   useEffect(() => {
+    const refCopy = ref.current
+
     const callback = (event: WheelEvent) => {
       if (loading || !supportDDC) return
       event.preventDefault()
       addBrightnessInRange(Math.sign(event.deltaY) * BRIGHTNESS_STEP * -1)
     }
 
-    ref.current?.addEventListener('wheel', callback)
+    refCopy?.addEventListener('wheel', callback)
 
-    return () => ref.current?.removeEventListener('wheel', callback)
+    return () => refCopy?.removeEventListener('wheel', callback)
   }, [loading, supportDDC, addBrightnessInRange])
 
   return (
