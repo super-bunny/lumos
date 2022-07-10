@@ -37,6 +37,15 @@
           }
         },
         {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "name": "Lumos",
+            "icon": "./src/assets/icons/lumos_icon.icns",
+            "format": "ULFO",
+            "overwrite": true
+          }
+        },
+        {
           "name": "@electron-forge/maker-zip",
           "platforms": [
             "darwin"
