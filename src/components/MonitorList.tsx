@@ -4,7 +4,6 @@ import { Alert, Button, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from './molecules/MonitorBrightnessCard'
 import EnhancedDisplay, { Backends } from '../classes/EnhancedDisplay'
 import Loader from './atoms/Loader'
-import Center from './atoms/Center'
 
 export interface Props {
   sx?: SxProps
@@ -46,38 +45,36 @@ export default function MonitorList({ sx }: Props) {
 
   useEffect(() => {
     getMonitors()
-  }, [])
+  }, [getMonitors])
 
   return (
-    <Center sx={ sx }>
-      <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 }>
-        { loading && <Loader title={ 'Loading monitor list' }/> }
+    <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 } sx={ sx }>
+      { loading && <Loader title={ 'Loading monitor list' }/> }
 
-        { !loading && (
-          <Stack
-            direction={ 'row' }
-            alignItems={ 'center' }
-            justifyContent={ 'center' }
-            flexWrap={ 'wrap' }
-            gap={ 4 }
-          >
-            { monitors?.map(monitor => <MonitorBrightnessCard
-              key={ monitor.info.index }
-              monitor={ monitor }
-            />) }
-          </Stack>
-        ) }
+      { !loading && (
+        <Stack
+          direction={ 'row' }
+          alignItems={ 'center' }
+          justifyContent={ 'center' }
+          flexWrap={ 'wrap' }
+          gap={ 4 }
+        >
+          { monitors?.map(monitor => <MonitorBrightnessCard
+            key={ monitor.info.index }
+            monitor={ monitor }
+          />) }
+        </Stack>
+      ) }
 
-        { !loading && monitors?.length === 0 && (
-          <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>No supported monitors found</Typography>
-        ) }
+      { !loading && monitors?.length === 0 && (
+        <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>No supported monitors found</Typography>
+      ) }
 
-        { !loading && error && (
-          <Alert severity={ 'error' }>{ error }</Alert>
-        ) }
+      { !loading && error && (
+        <Alert severity={ 'error' }>{ error }</Alert>
+      ) }
 
-        { !loading && <Button onClick={ getMonitors } variant={ 'text' }>{ error ? 'Retry' : 'Refresh' }</Button> }
-      </Stack>
-    </Center>
+      { !loading && <Button onClick={ getMonitors } variant={ 'text' }>{ error ? 'Retry' : 'Refresh' }</Button> }
+    </Stack>
   )
 }

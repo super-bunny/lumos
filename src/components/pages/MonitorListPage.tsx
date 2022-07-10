@@ -1,14 +1,13 @@
 import * as React from 'react'
-import { Box } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import MonitorList from '../MonitorList'
-import Center from '../atoms/Center'
 
 export default function MonitorListPage() {
   return (
-    <Box height={ 1 } p={ 8 }>
-      <Center>
-        <MonitorList sx={ { flexGrow: 'grow' } }/>
-      </Center>
-    </Box>
+    <Stack height={ 1 } direction={ 'column' }>
+      <Box display={ 'flex' } height={ 1 } p={ 4 } flexGrow={ 1 } overflow={ 'auto' }>
+        <MonitorList sx={ { margin: 'auto' } }/>
+      </Box>
+    </Stack>
   )
 }
