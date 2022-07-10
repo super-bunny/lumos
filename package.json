@@ -32,7 +32,8 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "lumos"
+            "iconUrl": "./src/assets/icons/lumos_icon.ico",
+            "setupIcon": "./src/assets/icons/lumos_icon.ico"
           }
         },
         {
