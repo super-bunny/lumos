@@ -24,7 +24,10 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "platform": ["darwin", "win32", "linux"],
+        "icon": "./src/assets/icons/lumos_icon"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -40,7 +43,9 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "icon": "./src/assets/icons/lumos_icon.png"
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",
