@@ -23,16 +23,31 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   const ref = useRef<HTMLDivElement>(null)
 
   const [supportDDC, setSupportDDC] = useState<boolean>()
-  const [brightness, setBrightness] = useState<number>(0)
+  const [brightness, setBrightnessState] = useState<number>(0)
   const [loading, setLoading] = useState(true)
+
+  const setMonitorBrightness = useCallback((brightnessPercentage: number) => {
+    console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightnessPercentage)
+
+    try {
+      monitor.setBrightnessPercentage(brightnessPercentage)
+    } catch (e) {
+      console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, e)
+    }
+  }, [monitor])
+
+  const setBrightness = useCallback((brightness: number) => {
+    setBrightnessState(brightness)
+    setMonitorBrightness(brightness)
+  }, [setMonitorBrightness])
 
   const setBrightnessInRange = useCallback((value: number) => {
     setBrightness(Math.max(0, Math.min(100, value || 0)))
   }, [setBrightness])
 
   const addBrightnessInRange = useCallback((valueToAdd: number) => {
-    setBrightness(brightness => Math.max(0, Math.min(100, (brightness + valueToAdd) || 0)))
-  }, [setBrightness])
+    setBrightness(Math.max(0, Math.min(100, (brightness + valueToAdd) || 0)))
+  }, [brightness, setBrightness])
 
   // Check if monitor support DDC protocol and retrieve monitor brightness if supported
   useEffect(() => {
@@ -44,23 +59,10 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
       return
     }
 
-    setBrightness(monitor.getBrightnessPercentage())
+    setBrightnessState(monitor.getBrightnessPercentage())
     setSupportDDC(true)
     setLoading(false)
   }, [monitor])
-
-  // Set monitor brightness on state change
-  useEffect(() => {
-    if (loading || !supportDDC) return
-
-    console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightness)
-
-    try {
-      monitor.setBrightnessPercentage(brightness)
-    } catch (e) {
-      console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, e)
-    }
-  }, [monitor, brightness, loading, supportDDC])
 
   // Register scroll event to set monitor brightness
   useEffect(() => {
@@ -125,6 +127,8 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
                 disabled={ loading }
                 value={ brightness }
                 onChange={ (event, value) => setBrightness(value as number) }
+                min={ 0 }
+                max={ 100 }
                 valueLabelDisplay="auto"
               />
             </Box>
