@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { DisplayManager } from 'ddc-rs'
 import { Alert, Button, Stack, SxProps, Typography } from '@mui/material'
-import MonitorBrightnessCard from './molecules/MonitorBrightnessCard'
-import EnhancedDisplay, { Backends } from '../classes/EnhancedDisplay'
-import Loader from './atoms/Loader'
+import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard'
+import EnhancedDisplay, { Backends } from '../../classes/EnhancedDisplay'
+import Loader from '../atoms/Loader'
 
 export interface Props {
   sx?: SxProps

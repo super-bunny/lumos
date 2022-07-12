@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Box, Stack } from '@mui/material'
-import MonitorList from '../MonitorList'
+import MonitorList from '../organisms/MonitorList'
 
 export default function MonitorListPage() {
   return (
