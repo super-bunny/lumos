@@ -1,11 +1,15 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import { Outlet } from 'react-router-dom'
+import Header from './components/molecules/Header'
 
 export default function app() {
   return (
-    <Box height={ 1 } overflow={ 'auto' }>
-      <Outlet/>
-    </Box>
+    <Stack height={ 1 } direction={ 'column' } overflow={ 'hidden' }>
+      <Header/>
+      <Box flexGrow={ 1 } overflow={ 'auto' }>
+        <Outlet/>
+      </Box>
+    </Stack>
   )
 }
