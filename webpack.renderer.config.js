@@ -6,6 +6,14 @@ rules.push({
   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
 })
 
+rules.push({
+  test: /\.(ttf|eot|woff|woff2)$/,
+  loader: 'file-loader',
+  options: {
+    name: 'fonts/[name].[ext]',
+  },
+})
+
 module.exports = {
   target: 'electron-renderer',
   module: {
