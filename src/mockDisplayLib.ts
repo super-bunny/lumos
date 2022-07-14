@@ -28,14 +28,14 @@ export function mockDisplayLib(): void {
       {
         index: 3,
         backend: Backends.NV_API,
-        displayId: '085F4D0L99T6YDtcnonzdoz753poa',
+        displayId: 'Sony TV',
       },
     ),
     new Display(
       {
         index: 4,
         backend: Backends.NV_API,
-        displayId: 'khdsce3S268jiepm093kIxJs90',
+        displayId: 'Mi Monitor',
       },
     ),
     new Display(
