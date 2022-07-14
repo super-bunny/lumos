@@ -14,8 +14,12 @@ const BRIGHTNESS_STEP = 10
 
 const StyledInput = styled(Input)({
   '& > input': {
+    height: '1.2em',
     marginRight: '-20px',
     textAlign: 'center',
+  },
+  '&:before': {
+    display: 'none',
   },
 })
 
@@ -80,10 +84,10 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   }, [loading, supportDDC, addBrightnessInRange])
 
   return (
-    <Paper ref={ ref } sx={ { width: 320, height: 320, p: 2, pb: 1, textAlign: 'center' } }>
+    <Paper ref={ ref } sx={ { width: 250, height: 250, p: 2, pb: 1, textAlign: 'center' } }>
       <Stack height={ 1 } direction={ 'column' }>
         <Typography
-          variant={ 'h4' }
+          variant={ 'h5' }
           textAlign={ 'center' }
           noWrap
         >{ monitor.getDisplayName() }</Typography>
@@ -91,14 +95,14 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
         <Divider sx={ { my: 1 } }/>
 
         { loading && (
-          <Center>
+          <Center sx={ { height: 'auto', flexGrow: 1 } }>
             <Loader title={ 'Loading monitor brightness...' }/>
           </Center>
         ) }
 
         { !loading && !supportDDC && (
-          <Center>
-            <Typography fontSize={ '1.5em' } noWrap sx={ { color: 'gray' } }>Monitor not supported</Typography>
+          <Center sx={ { height: 'auto', flexGrow: 1 } }>
+            <Typography fontSize={ '1.2em' } sx={ { color: 'gray' } }>Monitor not supported</Typography>
           </Center>
         ) }
 
@@ -107,22 +111,23 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
             <Typography
               mt={ 1 }
               variant={ 'overline' }
-              fontSize={ '1.2em' }
-              lineHeight={ '1.2em' }
+              fontSize={ '1em' }
+              lineHeight={ '1em' }
               textAlign={ 'center' }
             >Brightness</Typography>
 
-            <StyledInput
-              disabled={ loading }
-              value={ brightness.toString() }
-              onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
-              inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
-              endAdornment={ <Typography variant={ 'caption' } color={ 'initial' } fontSize={ 20 }>%</Typography> }
-              color={ 'primary' }
-              sx={ { fontSize: 80, color: theme => theme.palette.primary.main } }
-            />
+            <Center sx={ { height: 'auto', flexGrow: 1 } }>
+              <StyledInput
+                disabled={ loading }
+                value={ brightness.toString() }
+                onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
+                inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
+                endAdornment={ <Typography variant={ 'caption' } color={ 'gray' } fontSize={ '0.3em' }>%</Typography> }
+                color={ 'primary' }
+                sx={ { fontSize: 65, color: theme => theme.palette.primary.main, flexGrow: 1 } }
+              />
+            </Center>
 
-            <Box mt={ 2 } mb={ 1 }>
               <Slider
                 disabled={ loading }
                 value={ brightness }
@@ -131,7 +136,6 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
                 max={ 100 }
                 valueLabelDisplay="auto"
               />
-            </Box>
 
             <Typography
               variant={ 'body2' }
