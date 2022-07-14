@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <AppBar position="static">
       <Toolbar variant="dense" disableGutters>
-        <Stack ml={ 1 } gap={ 1 } flexGrow={ 1 }>
+        <Stack ml={ 2 } gap={ 1 } flexGrow={ 1 }>
           <Typography variant="h6" color="inherit" component="div">
             Lumos
           </Typography>
