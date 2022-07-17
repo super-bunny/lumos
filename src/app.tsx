@@ -11,8 +11,6 @@ export default function App() {
   const themeContext = useAppSelector(state => state.theme)
   const dispatch = useAppDispatch()
 
-  console.log('themeContext:', themeContext)
-
   useEffect(() => {
     const { store: { theme } } = new Store<SettingsType>()
 
