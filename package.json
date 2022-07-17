@@ -1,7 +1,7 @@
 {
   "name": "lumos",
   "productName": "lumos",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "description": "Control your monitors brightness",
   "main": ".webpack/main",
   "scripts": {
@@ -145,12 +145,15 @@
     "@mui/icons-material": "^5.6.1",
     "@mui/lab": "^5.0.0-alpha.77",
     "@mui/material": "^5.6.1",
+    "@reduxjs/toolkit": "^1.8.3",
     "ddc-rs": "^0.1.8",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.0.2",
     "file-loader": "^6.2.0",
     "material-ui-popup-state": "^4.0.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-redux": "^8.0.2",
     "react-router-dom": "6"
   }
 }

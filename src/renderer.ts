@@ -39,4 +39,3 @@ if (process.env.MOCK_DISPLAY_LIB === 'true') {
 console.info('Monitors:', new DisplayManager().list())
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack')
-

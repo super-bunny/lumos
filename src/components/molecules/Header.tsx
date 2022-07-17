@@ -1,8 +1,12 @@
 import React from 'react'
-import { AppBar, Stack, Toolbar, Typography } from '@mui/material'
+import { AppBar, IconButton, Stack, Toolbar, Tooltip, Typography } from '@mui/material'
 import HeaderExtraMenu from './HeaderExtraMenu'
+import { Settings } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
 
 export default function Header() {
+  const navigate = useNavigate()
+
   return (
     <AppBar position="static">
       <Toolbar variant="dense" disableGutters>
@@ -12,7 +16,13 @@ export default function Header() {
           </Typography>
         </Stack>
 
-        <Stack gap={ 1 }>
+        <Stack direction={ 'row' }>
+          <Tooltip title={ 'Settings' }>
+            <IconButton onClick={ () => navigate('/settings') } color="inherit">
+              <Settings/>
+            </IconButton>
+          </Tooltip>
+
           <HeaderExtraMenu/>
         </Stack>
       </Toolbar>
