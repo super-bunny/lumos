@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { DisplayManager } from 'ddc-rs'
 import { Alert, Button, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard'
 import EnhancedDisplay, { Backends } from '../../classes/EnhancedDisplay'
@@ -20,19 +19,18 @@ export default function MonitorList({ sx }: Props) {
     setError(null)
 
     try {
-      const monitors = new DisplayManager().list()
+      const monitors = EnhancedDisplay.list()
       console.info('Monitor list:', monitors)
-      const backendList = monitors.map(display => display.backend)
+      const backendList = monitors.map(display => display.info.backend)
 
       // If nvapi backend is detected filter out all other backend to avoid duplicate monitors
       if (backendList.includes(Backends.NV_API)) {
         const filteredMonitors = monitors
-          .filter(display => display.backend === Backends.NV_API)
-          .map(display => new EnhancedDisplay(display))
+          .filter(display => display.info.backend === Backends.NV_API)
 
         setMonitors(filteredMonitors)
       } else {
-        setMonitors(monitors.map(display => new EnhancedDisplay(display)))
+        setMonitors(monitors)
       }
     } catch (e) {
       console.error(e)

@@ -1,4 +1,4 @@
-import { Continuous, Display, VCPFeatures, VCPValue, VCPValueType } from 'ddc-rs'
+import { Continuous, Display, DisplayManager, VCPFeatures, VCPValue, VCPValueType } from 'ddc-rs'
 
 export enum Backends {
   WIN_API = 'winapi',
@@ -98,5 +98,11 @@ export default class EnhancedDisplay {
 
   clearCache(): void {
     this.cache = {}
+  }
+
+  static list(): Array<EnhancedDisplay> {
+    const displays = new DisplayManager().list()
+
+    return displays.map(display => new EnhancedDisplay(display))
   }
 }
