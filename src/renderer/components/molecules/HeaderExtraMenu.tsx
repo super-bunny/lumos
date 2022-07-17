@@ -2,7 +2,7 @@ import React from 'react'
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks'
 import { InfoRounded, MoreVert } from '@mui/icons-material'
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
-import { version } from '../../../package.json'
+import { version } from '../../../../package.json'
 import openInBrowser from '../../utils/openInBrowser'
 
 export default function HeaderExtraMenu() {
