@@ -30,21 +30,21 @@
           "win32",
           "linux"
         ],
-        "icon": "./src/assets/icons/lumos_icon"
+        "icon": "./src/renderer/assets/icons/lumos_icon"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "iconUrl": "https://github.com/super-bunny/lumos/raw/dev/src/assets/icons/lumos_icon.ico",
-            "setupIcon": "./src/assets/icons/lumos_icon.ico"
+            "iconUrl": "https://github.com/super-bunny/lumos/raw/dev/src/renderer/assets/icons/lumos_icon.ico",
+            "setupIcon": "./src/renderer/assets/icons/lumos_icon.ico"
           }
         },
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
             "name": "Lumos",
-            "icon": "./src/assets/icons/lumos_icon.icns",
+            "icon": "./src/renderer/assets/icons/lumos_icon.icns",
             "format": "ULFO",
             "overwrite": true
           }
@@ -58,7 +58,7 @@
         {
           "name": "@electron-forge/maker-deb",
           "config": {
-            "icon": "./src/assets/icons/lumos_icon.png"
+            "icon": "./src/renderer/assets/icons/lumos_icon.png"
           }
         },
         {
