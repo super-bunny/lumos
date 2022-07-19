@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles'
-import { Themes } from './types/Settings'
+import { Themes } from '../types/Settings'
 import { Theme } from '@emotion/react'
 
 

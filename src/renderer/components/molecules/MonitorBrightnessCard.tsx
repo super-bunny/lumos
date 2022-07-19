@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Box, Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
-import EnhancedDisplay from '../../classes/EnhancedDisplay'
+import { Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
+import Display from '../../classes/Display'
 import Center from '../atoms/Center'
 import Loader from '../atoms/Loader'
 
-export type Monitor = EnhancedDisplay
+export type Monitor = Display
 
 export interface Props {
   monitor: Monitor
@@ -30,42 +30,46 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   const [brightness, setBrightnessState] = useState<number>(0)
   const [loading, setLoading] = useState(true)
 
-  const setMonitorBrightness = useCallback((brightnessPercentage: number) => {
+  const setMonitorBrightness = useCallback(async (brightnessPercentage: number) => {
     console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightnessPercentage)
 
     try {
-      monitor.setBrightnessPercentage(brightnessPercentage)
+      await monitor.setBrightnessPercentage(brightnessPercentage)
     } catch (e) {
       console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, e)
     }
   }, [monitor])
 
-  const setBrightness = useCallback((brightness: number) => {
+  const setBrightness = useCallback(async (brightness: number) => {
     setBrightnessState(brightness)
-    setMonitorBrightness(brightness)
+    await setMonitorBrightness(brightness)
   }, [setMonitorBrightness])
 
-  const setBrightnessInRange = useCallback((value: number) => {
-    setBrightness(Math.max(0, Math.min(100, value || 0)))
+  const setBrightnessInRange = useCallback(async (value: number) => {
+    await setBrightness(Math.max(0, Math.min(100, value || 0)))
   }, [setBrightness])
 
-  const addBrightnessInRange = useCallback((valueToAdd: number) => {
-    setBrightness(Math.max(0, Math.min(100, (brightness + valueToAdd) || 0)))
+  const addBrightnessInRange = useCallback(async (valueToAdd: number) => {
+    await setBrightness(Math.max(0, Math.min(100, (brightness + valueToAdd) || 0)))
   }, [brightness, setBrightness])
 
   // Check if monitor support DDC protocol and retrieve monitor brightness if supported
   useEffect(() => {
-    const supportDDC = monitor.supportDDC()
+    const checkSupportDDC = async () => {
+      const supportDDC = await monitor.supportDDC()
 
-    if (!supportDDC) {
-      setSupportDDC(false)
+      if (!supportDDC) {
+        setSupportDDC(false)
+        setLoading(false)
+        return
+      }
+
+      setBrightnessState(await monitor.getBrightnessPercentage())
+      setSupportDDC(true)
       setLoading(false)
-      return
     }
 
-    setBrightnessState(monitor.getBrightnessPercentage())
-    setSupportDDC(true)
-    setLoading(false)
+    checkSupportDDC()
   }, [monitor])
 
   // Register scroll event to set monitor brightness
@@ -128,14 +132,14 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
               />
             </Center>
 
-              <Slider
-                disabled={ loading }
-                value={ brightness }
-                onChange={ (event, value) => setBrightness(value as number) }
-                min={ 0 }
-                max={ 100 }
-                valueLabelDisplay="auto"
-              />
+            <Slider
+              disabled={ loading }
+              value={ brightness }
+              onChange={ (event, value) => setBrightness(value as number) }
+              min={ 0 }
+              max={ 100 }
+              valueLabelDisplay="auto"
+            />
 
             <Typography
               variant={ 'body2' }
