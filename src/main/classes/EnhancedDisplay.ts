@@ -1,32 +1,11 @@
-import { Continuous, Display, DisplayManager, VCPFeatures, VCPValue, VCPValueType } from 'ddc-rs'
+import { Display, DisplayManager, VCPFeatures } from 'ddc-rs'
+import AbstractDisplay, { Continuous, DisplayInfo, VCPValue, VCPValueType } from './AbstractDisplay'
 
-export enum Backends {
-  WIN_API = 'winapi',
-  NV_API = 'nvapi',
-  I2C = 'i2c-dev',
-  MAC_OS = 'macos',
-}
-
-export interface DisplayInfo {
-  index: number
-  backend: string
-  edidData?: ArrayBuffer
-  version?: string
-  mccsVersion?: string
-  displayId: string
-  serial?: number
-  serialNumber?: string
-  modelId?: number
-  modelName?: string
-  manufacturerId?: string
-  manufactureYear?: number
-  manufactureWeek?: number
-}
-
-export default class EnhancedDisplay {
+export default class EnhancedDisplay extends AbstractDisplay {
   cache: Record<number, VCPValue | undefined> = {}
 
   constructor(readonly display: Display) {
+    super()
   }
 
   get info(): DisplayInfo {
@@ -57,7 +36,15 @@ export default class EnhancedDisplay {
   }
 
   getDisplayName(): string {
-    return this.info.modelName ?? this.display.displayId
+    return this.info.modelName ?? this.info.displayId
+  }
+
+  getVcpValue(featureCode: number): VCPValue {
+    return this.display.getVcpFeature(featureCode)
+  }
+
+  setVcpValue(featureCode: number, value: number): void {
+    return this.display.setVcpFeature(featureCode, value)
   }
 
   getVcpValueFromCache(featureCode: number, forceRefresh = false): VCPValue {
@@ -67,7 +54,7 @@ export default class EnhancedDisplay {
       return cachedValue
     }
 
-    const value = this.display.getVcpFeature(featureCode)
+    const value = this.getVcpValue(featureCode)
 
     this.cache[featureCode] = value
 

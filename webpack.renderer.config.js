@@ -15,16 +15,21 @@ rules.push({
 })
 
 module.exports = {
-  target: 'electron-renderer',
+  // target: 'electron-renderer',
   module: {
     rules,
   },
   plugins: plugins,
   resolve: {
-    fallback: { 'path': require.resolve('path-browserify') },
+    fallback: {
+      //   'path': require.resolve('path-browserify'),
+      //   'os': require.resolve('os-browserify/browser'),
+      //   'assert': require.resolve('assert/'),
+      // fs: false,
+    },
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
   },
-  externals: {
-    'ddc-rs': 'commonjs2 ddc-rs',
-  },
+  // externals: {
+  //   'ddc-rs': 'commonjs2 ddc-rs',
+  // },
 }

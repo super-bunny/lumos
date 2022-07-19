@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import PageTemplate from './components/templates/PageTemplate'
-import SettingsType, { Themes } from './types/Settings'
+import { Themes } from '../types/Settings'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import themeConfigs from './themeConfigs'
-import Store from 'electron-store'
 import { useAppDispatch, useAppSelector } from './store/store'
 import { setTheme } from './store/slices/themeSlice'
 
@@ -12,13 +11,16 @@ export default function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const { store: { theme } } = new Store<SettingsType>()
+    window.lumos.store.get()
+      .then(config => {
+        const { theme } = config.store
 
-    if (!theme || !Object.values(Themes).includes(theme)) {
-      return
-    }
+        if (!theme || !Object.values(Themes).includes(theme)) {
+          return
+        }
 
-    dispatch(setTheme(theme))
+        dispatch(setTheme(theme))
+      })
   }, [dispatch])
 
   return (

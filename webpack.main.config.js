@@ -1,5 +1,5 @@
 module.exports = {
-  target: 'electron-main',
+  // target: 'electron-main',
   /**
    * This is the main entry point for your application, it's the first file
    * that runs in the main process.
@@ -11,5 +11,8 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json']
+  },
+  externals: {
+    'ddc-rs': 'commonjs2 ddc-rs',
   },
 };

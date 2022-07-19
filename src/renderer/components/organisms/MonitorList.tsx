@@ -1,25 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Alert, Button, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard'
-import EnhancedDisplay, { Backends } from '../../classes/EnhancedDisplay'
+import Display from '../../classes/Display'
 import Loader from '../atoms/Loader'
+import { Backends } from '../../../main/classes/AbstractDisplay'
+import { mockDisplays } from '../../mockDisplays'
 
 export interface Props {
   sx?: SxProps
 }
 
 export default function MonitorList({ sx }: Props) {
-  const [monitors, setMonitors] = useState<Array<EnhancedDisplay>>()
+  const [monitors, setMonitors] = useState<Array<Display>>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>()
 
-  const getMonitors = useCallback(() => {
+  const getMonitors = useCallback(async () => {
     console.info('Getting monitor list...')
     setLoading(true)
     setError(null)
 
     try {
-      const monitors = EnhancedDisplay.list()
+      const monitors = await Display.list()
       console.info('Monitor list:', monitors)
       const backendList = monitors.map(display => display.info.backend)
 
@@ -42,7 +44,14 @@ export default function MonitorList({ sx }: Props) {
   }, [])
 
   useEffect(() => {
-    getMonitors()
+    window.lumos.getEnv()
+      .then(env => {
+        if (env.MOCK_DISPLAYS === 'true') {
+          console.info('Mocking Displays')
+          mockDisplays()
+        }
+      })
+      .then(() => getMonitors())
   }, [getMonitors])
 
   return (

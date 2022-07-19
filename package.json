@@ -79,7 +79,10 @@
                 {
                   "html": "./src/renderer/index.html",
                   "js": "./src/renderer/renderer.ts",
-                  "name": "main_window"
+                  "name": "main_window",
+                  "preload": {
+                    "js": "./src/main/preload.ts"
+                  }
                 }
               ]
             }
@@ -127,13 +130,13 @@
     "@types/react": "^18.0.4",
     "@types/react-dom": "^18.0.0",
     "@types/semver": "^7.3.10",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "css-loader": "^4.2.1",
     "electron": "18.0.3",
     "eslint": "^8.0.0",
     "eslint-config-react-app": "^7.0.1",
     "fork-ts-checker-webpack-plugin": "^5.0.14",
     "node-loader": "^2.0.0",
-    "path-browserify": "^1.0.1",
     "react-refresh": "^0.14.0",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",

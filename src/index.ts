@@ -1,5 +1,7 @@
 import { app, BrowserWindow, session } from 'electron'
 import Store from 'electron-store'
+import setupIpc from './main/contextBridge'
+import DisplayManager from './main/classes/DisplayManager'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -18,8 +20,8 @@ const createWindow = (): void => {
     width: 800,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-      nodeIntegration: true,
-      contextIsolation: false,
+      nodeIntegration: false,
+      contextIsolation: true,
     },
   })
 
@@ -42,11 +44,17 @@ app.on('ready', () => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': [`default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://api.github.com;`]
-      }
+        'Content-Security-Policy': [
+          `default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://api.github.com;`,
+        ],
+      },
     })
   })
 
+  const displayManager = new DisplayManager()
+
+  displayManager.refresh()
+  setupIpc(displayManager)
   createWindow()
 })
 

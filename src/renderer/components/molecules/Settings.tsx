@@ -1,11 +1,10 @@
-import React, { useCallback, useRef, useState } from 'react'
-import Store from 'electron-store'
-import ElectronStore from 'electron-store'
-import SettingsType, { Themes } from '../../types/Settings'
+import React, { useCallback, useEffect, useState } from 'react'
+import SettingsType, { Themes } from '../../../types/Settings'
 import { Alert, FormControl, Grid, InputLabel, Link, MenuItem, Select, SxProps } from '@mui/material'
-import { shell } from 'electron'
 import { useAppDispatch } from '../../store/store'
 import { setTheme } from '../../store/slices/themeSlice'
+import Loader from '../atoms/Loader'
+import Center from '../atoms/Center'
 
 export interface Props {
   sx?: SxProps
@@ -13,13 +12,32 @@ export interface Props {
 
 export default function Settings({ sx }: Props) {
   const dispatch = useAppDispatch()
-  const storeRef = useRef<ElectronStore<SettingsType>>(new Store<SettingsType>())
-  const [config, setConfig] = useState<SettingsType>(storeRef.current.store)
+  const [config, setConfig] = useState<SettingsType>()
+  const [storePath, setStorePath] = useState<string>()
+  const [loading, setLoading] = useState(true)
 
-  const editConfig = useCallback((newConfig: SettingsType) => {
+  const editConfig = useCallback(async (newConfig: SettingsType) => {
     setConfig(newConfig)
-    storeRef.current.set(newConfig)
+    return window.lumos.store.set(newConfig)
   }, [])
+
+  useEffect(() => {
+    setLoading(true)
+    window.lumos.store.get()
+      .then(store => {
+        setConfig(store.store)
+        setStorePath(store.path)
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+    return (
+      <Center>
+        <Loader title={ 'Loading monitor list' }/>
+      </Center>
+    )
+  }
 
   return (
     <Grid container gap={ 2 }>
@@ -27,9 +45,9 @@ export default function Settings({ sx }: Props) {
         <Alert severity="info">
           <span>Settings are saved in </span>
           <Link
-            onClick={ () => shell.showItemInFolder(storeRef.current.path) }
+            onClick={ () => window.lumos.showItemInFolder(storePath!) }
             href={ '#' }
-          >{ storeRef.current.path }</Link>
+          >{ storePath }</Link>
         </Alert>
       </Grid>
 
