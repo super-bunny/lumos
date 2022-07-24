@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, session } from 'electron'
 import Store from 'electron-store'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
@@ -37,7 +37,18 @@ const createWindow = (): void => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [`default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://api.github.com;`]
+      }
+    })
+  })
+
+  createWindow()
+})
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
