@@ -43,7 +43,6 @@
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
-            "name": "Lumos",
             "icon": "./src/renderer/assets/icons/lumos_icon.icns",
             "format": "ULFO",
             "overwrite": true
