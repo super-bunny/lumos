@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks'
-import { InfoRounded, MoreVert, Update } from '@mui/icons-material'
+import InfoRounded from '@mui/icons-material/InfoRounded'
+import MoreVert from '@mui/icons-material/MoreVert'
+import Update from '@mui/icons-material/Update'
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Tooltip } from '@mui/material'
-import { version } from '../../../../package.json'
+import packageJson from '../../../../package.json'
 import openInBrowser from '../../utils/openInBrowser'
 import AppVersionManager, { GithubRelease } from '../../classes/AppVersionManager'
 
 export default function HeaderExtraMenu() {
+  const {version} = packageJson
   const popupState = usePopupState({ variant: 'popover', popupId: 'demoMenu' })
   const [newRelease, setNewRelease] = useState<GithubRelease | null>(null)
 

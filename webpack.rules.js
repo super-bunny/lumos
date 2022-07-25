@@ -7,7 +7,7 @@ module.exports = [
     use: 'node-loader',
   },
   {
-    test: /\.(m?js|node)$/,
+    test: /\.(node)$/,
     parser: { amd: false },
     use: {
       loader: '@vercel/webpack-asset-relocator-loader',
@@ -17,13 +17,15 @@ module.exports = [
     },
   },
   {
-    test: /\.tsx?$/,
+    test: /\.(js|mjs|jsx|ts|tsx)$/,
     exclude: /(node_modules|\.webpack)/,
-    use: {
-      loader: 'ts-loader',
-      options: {
-        transpileOnly: true,
+    use: [
+      {
+        loader: 'babel-loader',
+        options: {
+          presets: ['react-app'],
+        },
       },
-    },
+    ],
   },
 ]

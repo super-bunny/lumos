@@ -1,6 +1,8 @@
 const rules = require('./webpack.rules')
 const plugins = require('./webpack.plugins')
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'production'
+
 rules.push({
   test: /\.css$/,
   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
@@ -15,21 +17,11 @@ rules.push({
 })
 
 module.exports = {
-  // target: 'electron-renderer',
   module: {
     rules,
   },
-  plugins: plugins,
+  plugins,
   resolve: {
-    fallback: {
-      //   'path': require.resolve('path-browserify'),
-      //   'os': require.resolve('os-browserify/browser'),
-      //   'assert': require.resolve('assert/'),
-      // fs: false,
-    },
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
   },
-  // externals: {
-  //   'ddc-rs': 'commonjs2 ddc-rs',
-  // },
 }
