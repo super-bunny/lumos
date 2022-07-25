@@ -8,7 +8,7 @@ import AppVersionManager, { GithubRelease } from '../../classes/AppVersionManage
 
 export default function HeaderExtraMenu() {
   const popupState = usePopupState({ variant: 'popover', popupId: 'demoMenu' })
-  const [newRelease, setNewRelease] = useState<GithubRelease | null>()
+  const [newRelease, setNewRelease] = useState<GithubRelease | null>(null)
 
   useEffect(() => {
     new AppVersionManager(version)
