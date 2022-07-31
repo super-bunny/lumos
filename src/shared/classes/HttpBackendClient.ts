@@ -24,14 +24,12 @@ export default class HttpBackendClient implements BackendClient {
   }
 
   async getVcpValue(id: string, featureCode: number): Promise<VCPValue> {
-    return this.axios.post(`${ id }/support-ddc`, {
-      featureCode,
-    })
+    return this.axios.get(`${ id }/vcp-feature/${ featureCode }`)
       .then(res => res.data.vpcValue)
   }
 
   async setVcpValue(id: string, featureCode: number, value: number): Promise<void> {
-    return this.axios.post(`${ id }/support-ddc`, {
+    return this.axios.post(`${ id }/vcp-feature`, {
       featureCode,
       value,
     })

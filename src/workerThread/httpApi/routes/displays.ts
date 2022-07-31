@@ -30,6 +30,7 @@ router.get(
         supportDDC,
       }
     } catch (err) {
+      console.debug(err)
       ctx.status = 404
       ctx.body = {
         error: (err as Error).message,
@@ -38,11 +39,11 @@ router.get(
   },
 )
 
-router.post(
-  '/:id/vpc-value/:featureCode',
+router.get(
+  '/:id/vcp-feature/:featureCode',
   async ctx => {
-    const { id } = ctx.params
-    const { featureCode } = ctx.body
+    const { id, featureCode: featureCodeStr } = ctx.params
+    const featureCode = parseInt(featureCodeStr, 10)
 
     try {
       const vpcValue = ctx.displayManager.getVcpValueById(id, featureCode)
@@ -51,6 +52,7 @@ router.post(
         vpcValue,
       }
     } catch (err) {
+      console.debug(err)
       ctx.status = 404
       ctx.body = {
         error: (err as Error).message,
@@ -60,7 +62,7 @@ router.post(
 )
 
 router.post(
-  '/:id/vpc-value',
+  '/:id/vcp-feature',
   async ctx => {
     const { id } = ctx.params
     const { featureCode, value } = ctx.body
@@ -68,6 +70,7 @@ router.post(
     try {
       ctx.displayManager.setVcpValueById(id, featureCode, value)
     } catch (err) {
+      console.debug(err)
       ctx.status = 404
       ctx.body = {
         error: (err as Error).message,
