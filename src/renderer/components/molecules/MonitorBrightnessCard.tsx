@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
-import Display from '../../classes/Display'
 import Center from '../atoms/Center'
 import Loader from '../atoms/Loader'
+import GenericDisplay from '../../classes/GenericDisplay'
 
-export type Monitor = Display
+export type Monitor = GenericDisplay
 
 export interface Props {
   monitor: Monitor

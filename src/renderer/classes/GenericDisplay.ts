@@ -1,26 +1,27 @@
 import { Continuous, DisplayInfo, VCPValue, VCPValueType } from '../../main/classes/AbstractDisplay'
 import VCPFeatures from '../../types/VCPFeatures'
+import BackendClient from '../../shared/classes/BackendClient'
 
-export default class Display {
+export default class GenericDisplay {
   cache: Record<number, VCPValue | undefined> = {}
 
-  constructor(public info: DisplayInfo) {
-  }
-
-  async supportDDC(): Promise<boolean> {
-    return window.lumos.display.supportDDC(this.info.displayId)
+  protected constructor(public client: BackendClient, public info: DisplayInfo) {
   }
 
   getDisplayName(): string {
     return this.info.modelName ?? this.info.displayId
   }
 
+  async supportDDC(): Promise<boolean> {
+    return this.client.supportDDC(this.info.displayId)
+  }
+
   async getVcpValue(featureCode: number): Promise<VCPValue> {
-    return window.lumos.display.getVcpValue(this.info.displayId, featureCode)
+    return this.client.getVcpValue(this.info.displayId, featureCode)
   }
 
   async setVcpValue(featureCode: number, value: number): Promise<void> {
-    return window.lumos.display.setVcpValue(this.info.displayId, featureCode, value)
+    return this.client.setVcpValue(this.info.displayId, featureCode, value)
   }
 
   async getVcpValueFromCache(featureCode: number, forceRefresh = false): Promise<VCPValue> {
@@ -63,9 +64,9 @@ export default class Display {
     this.cache = {}
   }
 
-  static async list(): Promise<Array<Display>> {
-    const displayInfoList = await window.lumos.display.list()
+  static async list(client: BackendClient): Promise<Array<GenericDisplay>> {
+    const displayInfoList = await client.list()
 
-    return displayInfoList.map(displayInfo => new Display(displayInfo))
+    return displayInfoList.map(displayInfo => new GenericDisplay(client, displayInfo))
   }
 }

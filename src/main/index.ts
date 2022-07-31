@@ -2,6 +2,10 @@ import { app, BrowserWindow, session } from 'electron'
 import Store from 'electron-store'
 import setupIpc from './contextBridge'
 import DisplayManager from './classes/DisplayManager'
+import SecretStore from './classes/SecretStore'
+import crypto from 'crypto'
+import BackendWorker from './classes/BackendWorker'
+import generateSessionJwt from './utils/generateSessionJwt'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -38,12 +42,27 @@ const createWindow = (): void => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  const displayManager = new DisplayManager()
+  const secretStore = new SecretStore({
+    defaults: {
+      httpApi: { jwtSecret: crypto.randomBytes(48).toString('base64') },
+    },
+  })
+  const sessionJwtSecret = crypto.randomBytes(48).toString('base64')
+  const httpApiPort = 8787
+  const backendWorker = new BackendWorker({
+    httpApiPort,
+    jwtSecret: secretStore.store.httpApi.jwtSecret,
+    sessionJwtSecret,
+  })
+  const sessionJwt = generateSessionJwt(sessionJwtSecret)
+
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
         'Content-Security-Policy': [
-          `default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://api.github.com;`,
+          `default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://api.github.com http://localhost:${ httpApiPort };`,
         ],
       },
     })
@@ -51,11 +70,7 @@ app.on('ready', () => {
 
   Store.initRenderer()
   createWindow()
-
-  const displayManager = new DisplayManager()
-
-  displayManager.refresh()
-  setupIpc(displayManager)
+  setupIpc({ displayManager, sessionJwt, httpApiPort })
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
