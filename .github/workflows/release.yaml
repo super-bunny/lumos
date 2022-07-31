@@ -41,7 +41,7 @@ jobs:
           toolchain: stable
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --network-timeout 100000
 
       - name: Build binaries (will create GitHub release)
         run: yarn run publish
