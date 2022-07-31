@@ -7,6 +7,8 @@ export default function workerThread(): void {
   const { httpApiPort, jwtSecret, sessionJwtSecret } = workerData as BackendWorkerData
   const displayManager = new DisplayManager()
 
+  displayManager.refresh()
+
   initHttpApi({
     port: httpApiPort ?? 8787,
     jwtSecret,

@@ -19,17 +19,23 @@ export default class HttpBackendClient implements BackendClient {
   }
 
   async supportDDC(id: string): Promise<boolean> {
-    return this.axios.get(`${ id }/support-ddc`)
+    return this.axios.post('support-ddc', {
+      id,
+    })
       .then(res => res.data.supportDDC)
   }
 
   async getVcpValue(id: string, featureCode: number): Promise<VCPValue> {
-    return this.axios.get(`${ id }/vcp-feature/${ featureCode }`)
+    return this.axios.post('get-vcp-feature', {
+      id,
+      featureCode,
+    })
       .then(res => res.data.vpcValue)
   }
 
   async setVcpValue(id: string, featureCode: number, value: number): Promise<void> {
-    return this.axios.post(`${ id }/vcp-feature`, {
+    return this.axios.post('set-vcp-feature', {
+      id,
       featureCode,
       value,
     })

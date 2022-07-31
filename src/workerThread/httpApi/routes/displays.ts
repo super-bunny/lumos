@@ -9,7 +9,10 @@ const router = new Router<DefaultState, GlobalContext>({
 router.get(
   '/',
   async ctx => {
-    ctx.displayManager.refresh()
+    if (ctx.displayManager.list.length === 0) {
+      ctx.displayManager.refresh()
+    }
+
     const displays = ctx.displayManager.list.map(display => display.info)
 
     ctx.body = {
@@ -18,10 +21,10 @@ router.get(
   },
 )
 
-router.get(
-  '/:id/support-ddc',
+router.post(
+  '/support-ddc',
   async ctx => {
-    const { id } = ctx.params
+    const { id } = ctx.body
 
     try {
       const supportDDC = ctx.displayManager.supportDDCById(id)
@@ -39,11 +42,10 @@ router.get(
   },
 )
 
-router.get(
-  '/:id/vcp-feature/:featureCode',
+router.post(
+  '/get-vcp-feature/',
   async ctx => {
-    const { id, featureCode: featureCodeStr } = ctx.params
-    const featureCode = parseInt(featureCodeStr, 10)
+    const { id, featureCode } = ctx.body
 
     try {
       const vpcValue = ctx.displayManager.getVcpValueById(id, featureCode)
@@ -62,10 +64,9 @@ router.get(
 )
 
 router.post(
-  '/:id/vcp-feature',
+  '/set-vcp-feature',
   async ctx => {
-    const { id } = ctx.params
-    const { featureCode, value } = ctx.body
+    const { id, featureCode, value } = ctx.body
 
     try {
       ctx.displayManager.setVcpValueById(id, featureCode, value)

@@ -13,15 +13,15 @@ export default class GenericDisplay {
   }
 
   async supportDDC(): Promise<boolean> {
-    return this.client.supportDDC(this.info.index.toString())
+    return this.client.supportDDC(this.info.displayId)
   }
 
   async getVcpValue(featureCode: number): Promise<VCPValue> {
-    return this.client.getVcpValue(this.info.index.toString(), featureCode)
+    return this.client.getVcpValue(this.info.displayId, featureCode)
   }
 
   async setVcpValue(featureCode: number, value: number): Promise<void> {
-    return this.client.setVcpValue(this.info.index.toString(), featureCode, value)
+    return this.client.setVcpValue(this.info.displayId, featureCode, value)
   }
 
   async getVcpValueFromCache(featureCode: number, forceRefresh = false): Promise<VCPValue> {
