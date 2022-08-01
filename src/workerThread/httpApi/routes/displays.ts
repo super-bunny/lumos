@@ -36,7 +36,7 @@ router.post(
       console.debug(err)
       ctx.status = 404
       ctx.body = {
-        error: (err as Error).message,
+        error: (err as Error)?.message,
       }
     }
   },
@@ -57,7 +57,7 @@ router.post(
       console.debug(err)
       ctx.status = 404
       ctx.body = {
-        error: (err as Error).message,
+        error: (err as Error)?.message,
       }
     }
   },
@@ -74,7 +74,7 @@ router.post(
       console.debug(err)
       ctx.status = 404
       ctx.body = {
-        error: (err as Error).message,
+        error: (err as Error)?.message,
       }
     }
   },
