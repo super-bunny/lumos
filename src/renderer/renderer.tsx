@@ -16,8 +16,6 @@ root.render(
 
 window.lumos.getEnv()
   .then(env => console.debug('Env:', env))
-window.lumos.display.list()
-  .then(displays => console.info('Monitor list:', displays))
 window.lumos.sessionJwt()
   .then(jwt => console.info('Session jwt:', jwt))
 
@@ -27,6 +25,6 @@ window.lumos.sessionJwt()
   )
   .then(({ jwt, port }) => new HttpBackendClient(jwt, { port }))
   .then(client => client.list())
-  .then(list => console.info('List:', list))
+  .then(list => console.info('Monitor list:', list))
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack')
