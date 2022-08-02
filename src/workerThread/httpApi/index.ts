@@ -7,6 +7,7 @@ import DisplayManager from '../../main/classes/DisplayManager'
 import GlobalContext from './types/GlobalContext'
 
 export interface InitHttpApiArgs {
+  host: string
   port: number
   sessionJwtSecret: string,
   jwtSecret: string,
@@ -19,7 +20,7 @@ export interface InitHttpApiArgs {
 // Minus 2 minutes to handle delay between token creation and api initialization.
 const SESSION_JWT_MIN_CREATION_DATE = Date.now() - 1000 * 60 * 2 // 2 minutes
 
-export default function initHttpApi({ port, sessionJwtSecret, jwtSecret, context }: InitHttpApiArgs): void {
+export default function initHttpApi({ host, port, sessionJwtSecret, jwtSecret, context }: InitHttpApiArgs): void {
   const app = new Koa<DefaultState, GlobalContext>()
 
   // Context
@@ -53,5 +54,8 @@ export default function initHttpApi({ port, sessionJwtSecret, jwtSecret, context
     .use(router.routes())
     .use(router.allowedMethods())
 
-  app.listen(port, () => console.info(`Http api started, listening on port ${ port }`))
+  app.listen({
+    host,
+    port,
+  }, () => console.info(`Http api started, listening on port ${ port }`))
 }

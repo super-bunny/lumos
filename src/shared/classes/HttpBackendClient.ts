@@ -3,6 +3,7 @@ import axios, { AxiosInstance } from 'axios'
 import BackendClient from './BackendClient'
 
 export interface Options {
+  host?: string
   port?: number
 }
 
@@ -11,7 +12,7 @@ export default class HttpBackendClient implements BackendClient {
 
   constructor(public jwt: string, options?: Options) {
     this.axios = axios.create({
-      baseURL: `http://localhost:${ options?.port ?? 8787 }/displays`,
+      baseURL: `http://${ options?.host ?? 'localhost' }:${ options?.port ?? 8787 }/displays`,
       headers: {
         'Authorization': `Bearer ${ jwt }`,
       },

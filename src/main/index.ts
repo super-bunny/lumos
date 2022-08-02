@@ -6,6 +6,7 @@ import SecretStore from './classes/SecretStore'
 import crypto from 'crypto'
 import BackendWorker from './classes/BackendWorker'
 import generateSessionJwt from './utils/generateSessionJwt'
+import SettingsStore from './classes/SettingsStore'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -43,14 +44,17 @@ const createWindow = (): void => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   const displayManager = new DisplayManager()
+  const settings = new SettingsStore()
   const secretStore = new SecretStore({
     defaults: {
       httpApi: { jwtSecret: crypto.randomBytes(48).toString('base64') },
     },
   })
   const sessionJwtSecret = crypto.randomBytes(48).toString('base64')
-  const httpApiPort = 8787
+  const httpApiPort = settings.store.httpApi?.port ?? 8787
+  const httpApiHost = settings.store.httpApi?.host ?? 'localhost'
   const backendWorker = new BackendWorker({
+    httpApiHost,
     httpApiPort,
     jwtSecret: secretStore.store.httpApi.jwtSecret,
     sessionJwtSecret,

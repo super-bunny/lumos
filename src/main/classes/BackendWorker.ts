@@ -2,6 +2,7 @@ import { Worker } from 'worker_threads'
 import { IpcMessage } from '../../types/Ipc'
 
 export interface BackendWorkerData {
+  httpApiHost: string
   httpApiPort: number
   jwtSecret: string
   sessionJwtSecret: string
