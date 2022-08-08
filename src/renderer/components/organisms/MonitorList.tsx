@@ -5,7 +5,7 @@ import Loader from '../atoms/Loader'
 import { Backends } from '../../../main/classes/AbstractDisplay'
 import { mockDisplays } from '../../mockDisplays'
 import GenericDisplay from '../../classes/GenericDisplay'
-import HttpBackendClient from '../../../shared/classes/HttpBackendClient'
+import IpcBackendClient from '../../classes/IpcBackendClient'
 
 export interface Props {
   sx?: SxProps
@@ -22,13 +22,7 @@ export default function MonitorList({ sx }: Props) {
     setError(null)
 
     try {
-      const [jwt, httpApiConfig] = await Promise.all([
-        window.lumos.sessionJwt(),
-        window.lumos.getHttpApiConfig(),
-      ])
-      const monitors = await GenericDisplay.list(new HttpBackendClient(jwt, {
-        port: httpApiConfig.httpApiPort,
-      }))
+      const monitors = await GenericDisplay.list(new IpcBackendClient())
       console.info('Monitor list:', monitors)
       const backendList = monitors.map(display => display.info.backend)
 
