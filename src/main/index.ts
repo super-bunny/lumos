@@ -7,6 +7,7 @@ import crypto from 'crypto'
 import BackendWorker from './classes/BackendWorker'
 import generateSessionJwt from './utils/generateSessionJwt'
 import SettingsStore from './classes/SettingsStore'
+import AppTray from './classes/AppTray'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -16,7 +17,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit()
 }
 
-const createWindow = (): void => {
+const createWindow = (): BrowserWindow => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     height: 600,
@@ -37,12 +38,15 @@ const createWindow = (): void => {
   if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools()
   }
+
+  return mainWindow
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  const appTray = new AppTray()
   const displayManager = new DisplayManager()
   const settings = new SettingsStore()
   const secretStore = new SecretStore({
@@ -73,8 +77,13 @@ app.on('ready', () => {
   })
 
   Store.initRenderer()
-  createWindow()
+  const mainWindow = createWindow()
   setupIpc({ displayManager, sessionJwt, httpApiPort })
+
+  // App tray
+  appTray.tray.on('double-click', () => mainWindow.show())
+  appTray.config.onAppOpen = () => mainWindow.show()
+  appTray.reloadContextMenu()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
