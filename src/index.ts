@@ -1,8 +1,9 @@
 import { isMainThread } from 'worker_threads'
 import workerThread from './workerThread'
+import main from './main'
 
 if (isMainThread) {
-  require('./main')
+  main()
 } else {
   workerThread()
 }
