@@ -125,6 +125,12 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
                 disabled={ loading }
                 value={ brightness.toString() }
                 onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
+                onWheelCapture={ event => {
+                  if (event.target === document.activeElement) {
+                    event.stopPropagation()
+                    addBrightnessInRange(Math.sign(event.deltaY) * -1)
+                  }
+                } }
                 inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
                 endAdornment={ <Typography variant={ 'caption' } color={ 'gray' } fontSize={ '0.3em' }>%</Typography> }
                 color={ 'primary' }
