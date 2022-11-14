@@ -1,5 +1,6 @@
-import { app, Menu, MenuItem, MenuItemConstructorOptions, Tray } from 'electron'
+import { Menu, MenuItem, MenuItemConstructorOptions, Tray } from 'electron'
 import { version } from '../../../package.json'
+import * as path from 'path'
 
 export interface Config {
   onAppOpen?: () => void
@@ -19,11 +20,11 @@ export default class AppTray {
   protected getIconPath(): string {
     switch (process.platform) {
       case 'win32':
-        return 'src/renderer/assets/icons/lumos_icon.ico'
+        return path.resolve(__dirname, '..', 'shared/assets/icons/lumos_icon.ico')
       case 'darwin':
-        return 'src/renderer/assets/icons/lumos_icon.icns'
+        return path.resolve(__dirname, '..', 'shared/assets/icons/lumos_icon.icns')
       default:
-        return 'src/renderer/assets/icons/lumos_icon.png'
+        return path.resolve(__dirname, '..', 'shared/assets/icons/lumos_icon.png')
     }
   }
 

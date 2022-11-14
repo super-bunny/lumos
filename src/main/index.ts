@@ -47,7 +47,6 @@ export default function main() {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', () => {
-    const appTray = new AppTray()
     const displayManager = new DisplayManager()
     const settings = new SettingsStore()
     const secretStore = new SecretStore({
@@ -82,9 +81,15 @@ export default function main() {
     setupIpc({ displayManager, sessionJwt, httpApiPort })
 
     // App tray
-    appTray.tray.on('double-click', () => mainWindow.show())
-    appTray.config.onAppOpen = () => mainWindow.show()
-    appTray.reloadContextMenu()
+    try {
+      const appTray = new AppTray()
+
+      appTray.tray.on('double-click', () => mainWindow.show())
+      appTray.config.onAppOpen = () => mainWindow.show()
+      appTray.reloadContextMenu()
+    } catch (e) {
+      console.log(e)
+    }
   })
 
   // Quit when all windows are closed, except on macOS. There, it's common
