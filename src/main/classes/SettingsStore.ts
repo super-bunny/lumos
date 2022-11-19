@@ -5,6 +5,7 @@ export default class SettingsStore extends ElectronStore<Settings> {
   constructor() {
     super({
       defaults: {
+        minimizeAppOnWindowClose: true,
         theme: Themes.DEFAULT,
         httpApi: {
           host: 'localhost',

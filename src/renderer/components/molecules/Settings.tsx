@@ -1,6 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import SettingsType, { Themes } from '../../../types/Settings'
-import { Alert, FormControl, Grid, InputLabel, Link, MenuItem, Select, SxProps } from '@mui/material'
+import {
+  Alert,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  InputLabel,
+  Link,
+  MenuItem,
+  Select,
+  Switch,
+  SxProps,
+} from '@mui/material'
 import { useAppDispatch } from '../../store/store'
 import { setTheme } from '../../store/slices/themeSlice'
 import Loader from '../atoms/Loader'
@@ -49,6 +60,20 @@ export default function Settings({ sx }: Props) {
             href={ '#' }
           >{ storePath }</Link>
         </Alert>
+      </Grid>
+
+      <Grid item xs={ 12 }>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={ config?.minimizeAppOnWindowClose }
+              onChange={ (event) =>
+              editConfig({ ...config, minimizeAppOnWindowClose: event.target.checked })
+            }
+            />
+          }
+          label="Minimize app in task bar on close"
+        />
       </Grid>
 
       <Grid item xs={ 12 }>

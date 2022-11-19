@@ -4,6 +4,7 @@ export enum Themes {
 }
 
 export default interface Settings {
+  minimizeAppOnWindowClose?: boolean
   theme?: Themes
   httpApi?: {
     host?: string,
