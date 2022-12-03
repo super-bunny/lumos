@@ -14,6 +14,8 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
 let mainWindow: BrowserWindow | undefined
 let settings: SettingsStore | undefined
+// Use to handle window hiding/showing without prevent app from quit by closing all windows
+let shouldQuit: boolean = false
 
 export default function main() {
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -42,6 +44,13 @@ export default function main() {
     if (process.env.NODE_ENV === 'development') {
       mainWindow.webContents.openDevTools()
     }
+
+    mainWindow.on('close', (event) => {
+      if (!shouldQuit && settings?.store.minimizeAppOnWindowClose) {
+        event.preventDefault()
+        mainWindow?.hide()
+      }
+    })
 
     return mainWindow
   }
@@ -116,5 +125,9 @@ export default function main() {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     onAppOpen()
+  })
+
+  app.on('before-quit', () => {
+    shouldQuit = true
   })
 }
