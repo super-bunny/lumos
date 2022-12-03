@@ -1,0 +1,32 @@
+FROM node:18 AS builder
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Update default packages
+#RUN apt-get update
+
+# Get Ubuntu packages
+#RUN apt-get install -y \
+#    build-essential \
+#    curl
+
+# Update new packages
+#RUN apt-get update
+
+# Install Rust
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+RUN rustup target add x86_64-pc-windows-gnu
+RUN dpkg --add-architecture i386 && apt-get update && apt-get install -y mingw-w64 wine32 wine64 libwine mono-devel
+
+WORKDIR /app
+
+COPY package.json yarn.lock /app/
+
+RUN npm_config_arch=x64 CARGO_BUILD_TARGET=x86_64-pc-windows-gnu yarn --frozen-lockfile
+
+COPY . /app/
+
+RUN yarn make --targets @electron-forge/maker-squirrel --platform win32
+
+FROM scratch AS voidstar
+COPY --from=builder /app/out/make /
