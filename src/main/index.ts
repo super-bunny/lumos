@@ -12,6 +12,7 @@ import AppTray from './classes/AppTray'
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
+const singleInstanceLock = app.requestSingleInstanceLock()
 let mainWindow: BrowserWindow | undefined
 let settings: SettingsStore | undefined
 // Use to handle window hiding/showing without prevent app from quit by closing all windows
@@ -21,6 +22,13 @@ export default function main() {
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
   if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
     app.quit()
+    return
+  }
+
+  // Quit app if another instance is running
+  if (!singleInstanceLock) {
+    app.quit()
+    return
   }
 
   const createWindow = (): BrowserWindow => {
@@ -109,6 +117,17 @@ export default function main() {
       appTray.reloadContextMenu()
     } catch (e) {
       console.log(e)
+    }
+  })
+
+  app.on('second-instance', () => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore()
+        mainWindow.focus()
+      }
+      if (!mainWindow.isVisible()) mainWindow.show()
     }
   })
 
