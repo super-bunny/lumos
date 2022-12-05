@@ -6,8 +6,10 @@ import SecretStore from './classes/SecretStore'
 import crypto from 'crypto'
 import BackendWorker from './classes/BackendWorker'
 import generateSessionJwt from './utils/generateSessionJwt'
-import SettingsStore from './classes/SettingsStore'
+import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import AppTray from './classes/AppTray'
+import setupAutoStartup from './utils/setupAutoStartup'
+import { defaultSerializeQueryArgs } from '@reduxjs/toolkit/dist/query/defaultSerializeQueryArgs'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -36,6 +38,7 @@ export default function main() {
     const mainWindow = new BrowserWindow({
       height: 720,
       width: 1280,
+      show: !settings?.store.minimizeAppOnStartup,
       webPreferences: {
         preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         nodeIntegration: false,
@@ -104,6 +107,7 @@ export default function main() {
       })
     })
 
+    setupAutoStartup(settings.store.runAppOnStartup ?? defaultSettings.runAppOnStartup)
     Store.initRenderer()
     mainWindow = createWindow()
     setupIpc({ displayManager, sessionJwt, httpApiPort })

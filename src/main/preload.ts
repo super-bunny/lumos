@@ -3,6 +3,7 @@ import { VCPValue } from 'ddc-rs'
 import { DisplayInfo } from './classes/AbstractDisplay'
 import ElectronStore from 'electron-store'
 import Settings from '../types/Settings'
+import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore from './classes/SettingsStore'
 
@@ -29,6 +30,10 @@ export const LumosApi = {
       data: any,
       options?: StoreOptions,
     ): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_STORE_DATA, data, options),
+    getSettings: (): Promise<{ settings: SettingsType, path: string }> => ipcRenderer.invoke(IpcEvents.GET_SETTINGS),
+    setSettings: (
+      settings: SettingsType,
+    ): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_SETTINGS, settings),
   },
   initTheme: settings.store.theme,
   getEnv: (): Promise<Record<string, string>> => ipcRenderer.invoke(IpcEvents.GET_NODE_ENV),

@@ -29,14 +29,14 @@ export default function Settings({ sx }: Props) {
 
   const editConfig = useCallback(async (newConfig: SettingsType) => {
     setConfig(newConfig)
-    return window.lumos.store.set(newConfig)
+    return window.lumos.store.setSettings(newConfig)
   }, [])
 
   useEffect(() => {
     setLoading(true)
-    window.lumos.store.get()
+    window.lumos.store.getSettings()
       .then(store => {
-        setConfig(store.store)
+        setConfig(store.settings)
         setStorePath(store.path)
       })
       .finally(() => setLoading(false))
@@ -66,10 +66,38 @@ export default function Settings({ sx }: Props) {
         <FormControlLabel
           control={
             <Switch
+              checked={ config?.runAppOnStartup }
+              onChange={ (event) =>
+                editConfig({ ...config, runAppOnStartup: event.target.checked } as SettingsType)
+              }
+            />
+          }
+          label="Run app on startup"
+        />
+      </Grid>
+
+      <Grid item xs={ 12 }>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={ config?.minimizeAppOnStartup }
+              onChange={ (event) =>
+                editConfig({ ...config, minimizeAppOnStartup: event.target.checked } as SettingsType)
+              }
+            />
+          }
+          label="Minimize app on startup"
+        />
+      </Grid>
+
+      <Grid item xs={ 12 }>
+        <FormControlLabel
+          control={
+            <Switch
               checked={ config?.minimizeAppOnWindowClose }
               onChange={ (event) =>
-              editConfig({ ...config, minimizeAppOnWindowClose: event.target.checked })
-            }
+                editConfig({ ...config, minimizeAppOnWindowClose: event.target.checked } as SettingsType)
+              }
             />
           }
           label="Minimize app in task bar on close"

@@ -4,6 +4,8 @@ export enum Themes {
 }
 
 export default interface Settings {
+  runAppOnStartup?: boolean
+  minimizeAppOnStartup?: boolean
   minimizeAppOnWindowClose?: boolean
   theme?: Themes
   httpApi?: {
