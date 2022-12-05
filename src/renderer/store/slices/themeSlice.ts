@@ -3,7 +3,7 @@ import { Themes } from '../../../types/Settings'
 
 const themeSlice = createSlice({
   name: 'theme',
-  initialState: Themes.DEFAULT,
+  initialState: window.lumos.initTheme ?? Themes.DEFAULT,
   reducers: {
     setTheme: (state, action: PayloadAction<Themes>) => action.payload,
   },

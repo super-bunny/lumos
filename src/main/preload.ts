@@ -4,8 +4,11 @@ import { DisplayInfo } from './classes/AbstractDisplay'
 import ElectronStore from 'electron-store'
 import Settings from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
+import SettingsStore from './classes/SettingsStore'
 
 export type StoreOptions = Pick<ElectronStore.Options<Settings>, 'name'>
+
+const settings = new SettingsStore()
 
 export const LumosApi = {
   display: {
@@ -27,6 +30,7 @@ export const LumosApi = {
       options?: StoreOptions,
     ): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_STORE_DATA, data, options),
   },
+  initTheme: settings.store.theme,
   getEnv: (): Promise<Record<string, string>> => ipcRenderer.invoke(IpcEvents.GET_NODE_ENV),
   showItemInFolder: (path: string) => shell.showItemInFolder(path),
   openInBrowser: (url: string) => shell.openExternal(url),
