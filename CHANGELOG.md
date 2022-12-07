@@ -2,6 +2,10 @@
 
 ## [Unreleased](https://github.com/super-bunny/lumos/tree/dev)
 
+None
+
+## [0.1.0-alpha.7](https://github.com/super-bunny/lumos/releases/tag/v0.1.0-alpha.7) (2022-12-6)
+
 ### Features
 
 - Add option to minimize app on close
