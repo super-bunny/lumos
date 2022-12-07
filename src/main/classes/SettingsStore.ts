@@ -3,7 +3,7 @@ import Settings, { Themes } from '../../types/Settings'
 
 export const defaultSettings: Required<Settings> = {
   runAppOnStartup: false,
-  minimizeAppOnStartup: true,
+  minimizeAppOnStartup: false,
   minimizeAppOnWindowClose: true,
   theme: Themes.DEFAULT,
   httpApi: {
