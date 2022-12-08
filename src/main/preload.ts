@@ -10,6 +10,9 @@ import SettingsStore from './classes/SettingsStore'
 export type StoreOptions = Pick<ElectronStore.Options<Settings>, 'name'>
 
 const settings = new SettingsStore()
+const env = {
+  MOCK_DISPLAYS: process.env.MOCK_DISPLAYS,
+}
 
 export const LumosApi = {
   display: {
@@ -36,6 +39,7 @@ export const LumosApi = {
   openInBrowser: (url: string) => shell.openExternal(url),
   sessionJwt: (): Promise<string> => ipcRenderer.invoke(IpcEvents.GET_SESSION_JWT),
   getHttpApiConfig: (): Promise<{ httpApiPort: number }> => ipcRenderer.invoke(IpcEvents.GET_HTTP_API_CONFIG),
+  env,
 }
 
 contextBridge.exposeInMainWorld('lumos', LumosApi)
