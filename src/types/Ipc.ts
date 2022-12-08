@@ -6,8 +6,6 @@ export enum IpcEvents {
   // Store
   GET_SETTINGS = 'GET_SETTINGS',
   SET_SETTINGS = 'SET_SETTINGS',
-  GET_STORE = 'GET_STORE',
-  SET_STORE_DATA = 'SET_STORE_DATA',
   // Node
   GET_NODE_ENV = 'GET_NODE_ENV',
   // Backend

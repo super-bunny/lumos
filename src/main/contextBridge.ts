@@ -1,7 +1,5 @@
 import { ipcMain } from 'electron'
 import DisplayManager from './classes/DisplayManager'
-import ElectronStore from 'electron-store'
-import Settings from '../types/Settings'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
@@ -40,19 +38,6 @@ export default function setupIpc({ displayManager, sessionJwt, httpApiPort }: Se
     settingsStore.set(settings)
     setupAutoStartup(settings.runAppOnStartup ?? defaultSettings.runAppOnStartup)
   })
-
-  ipcMain.handle(IpcEvents.GET_STORE, (event, options) => {
-    const store = new ElectronStore<Settings>(options)
-    return {
-      store: store.store,
-      path: store.path,
-    }
-  })
-  ipcMain.handle(IpcEvents.SET_STORE_DATA, (event, data, options) => {
-    const store = new ElectronStore<Settings>(options)
-    store.set(data)
-  })
-
 
   ipcMain.handle(IpcEvents.GET_NODE_ENV, () => ({
     MOCK_DISPLAYS: process.env.MOCK_DISPLAYS,

@@ -25,11 +25,6 @@ export const LumosApi = {
     list: (): Promise<Array<DisplayInfo>> => ipcRenderer.invoke(IpcEvents.LIST_DISPLAYS),
   },
   store: {
-    get: (options?: StoreOptions): Promise<{ store: Settings, path: string }> => ipcRenderer.invoke(IpcEvents.GET_STORE, options),
-    set: (
-      data: any,
-      options?: StoreOptions,
-    ): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_STORE_DATA, data, options),
     getSettings: (): Promise<{ settings: SettingsType, path: string }> => ipcRenderer.invoke(IpcEvents.GET_SETTINGS),
     setSettings: (
       settings: SettingsType,
