@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Divider, Input, Paper, Slider, Stack, styled, Typography } from '@mui/material'
+import { Divider, IconButton, Input, Paper, Slider, Stack, styled, Tooltip, Typography } from '@mui/material'
 import Center from '../atoms/Center'
 import Loader from '../atoms/Loader'
 import GenericDisplay from '../../classes/GenericDisplay'
+import RefreshIcon from '@mui/icons-material/Refresh'
 
 export type Monitor = GenericDisplay
 
@@ -54,23 +55,26 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   }, [brightness, setBrightness])
 
   // Check if monitor support DDC protocol and retrieve monitor brightness if supported
-  useEffect(() => {
-    const checkSupportDDC = async () => {
-      const supportDDC = await monitor.supportDDC()
+  const refreshBrightness = useCallback(async (useCache: boolean = true) => {
+    setLoading(true)
 
-      if (!supportDDC) {
-        setSupportDDC(false)
-        setLoading(false)
-        return
-      }
+    const supportDDC = await monitor.supportDDC()
 
-      setBrightnessState(await monitor.getBrightnessPercentage())
-      setSupportDDC(true)
+    if (!supportDDC) {
+      setSupportDDC(false)
       setLoading(false)
+      return
     }
 
-    checkSupportDDC()
+    setBrightnessState(await monitor.getBrightnessPercentage(useCache))
+    setSupportDDC(true)
+    setLoading(false)
   }, [monitor])
+
+  // Check if monitor support DDC protocol and retrieve monitor brightness if supported
+  useEffect(() => {
+    refreshBrightness()
+  }, [refreshBrightness])
 
   // Register scroll event to set monitor brightness
   useEffect(() => {
@@ -112,13 +116,23 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
         { !loading && supportDDC && (
           <>
-            <Typography
-              mt={ 1 }
-              variant={ 'overline' }
-              fontSize={ '1em' }
-              lineHeight={ '1em' }
-              textAlign={ 'center' }
-            >Brightness</Typography>
+            <div style={ { alignSelf: 'center', position: 'relative' } }>
+              <Typography
+                mt={ 1 }
+                variant={ 'overline' }
+                fontSize={ '1em' }
+                lineHeight={ '1em' }
+                textAlign={ 'center' }
+              >Brightness</Typography>
+
+              <Tooltip title={ 'Refresh brightness for this monitor' } placement={ 'top' }>
+                <IconButton
+                  onClick={ () => refreshBrightness(false) }
+                  color={ 'primary' }
+                  sx={ { p: 0, position: 'absolute', top: 0, right: -32 } }
+                ><RefreshIcon/></IconButton>
+              </Tooltip>
+            </div>
 
             <Center sx={ { height: 'auto', flexGrow: 1 } }>
               <StyledInput
