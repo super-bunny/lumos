@@ -11,6 +11,8 @@ export enum IpcEvents {
   // Backend
   GET_SESSION_JWT = 'GET_SESSION_JWT',
   GET_HTTP_API_CONFIG = 'GET_HTTP_API_CONFIG',
+  // App
+  RESTART_APP = 'RESTART_APP',
 }
 
 export interface IpcMessage<T = any> {

@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import SettingsType, { Themes } from '../../../types/Settings'
 import {
   Alert,
+  Button,
   FormControl,
   FormControlLabel,
   Grid,
@@ -16,9 +17,16 @@ import { useAppDispatch } from '../../store/store'
 import { setTheme } from '../../store/slices/themeSlice'
 import Loader from '../atoms/Loader'
 import Center from '../atoms/Center'
+import InfoIcon from '../atoms/InfoIcon'
 
 export interface Props {
   sx?: SxProps
+}
+
+function checkIfNeedRestart(settings: SettingsType) {
+  if (window.lumos.initSettings.enableHttpApi !== settings.enableHttpApi) return true
+
+  return false
 }
 
 export default function Settings({ sx }: Props) {
@@ -26,6 +34,8 @@ export default function Settings({ sx }: Props) {
   const [config, setConfig] = useState<SettingsType>()
   const [storePath, setStorePath] = useState<string>()
   const [loading, setLoading] = useState(true)
+
+  const needRestart = useMemo(() => config ? checkIfNeedRestart(config) : false, [config])
 
   const editConfig = useCallback(async (newConfig: SettingsType) => {
     setConfig(newConfig)
@@ -61,6 +71,17 @@ export default function Settings({ sx }: Props) {
           >{ storePath }</Link>
         </Alert>
       </Grid>
+
+      { needRestart && (
+        <Grid item xs={ 12 }>
+          <Alert
+            severity="warning"
+            action={
+              <Button onClick={ () => window.lumos.restartApp() } color={ 'error' }>Restart</Button>
+            }
+          >You need to restart the app to apply settings</Alert>
+        </Grid>
+      ) }
 
       <Grid item xs={ 12 }>
         <FormControlLabel
@@ -121,6 +142,24 @@ export default function Settings({ sx }: Props) {
             )) }
           </Select>
         </FormControl>
+      </Grid>
+
+      <Grid item display={ 'flex' } alignItems={ 'center' } xs={ 12 }>
+        <FormControlLabel
+          color={ 'error' }
+          control={
+            <Switch
+              checked={ config?.enableHttpApi }
+              onChange={ (event) => editConfig({ ...config, enableHttpApi: event.target.checked } as SettingsType) }
+            />
+          }
+          label="Enable HTTP API"
+        />
+
+        <InfoIcon
+          message={ 'Experimental HTTP API that allow third party app/tools to use the Lumos app backend to ' +
+            'control your monitors via the DDC/CI protocol.\nThis settings need app restart to apply.' }
+        />
       </Grid>
     </Grid>
   )

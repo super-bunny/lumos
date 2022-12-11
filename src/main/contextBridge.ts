@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron'
+import { app, ipcMain } from 'electron'
 import DisplayManager from './classes/DisplayManager'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
@@ -47,4 +47,9 @@ export default function setupIpc({ displayManager, sessionJwt, httpApiPort }: Se
   ipcMain.handle(IpcEvents.GET_HTTP_API_CONFIG, () => ({
     httpApiPort,
   }))
+  // App
+  ipcMain.handle(IpcEvents.RESTART_APP, () => {
+    app.relaunch()
+    app.quit()
+  })
 }

@@ -4,16 +4,18 @@ import initHttpApi from './httpApi'
 import { BackendWorkerData } from '../main/classes/BackendWorker'
 
 export default function workerThread(): void {
-  const { httpApiPort, httpApiHost, jwtSecret, sessionJwtSecret } = workerData as BackendWorkerData
+  const { enableHttpApi, httpApiPort, httpApiHost, jwtSecret, sessionJwtSecret } = workerData as BackendWorkerData
   const displayManager = new DisplayManager()
 
   displayManager.refresh()
 
-  initHttpApi({
-    host: httpApiHost,
-    port: httpApiPort ?? 8787,
-    jwtSecret,
-    sessionJwtSecret,
-    context: { displayManager },
-  })
+  if (enableHttpApi) {
+    initHttpApi({
+      host: httpApiHost,
+      port: httpApiPort ?? 8787,
+      jwtSecret,
+      sessionJwtSecret,
+      context: { displayManager },
+    })
+  }
 }

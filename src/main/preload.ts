@@ -34,12 +34,14 @@ export const LumosApi = {
     ): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_SETTINGS, settings),
   },
   initTheme: settings.store.theme,
+  initSettings: settings.store,
   getEnv: (): Promise<Record<string, string>> => ipcRenderer.invoke(IpcEvents.GET_NODE_ENV),
   showItemInFolder: (path: string) => shell.showItemInFolder(path),
   openInBrowser: (url: string) => shell.openExternal(url),
   sessionJwt: (): Promise<string> => ipcRenderer.invoke(IpcEvents.GET_SESSION_JWT),
   getHttpApiConfig: (): Promise<{ httpApiPort: number }> => ipcRenderer.invoke(IpcEvents.GET_HTTP_API_CONFIG),
   env,
+  restartApp: () => ipcRenderer.invoke(IpcEvents.RESTART_APP),
 }
 
 contextBridge.exposeInMainWorld('lumos', LumosApi)

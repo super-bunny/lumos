@@ -9,7 +9,6 @@ import generateSessionJwt from './utils/generateSessionJwt'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import AppTray from './classes/AppTray'
 import setupAutoStartup from './utils/setupAutoStartup'
-import { defaultSerializeQueryArgs } from '@reduxjs/toolkit/dist/query/defaultSerializeQueryArgs'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -89,6 +88,7 @@ export default function main() {
     const httpApiPort = settings.store.httpApi?.port ?? 8787
     const httpApiHost = settings.store.httpApi?.host ?? 'localhost'
     const backendWorker = new BackendWorker({
+      enableHttpApi: settings.store.enableHttpApi ?? defaultSettings.enableHttpApi,
       httpApiHost,
       httpApiPort,
       jwtSecret: secretStore.store.httpApi.jwtSecret,
