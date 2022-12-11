@@ -15,13 +15,13 @@ export default function MonitorList({ sx }: Props) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>()
 
-  const getMonitors = useCallback(async () => {
+  const getMonitors = useCallback(async (useCache?: boolean) => {
     console.info('Getting monitor list...')
     setLoading(true)
     setError(null)
 
     try {
-      const monitors = await GenericDisplay.list(new IpcBackendClient())
+      const monitors = await GenericDisplay.list(new IpcBackendClient(), { useCache })
       console.info('Monitor list:', monitors)
       const backendList = monitors.map(display => display.info.backend)
 
@@ -74,7 +74,8 @@ export default function MonitorList({ sx }: Props) {
         <Alert severity={ 'error' }>{ error }</Alert>
       ) }
 
-      { !loading && <Button onClick={ getMonitors } variant={ 'text' }>{ error ? 'Retry' : 'Refresh' }</Button> }
+      { !loading &&
+        <Button onClick={ () => getMonitors(false) } variant={ 'text' }>{ error ? 'Retry' : 'Refresh' }</Button> }
     </Stack>
   )
 }

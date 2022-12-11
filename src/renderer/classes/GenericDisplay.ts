@@ -1,9 +1,13 @@
 import { Continuous, DisplayInfo, VCPValue, VCPValueType } from '../../main/classes/AbstractDisplay'
 import VCPFeatures from '../../types/VCPFeatures'
 import BackendClient from '../../shared/classes/BackendClient'
+import NodeCache from 'node-cache'
+
+const cache = new NodeCache({ useClones: false })
+const DISPLAY_LIST_CACHE_KEY = 'display-list'
 
 export default class GenericDisplay {
-  cache: Record<number, VCPValue | undefined> = {}
+  cache: Record<number | string, any> = {}
 
   protected constructor(public client: BackendClient, public info: DisplayInfo) {
   }
@@ -12,8 +16,19 @@ export default class GenericDisplay {
     return this.info.modelName ?? this.info.displayId
   }
 
-  async supportDDC(): Promise<boolean> {
-    return this.client.supportDDC(this.info.displayId)
+  async supportDDC(useCache: boolean = true): Promise<boolean> {
+    const cachedValue = this.cache['supportDDC']
+
+    if (useCache && cachedValue) {
+      console.debug(`[GENERIC DISPLAY ${ this.info.displayId }] Support DDC - CACHE HIT`)
+      return cachedValue
+    }
+
+    const supportDDCPromise = this.client.supportDDC(this.info.displayId)
+
+    this.cache['supportDDC'] = supportDDCPromise
+
+    return supportDDCPromise
   }
 
   async getVcpValue(featureCode: number): Promise<VCPValue> {
@@ -24,10 +39,11 @@ export default class GenericDisplay {
     return this.client.setVcpValue(this.info.displayId, featureCode, value)
   }
 
-  async getVcpValueFromCache(featureCode: number, forceRefresh = false): Promise<VCPValue> {
+  async getVcpValueFromCache(featureCode: number, useCache: boolean = true): Promise<VCPValue> {
     const cachedValue = this.cache[featureCode]
 
-    if (cachedValue && !forceRefresh) {
+    if (useCache && cachedValue) {
+      console.debug(`[GENERIC DISPLAY ${ this.info.displayId }] Get VCP feature: ${ featureCode } - CACHE HIT`)
       return cachedValue
     }
 
@@ -38,8 +54,8 @@ export default class GenericDisplay {
     return value
   }
 
-  async getVcpLuminance(useCache = false): Promise<Continuous> {
-    const value = await this.getVcpValueFromCache(VCPFeatures.ImageAdjustment.Luminance, !useCache)
+  async getVcpLuminance(useCache?: boolean): Promise<Continuous> {
+    const value = await this.getVcpValueFromCache(VCPFeatures.ImageAdjustment.Luminance, useCache)
 
     if (value.type !== VCPValueType.CONTINUOUS) {
       throw new Error('VCP Luminance (brightness) value type not supported')
@@ -48,8 +64,8 @@ export default class GenericDisplay {
     return value
   }
 
-  async getBrightnessPercentage(): Promise<number> {
-    const { currentValue, maximumValue } = await this.getVcpLuminance()
+  async getBrightnessPercentage(useCache?: boolean): Promise<number> {
+    const { currentValue, maximumValue } = await this.getVcpLuminance(useCache)
 
     return Math.round(currentValue * 100 / maximumValue)
   }
@@ -64,9 +80,22 @@ export default class GenericDisplay {
     this.cache = {}
   }
 
-  static async list(client: BackendClient): Promise<Array<GenericDisplay>> {
-    const displayInfoList = await client.list()
+  static async list(client: BackendClient, options?: { useCache?: boolean }): Promise<Array<GenericDisplay>> {
+    const { useCache = true } = options ?? {}
 
-    return displayInfoList.map(displayInfo => new GenericDisplay(client, displayInfo))
+    if (useCache && cache.has(DISPLAY_LIST_CACHE_KEY)) {
+      console.debug('List generic display - CACHE HIT')
+      return cache.get(DISPLAY_LIST_CACHE_KEY) as Promise<Array<GenericDisplay>>
+    }
+
+    console.debug('List generic display')
+    const genericDisplayListPromise = await client.list()
+      .then(displayInfoList => {
+        return displayInfoList.map(displayInfo => new GenericDisplay(client, displayInfo))
+      })
+
+    cache.set(DISPLAY_LIST_CACHE_KEY, genericDisplayListPromise)
+
+    return genericDisplayListPromise
   }
 }
