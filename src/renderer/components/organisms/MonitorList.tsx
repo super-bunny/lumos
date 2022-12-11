@@ -3,7 +3,6 @@ import { Alert, Button, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard'
 import Loader from '../atoms/Loader'
 import { Backends } from '../../../main/classes/AbstractDisplay'
-import { mockDisplays } from '../../mockDisplays'
 import GenericDisplay from '../../classes/GenericDisplay'
 import IpcBackendClient from '../../classes/IpcBackendClient'
 
@@ -45,14 +44,7 @@ export default function MonitorList({ sx }: Props) {
   }, [])
 
   useEffect(() => {
-    window.lumos.getEnv()
-      .then(env => {
-        if (env.MOCK_DISPLAYS === 'true') {
-          console.info('Mocking Displays')
-          mockDisplays()
-        }
-      })
-      .then(() => getMonitors())
+    getMonitors(true)
   }, [getMonitors])
 
   return (
