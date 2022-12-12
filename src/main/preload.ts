@@ -6,6 +6,7 @@ import Settings from '../types/Settings'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore from './classes/SettingsStore'
+import { sentryIsEnabled } from '../shared/utils/sentry'
 
 export type StoreOptions = Pick<ElectronStore.Options<Settings>, 'name'>
 
@@ -13,6 +14,7 @@ const settings = new SettingsStore()
 const env = {
   MOCK_DISPLAYS: process.env.MOCK_DISPLAYS,
 }
+const sentryEnabled = sentryIsEnabled()
 
 export const LumosApi = {
   display: {
@@ -41,6 +43,7 @@ export const LumosApi = {
   sessionJwt: (): Promise<string> => ipcRenderer.invoke(IpcEvents.GET_SESSION_JWT),
   getHttpApiConfig: (): Promise<{ httpApiPort: number }> => ipcRenderer.invoke(IpcEvents.GET_HTTP_API_CONFIG),
   env,
+  sentryEnabled,
   restartApp: () => ipcRenderer.invoke(IpcEvents.RESTART_APP),
 }
 

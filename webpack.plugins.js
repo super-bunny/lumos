@@ -3,6 +3,8 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
+const SentryWebpackPlugin = require('@sentry/webpack-plugin')
+const { version } = require('./package.json')
 
 const plugins = [
   new ForkTsCheckerWebpackPlugin(),
@@ -14,6 +16,19 @@ const plugins = [
         to: path.resolve(__dirname, '.webpack/shared/assets'),
       },
     ],
+  }),
+  new SentryWebpackPlugin({
+    org: 'lumos-app',
+    project: 'lumos-app',
+    // Specify the directory containing build artifacts
+    include: './.webpack/',
+    urlPrefix: '~/.webpack/',
+    // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+    // and needs the `project:releases` and `org:read` scopes
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+    // Optionally uncomment the line below to override automatic release name detection
+    release: version,
+    cleanArtifacts: true,
   }),
 ]
 
