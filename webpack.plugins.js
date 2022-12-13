@@ -17,20 +17,25 @@ const plugins = [
       },
     ],
   }),
-  new SentryWebpackPlugin({
-    org: 'lumos-app',
-    project: 'lumos-app',
-    // Specify the directory containing build artifacts
-    include: './.webpack/',
-    urlPrefix: '~/.webpack/',
-    // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
-    // and needs the `project:releases` and `org:read` scopes
-    authToken: process.env.SENTRY_AUTH_TOKEN,
-    // Optionally uncomment the line below to override automatic release name detection
-    release: version,
-    cleanArtifacts: true,
-  }),
 ]
+
+if (process.env.NODE_ENV === 'production') {
+  plugins.push(
+    new SentryWebpackPlugin({
+      org: 'lumos-app',
+      project: 'lumos-app',
+      // Specify the directory containing build artifacts
+      include: './.webpack/',
+      urlPrefix: '~/.webpack/',
+      // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+      // and needs the `project:releases` and `org:read` scopes
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      // Optionally uncomment the line below to override automatic release name detection
+      release: version,
+      cleanArtifacts: true,
+    }),
+  )
+}
 
 if (process.env.OPEN_ANALYZER === 'true') {
   plugins.push(new BundleAnalyzerPlugin())
