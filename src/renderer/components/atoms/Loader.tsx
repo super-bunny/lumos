@@ -10,7 +10,7 @@ export default function Loader({ title }: Props) {
     <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 }>
       <CircularProgress/>
       { title && typeof title === 'string' ? (
-        <Typography noWrap sx={ { color: 'gray' } }>{ title }</Typography>
+        <Typography sx={ { color: 'gray' } }>{ title }</Typography>
       ) : title }
     </Stack>
   )
