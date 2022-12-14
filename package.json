@@ -22,112 +22,17 @@
     "email": "clovis.devillars@gmail.com"
   },
   "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "platform": [
-          "darwin",
-          "win32",
-          "linux"
-        ],
-        "icon": "./src/shared/assets/icons/lumos_icon"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "iconUrl": "https://github.com/super-bunny/lumos/raw/dev/src/shared/assets/icons/lumos_icon.ico",
-            "setupIcon": "./src/shared/assets/icons/lumos_icon.ico"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-dmg",
-          "config": {
-            "icon": "./src/shared/assets/icons/lumos_icon.icns",
-            "format": "ULFO",
-            "overwrite": true
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "icon": "./src/shared/assets/icons/lumos_icon.png"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "devServer": {
-              "liveReload": false
-            },
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "html": "./src/renderer/index.html",
-                  "js": "./src/renderer/renderer.tsx",
-                  "name": "main_window",
-                  "preload": {
-                    "js": "./src/main/preload.ts"
-                  }
-                }
-              ]
-            }
-          }
-        ],
-        [
-          "@timfish/forge-externals-plugin",
-          {
-            "externals": [
-              "ddc-rs"
-            ],
-            "includeDeps": true
-          }
-        ]
-      ],
-      "publishers": [
-        {
-          "name": "@electron-forge/publisher-github",
-          "platforms": [
-            "win32",
-            "darwin",
-            "linux"
-          ],
-          "config": {
-            "repository": {
-              "owner": "super-bunny",
-              "name": "lumos"
-            }
-          }
-        }
-      ]
-    }
-  },
   "devDependencies": {
     "@babel/core": "^7.18.9",
-    "@electron-forge/cli": "^6.0.0-beta.65",
-    "@electron-forge/maker-deb": "^6.0.0-beta.65",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.65",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.65",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
-    "@electron-forge/maker-zip": "^6.0.0-beta.65",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.65",
-    "@electron-forge/publisher-github": "^6.0.0-beta.65",
+    "@electron-forge/cli": "^6.0.4",
+    "@electron-forge/maker-deb": "^6.0.4",
+    "@electron-forge/maker-dmg": "^6.0.4",
+    "@electron-forge/maker-rpm": "^6.0.4",
+    "@electron-forge/maker-squirrel": "^6.0.4",
+    "@electron-forge/maker-zip": "^6.0.4",
+    "@electron-forge/plugin-webpack": "6.0.4",
+    "@electron-forge/publisher-github": "^6.0.4",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
-    "@timfish/forge-externals-plugin": "^0.1.2",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/koa": "^2.13.5",
     "@types/koa-bodyparser": "^4.3.7",
@@ -136,7 +41,7 @@
     "@types/react": "^18.0.4",
     "@types/react-dom": "^18.0.0",
     "@types/semver": "^7.3.10",
-    "@vercel/webpack-asset-relocator-loader": "^1.7.3",
+    "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "babel-loader": "^8.2.5",
     "babel-preset-react-app": "^10.0.1",
     "copy-webpack-plugin": "^11.0.0",
