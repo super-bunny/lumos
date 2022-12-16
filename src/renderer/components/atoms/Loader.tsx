@@ -1,5 +1,5 @@
 import React from 'react'
-import { CircularProgress, Stack, Typography } from '@mui/material'
+import { CircularProgress, Fade, Stack, Typography } from '@mui/material'
 
 export interface Props {
   title?: string | JSX.Element;
@@ -7,11 +7,13 @@ export interface Props {
 
 export default function Loader({ title }: Props) {
   return (
-    <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 }>
-      <CircularProgress/>
-      { title && typeof title === 'string' ? (
-        <Typography sx={ { color: 'gray' } }>{ title }</Typography>
-      ) : title }
-    </Stack>
+    <Fade in={ true } exit={ true } timeout={ 500 }>
+      <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 }>
+        <CircularProgress/>
+        { title && typeof title === 'string' ? (
+          <Typography sx={ { color: 'gray' } }>{ title }</Typography>
+        ) : title }
+      </Stack>
+    </Fade>
   )
 }
