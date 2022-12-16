@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Alert, Button, Stack, SxProps, Typography } from '@mui/material'
+import { Alert, Button, Grow, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard'
 import Loader from '../atoms/Loader'
 import { Backends } from '../../../main/classes/AbstractDisplay'
@@ -59,10 +59,16 @@ export default function MonitorList({ sx }: Props) {
           flexWrap={ 'wrap' }
           gap={ 4 }
         >
-          { monitors?.map(monitor => <MonitorBrightnessCard
-            key={ monitor.info.index }
-            monitor={ monitor }
-          />) }
+          { monitors?.map((monitor, index) => (
+            <Grow
+              in={ true }
+              timeout={ 500 + (300 * (index + 1)) }
+              key={ monitor.info.index }
+            >
+              <div>
+                <MonitorBrightnessCard monitor={ monitor }/>
+              </div>
+            </Grow>)) }
         </Stack>
       ) }
 
