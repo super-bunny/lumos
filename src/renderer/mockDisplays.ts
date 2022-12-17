@@ -2,8 +2,10 @@ import { Backends, VCPValueType } from '../main/classes/AbstractDisplay'
 import IpcBackendClient from './classes/IpcBackendClient'
 
 export function mockDisplays(): void {
-  IpcBackendClient.prototype.list = () => {
+  IpcBackendClient.prototype.list = async () => {
     console.debug('Display.list() mock called')
+
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 5000))
 
     return Promise.resolve([
         {
@@ -45,10 +47,12 @@ export function mockDisplays(): void {
 
     return Promise.resolve(undefined)
   }
-  IpcBackendClient.prototype.getVcpValue = (...args) => {
+  IpcBackendClient.prototype.getVcpValue = async (...args) => {
     console.debug('Display.getVcpValue() mock called with args:', args)
 
     const maximum = Math.round(Math.random() * 1000)
+
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 1000))
 
     return Promise.resolve({
         type: VCPValueType.CONTINUOUS,
