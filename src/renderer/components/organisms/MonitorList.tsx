@@ -5,6 +5,7 @@ import Loader from '../atoms/Loader'
 import { Backends } from '../../../main/classes/AbstractDisplay'
 import GenericDisplay from '../../classes/GenericDisplay'
 import IpcBackendClient from '../../classes/IpcBackendClient'
+import useSettingsStore from '../../hooks/useSettingsStore'
 
 export interface Props {
   sx?: SxProps
@@ -14,6 +15,8 @@ export default function MonitorList({ sx }: Props) {
   const [monitors, setMonitors] = useState<Array<GenericDisplay>>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>()
+
+  const { settingsStore } = useSettingsStore()
 
   const getMonitors = useCallback(async (useCache?: boolean) => {
     console.info('Getting monitor list...')
@@ -62,6 +65,7 @@ export default function MonitorList({ sx }: Props) {
           { monitors?.map((monitor, index) => (
             <Grow
               in={ true }
+              appear={ settingsStore?.settings.enableAnimations ?? false }
               timeout={ 500 + (300 * (index + 1)) }
               key={ monitor.info.index }
             >

@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Collapse, Grid, Link, Stack, styled, SxProps, Tab, Tabs } from '@mui/material'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { TabContext, TabPanel } from '@mui/lab'
 import SettingsType from '../../../types/Settings'
 import Center from '../atoms/Center'
@@ -7,6 +7,7 @@ import Loader from '../atoms/Loader'
 import InterfaceSettings from '../molecules/Settings/InterfaceSettings'
 import ApplicationSettings from '../molecules/Settings/ApplicationSettings'
 import ExperimentalSettings from '../molecules/Settings/ExperimentalSettings'
+import useSettingsStore from '../../hooks/useSettingsStore'
 
 export interface Props {
   sx?: SxProps
@@ -29,29 +30,20 @@ const SettingsTabPanel = styled(TabPanel)`
 `
 
 export default function Settings({ sx }: Props) {
+  const { settingsStore, isLoading, mutate } = useSettingsStore()
+  const { settings, path } = settingsStore ?? {}
+
   const [tabIndex, setTabIndex] = useState<SETTINGS_TABS>(SETTINGS_TABS.APPLICATION)
-  const [settings, setSettings] = useState<SettingsType>()
-  const [storePath, setStorePath] = useState<string>()
-  const [loading, setLoading] = useState(true)
 
   const needRestart = useMemo(() => settings ? checkIfNeedRestart(settings) : false, [settings])
 
-  const saveSettings = useCallback(async (newConfig: SettingsType) => {
-    setSettings(newConfig)
-    return window.lumos.store.setSettings(newConfig)
-  }, [])
+  const saveSettings = useCallback(async (newSettings: SettingsType) => {
+    if (!settingsStore) return
+    await mutate({ ...settingsStore, settings: newSettings }, { revalidate: false })
+    return window.lumos.store.setSettings(newSettings)
+  }, [mutate, settingsStore])
 
-  useEffect(() => {
-    setLoading(true)
-    window.lumos.store.getSettings()
-      .then(store => {
-        setSettings(store.settings)
-        setStorePath(store.path)
-      })
-      .finally(() => setLoading(false))
-  }, [])
-
-  if (loading) {
+  if (isLoading) {
     return (
       <Center>
         <Loader title={ 'Loading settings' }/>
@@ -66,9 +58,9 @@ export default function Settings({ sx }: Props) {
           <Alert severity="info">
             <span>Settings are saved in </span>
             <Link
-              onClick={ () => window.lumos.showItemInFolder(storePath!) }
+              onClick={ () => window.lumos.showItemInFolder(path!) }
               href={ '#' }
-            >{ storePath }</Link>
+            >{ path }</Link>
           </Alert>
         </Grid>
 

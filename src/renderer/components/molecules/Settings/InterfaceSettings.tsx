@@ -1,6 +1,6 @@
 import React from 'react'
 import SettingsType, { Themes } from '../../../../types/Settings'
-import { FormControl, Grid, InputLabel, MenuItem, Select, SxProps } from '@mui/material'
+import { FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Switch, SxProps } from '@mui/material'
 import { useAppDispatch } from '../../../store/store'
 import { setTheme } from '../../../store/slices/themeSlice'
 
@@ -32,6 +32,20 @@ export default function InterfaceSettings({ settings, onChange, sx }: Props) {
             )) }
           </Select>
         </FormControl>
+      </Grid>
+
+      <Grid item xs={ 12 }>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={ settings.enableAnimations }
+              onChange={ (event) =>
+                onChange?.({ ...settings, enableAnimations: event.target.checked } as SettingsType)
+              }
+            />
+          }
+          label="Enable animations"
+        />
       </Grid>
     </Grid>
   )

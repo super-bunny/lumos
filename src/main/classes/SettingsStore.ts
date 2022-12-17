@@ -6,6 +6,7 @@ export const defaultSettings: Required<Settings> = {
   minimizeAppOnStartup: false,
   minimizeAppOnWindowClose: true,
   theme: Themes.DEFAULT,
+  enableAnimations: true,
   enableHttpApi: false,
   httpApi: {
     host: 'localhost',
