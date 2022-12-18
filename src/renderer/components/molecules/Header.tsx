@@ -1,10 +1,11 @@
 import React from 'react'
 import { AppBar, IconButton, Stack, Toolbar, Tooltip, Typography } from '@mui/material'
 import HeaderExtraMenu from './HeaderExtraMenu'
-import { Settings } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
+import { Home, Settings } from '@mui/icons-material'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export default function Header() {
+  const location = useLocation()
   const navigate = useNavigate()
 
   return (
@@ -17,11 +18,27 @@ export default function Header() {
         </Stack>
 
         <Stack direction={ 'row' }>
-          <Tooltip title={ 'Settings' }>
-            <IconButton onClick={ () => navigate('/settings') } color="inherit">
-              <Settings/>
-            </IconButton>
-          </Tooltip>
+          { location.pathname === '/' && (
+            <Tooltip title={ 'Settings' }>
+              <IconButton
+                onClick={ () => navigate('/settings') }
+                color="inherit"
+              >
+                <Settings/>
+              </IconButton>
+            </Tooltip>
+          ) }
+
+          { location.pathname === '/settings' && (
+            <Tooltip title={ 'Home' }>
+              <IconButton
+                onClick={ () => navigate('/') }
+                color="inherit"
+              >
+                <Home/>
+              </IconButton>
+            </Tooltip>
+          ) }
 
           <HeaderExtraMenu/>
         </Stack>
