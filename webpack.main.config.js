@@ -1,3 +1,5 @@
+const plugins = require('./webpack.plugins')
+
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
 module.exports = {
@@ -9,4 +11,5 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
   },
+  plugins,
 }

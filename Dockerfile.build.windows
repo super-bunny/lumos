@@ -1,7 +1,10 @@
 FROM node:18 AS builder
 
 ARG SENTRY_AUTH_TOKEN
+ARG NODE_ENV="production"
+ARG ENABLE_SENTRY="true"
 
+ENV ENABLE_SENTRY=${ENABLE_SENTRY}
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Install Rust
@@ -13,11 +16,11 @@ WORKDIR /app
 
 COPY package.json yarn.lock /app/
 
-RUN npm_config_arch=x64 CARGO_BUILD_TARGET=x86_64-pc-windows-gnu yarn --frozen-lockfile
+RUN npm_config_arch=x64 CARGO_BUILD_TARGET=x86_64-pc-windows-gnu yarn --production=false --frozen-lockfile
 
 COPY . /app/
 
-RUN yarn make --targets @electron-forge/maker-squirrel --platform win32
+RUN NODE_ENV=$NODE_ENV yarn make --targets @electron-forge/maker-squirrel --platform win32
 
 FROM scratch AS voidstar
 COPY --from=builder /app/out/make /

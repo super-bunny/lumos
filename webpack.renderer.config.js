@@ -1,5 +1,6 @@
 const rules = require('./webpack.rules')
 const plugins = require('./webpack.plugins')
+const rendererPlugins = require('./webpack.renderer.plugins')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
@@ -21,7 +22,10 @@ module.exports = {
   module: {
     rules,
   },
-  plugins,
+  plugins: [
+    ...plugins,
+    ...rendererPlugins,
+  ],
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
   },
