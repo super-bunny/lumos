@@ -4,6 +4,7 @@ import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import setupAutoStartup from './utils/setupAutoStartup'
+import { GetVcpValueOptions } from './classes/EnhancedDisplay'
 
 export interface SetupIpcArgs {
   displayManager: DisplayManager
@@ -21,8 +22,8 @@ export default function setupIpc({ displayManager, sessionJwt, httpApiPort }: Se
   ipcMain.handle(IpcEvents.SUPPORT_DDC, (event, id: string) => {
     return displayManager.supportDDCById(id)
   })
-  ipcMain.handle(IpcEvents.GET_VCP_VALUE, (event, id: string, featureCode: number) => {
-    return displayManager.getVcpValueById(id, featureCode)
+  ipcMain.handle(IpcEvents.GET_VCP_VALUE, (event, id: string, featureCode: number, options?: GetVcpValueOptions) => {
+    return displayManager.getVcpValueById(id, featureCode, options)
   })
   ipcMain.handle(IpcEvents.SET_VCP_VALUE, (event, id: string, featureCode: number, value: number) => {
     return displayManager.setVcpValueById(id, featureCode, value)

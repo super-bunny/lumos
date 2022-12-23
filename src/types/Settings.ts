@@ -14,4 +14,8 @@ export default interface Settings {
     host?: string,
     port?: number,
   }
+  globalShortcuts: {
+    dimAllDisplays?: string,
+    brightAllDisplays?: string,
+  } & Record<string, string>
 }

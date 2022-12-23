@@ -7,7 +7,7 @@ export default class IpcBackendClient extends BackendClient {
   }
 
   async getVcpValue(id: string, featureCode: number): Promise<VCPValue> {
-    return window.lumos.display.getVcpValue(id, featureCode)
+    return window.lumos.display.getVcpValue(id, featureCode, { useCache: false })
   }
 
   async setVcpValue(id: string, featureCode: number, value: number): Promise<void> {

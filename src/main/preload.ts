@@ -7,19 +7,23 @@ import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore from './classes/SettingsStore'
 import { sentryIsEnabled } from '../shared/utils/sentry'
+import type { GetVcpValueOptions } from './classes/EnhancedDisplay'
 
 export type StoreOptions = Pick<ElectronStore.Options<Settings>, 'name'>
+export type IpcWrappedListener = (event: Electron.IpcRendererEvent, ...args: Array<any>) => void
 
 const settings = new SettingsStore()
 const env = {
   MOCK_DISPLAYS: process.env.MOCK_DISPLAYS,
+  NODE_ENV: process.env.NODE_ENV,
 }
 const sentryEnabled = sentryIsEnabled()
+const validListenableIpcChannels = [IpcEvents.PING, IpcEvents.DISPLAY_UPDATE]
 
 export const LumosApi = {
   display: {
-    getVcpValue: (id: string, featureCode: number): Promise<VCPValue> => {
-      return ipcRenderer.invoke(IpcEvents.GET_VCP_VALUE, id, featureCode)
+    getVcpValue: (id: string, featureCode: number, options?: GetVcpValueOptions): Promise<VCPValue> => {
+      return ipcRenderer.invoke(IpcEvents.GET_VCP_VALUE, id, featureCode, options)
     },
     setVcpValue: (id: string, featureCode: number, value: number): Promise<void> => {
       return ipcRenderer.invoke(IpcEvents.SET_VCP_VALUE, id, featureCode, value)
@@ -35,6 +39,23 @@ export const LumosApi = {
       settings: SettingsType,
     ): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_SETTINGS, settings),
   },
+  ipc: {
+    on: (channel: IpcEvents, listener: (...args: Array<any>) => void): IpcWrappedListener => {
+      if (!validListenableIpcChannels.includes(channel)) {
+        throw new Error(`Invalid channel: ${ channel }`)
+      }
+      // Deliberately strip event as it includes `sender`
+      const listenerWrapper: IpcWrappedListener = (event, ...args) => listener(...args)
+      ipcRenderer.on(channel, listenerWrapper)
+      return listenerWrapper
+    },
+    removeListener: (channel: IpcEvents, listener: (...args: Array<any>) => void) => {
+      if (!validListenableIpcChannels.includes(channel)) {
+        throw new Error(`Invalid channel: ${ channel }`)
+      }
+      ipcRenderer.removeListener(channel, listener)
+    },
+  },
   initTheme: settings.store.theme,
   initSettings: settings.store,
   getEnv: (): Promise<Record<string, string>> => ipcRenderer.invoke(IpcEvents.GET_NODE_ENV),
@@ -45,6 +66,7 @@ export const LumosApi = {
   env,
   sentryEnabled,
   restartApp: () => ipcRenderer.invoke(IpcEvents.RESTART_APP),
+  ipcRenderer,
 }
 
 contextBridge.exposeInMainWorld('lumos', LumosApi)

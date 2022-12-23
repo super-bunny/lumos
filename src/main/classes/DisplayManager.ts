@@ -1,4 +1,4 @@
-import EnhancedDisplay from './EnhancedDisplay'
+import EnhancedDisplay, { GetVcpValueOptions } from './EnhancedDisplay'
 import { Continuous, VCPValue } from 'ddc-rs'
 
 export default class DisplayManager {
@@ -25,10 +25,10 @@ export default class DisplayManager {
     return display.supportDDC()
   }
 
-  getVcpValueById(id: string, featureCode: number): VCPValue {
+  getVcpValueById(id: string, featureCode: number, options?: GetVcpValueOptions): VCPValue {
     const display = this.getDisplayByIdOrThrow(id)
 
-    return display.getVcpValue(featureCode)
+    return display.getVcpValue(featureCode, options)
   }
 
   setVcpValueById(id: string, featureCode: number, value: number): void {
@@ -37,16 +37,16 @@ export default class DisplayManager {
     return display.setVcpValue(featureCode, value)
   }
 
-  getVcpLuminanceById(id: string, useCache: boolean = false): Continuous {
+  getVcpLuminanceById(id: string, useCache: boolean = true): Continuous {
     const display = this.getDisplayByIdOrThrow(id)
 
     return display.getVcpLuminance(useCache)
   }
 
-  getBrightnessPercentageById(id: string): number {
+  getBrightnessPercentageById(id: string, useCache: boolean = true): number {
     const display = this.getDisplayByIdOrThrow(id)
 
-    return display.getBrightnessPercentage()
+    return display.getBrightnessPercentage(useCache)
   }
 
   setBrightnessPercentageById(id: string, value: number): void {

@@ -12,6 +12,7 @@ export const defaultSettings: Required<Settings> = {
     host: 'localhost',
     port: 8787,
   },
+  globalShortcuts: {},
 }
 
 export default class SettingsStore extends ElectronStore<Settings> {
@@ -19,5 +20,16 @@ export default class SettingsStore extends ElectronStore<Settings> {
     super({
       defaults: defaultSettings,
     })
+  }
+
+  validate() {
+    const { globalShortcuts } = this.store
+    const globalShortcutsValues = Object.values(globalShortcuts)
+
+    for (const [index, globalShortcutsValue] of globalShortcutsValues.entries()) {
+      if (index !== globalShortcutsValues.lastIndexOf(globalShortcutsValue)) {
+        throw new Error(`Duplicate global shortcut: ${ globalShortcutsValue }`)
+      }
+    }
   }
 }

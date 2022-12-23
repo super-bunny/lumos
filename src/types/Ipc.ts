@@ -1,4 +1,5 @@
 export enum IpcEvents {
+  PING = 'PING',
   LIST_DISPLAYS = 'LIST_DISPLAYS',
   SUPPORT_DDC = 'SUPPORT_DDC',
   GET_VCP_VALUE = 'GET_VCP_VALUE',
@@ -13,6 +14,7 @@ export enum IpcEvents {
   GET_HTTP_API_CONFIG = 'GET_HTTP_API_CONFIG',
   // App
   RESTART_APP = 'RESTART_APP',
+  DISPLAY_UPDATE = 'DISPLAY_UPDATE',
 }
 
 export interface IpcMessage<T = any> {

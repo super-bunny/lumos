@@ -1,4 +1,4 @@
-import { app, BrowserWindow, session } from 'electron'
+import { app, BrowserWindow, dialog, globalShortcut, session } from 'electron'
 import Store from 'electron-store'
 import setupIpc from './contextBridge'
 import DisplayManager from './classes/DisplayManager'
@@ -9,6 +9,10 @@ import generateSessionJwt from './utils/generateSessionJwt'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import AppTray from './classes/AppTray'
 import setupAutoStartup from './utils/setupAutoStartup'
+import type Settings from '../types/Settings'
+import { IpcEvents } from '../types/Ipc'
+import { sendIpcDisplayUpdate } from './utils/ipc'
+import { VCPFeatures } from 'ddc-rs'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -20,8 +24,8 @@ let settings: SettingsStore | undefined
 let shouldQuit: boolean = false
 
 export default function main() {
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-  if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
+  // Handle creating/removing shortcuts on Windows when installing/uninstalling.
+  if (require('electron-squirrel-startup')) {
     app.quit()
     return
   }
@@ -62,6 +66,10 @@ export default function main() {
       }
     })
 
+    mainWindow.webContents.on('did-finish-load', () => {
+      mainWindow.webContents.send(IpcEvents.PING, 'pong')
+    })
+
     return mainWindow
   }
 
@@ -73,12 +81,106 @@ export default function main() {
     }
   }
 
+  // Return validated settings or alert user with error and quit app.
+  const getSettingsStore = (): SettingsStore | undefined => {
+    let settingsStore: SettingsStore | undefined
+    try {
+      settingsStore = new SettingsStore()
+      settingsStore.validate()
+      return settingsStore
+    } catch (e) {
+      dialog.showErrorBox('Invalid settings', [
+        e instanceof Error ? e.message : 'Unknown error',
+        `Try to edit or delete your settings file: ${ settingsStore?.path }`,
+      ].join('\n'))
+      app.quit()
+      return undefined
+    }
+  }
+
+  const registerGlobalShortcuts = (shortcuts: Settings['globalShortcuts'], displayManager: DisplayManager) => {
+    const globalShortcutHandlers: Record<keyof Settings['globalShortcuts'] | string, (...matches: Array<string>) => void> = {
+      dimAllDisplays: () => {
+        displayManager.list.forEach((display) => {
+          if (!display.supportDDC()) return
+          const brightnessPercentage = display.getBrightnessPercentage(true)
+          display.setBrightnessPercentage(brightnessPercentage - 5)
+
+          mainWindow && sendIpcDisplayUpdate(mainWindow, {
+            displayId: display.info.displayId,
+            vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+          })
+        })
+      },
+      brightAllDisplays: () => {
+        displayManager.list.forEach((display) => {
+          if (!display.supportDDC()) return
+          const brightnessPercentage = display.getBrightnessPercentage(true)
+          display.setBrightnessPercentage(brightnessPercentage + 5)
+
+          mainWindow && sendIpcDisplayUpdate(mainWindow, {
+            displayId: display.info.displayId,
+            vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+          })
+        })
+      },
+      'dimDisplay(.*)': (key, displayId) => {
+        const display = displayManager.list.find((display) => display.info.displayId === displayId)
+
+        if (!display || !display.supportDDC()) return
+
+        const brightnessPercentage = display.getBrightnessPercentage(true)
+        display.setBrightnessPercentage(brightnessPercentage - 5)
+
+        mainWindow && sendIpcDisplayUpdate(mainWindow, {
+          displayId: display.info.displayId,
+          vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+        })
+      },
+      'brightDisplay(.*)': (key, displayId) => {
+        const display = displayManager.list.find((display) => display.info.displayId === displayId)
+
+        if (!display || !display.supportDDC()) return
+
+        const brightnessPercentage = display.getBrightnessPercentage(true)
+        display.setBrightnessPercentage(brightnessPercentage + 5)
+
+        mainWindow && sendIpcDisplayUpdate(mainWindow, {
+          displayId: display.info.displayId,
+          vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+        })
+      },
+    }
+
+    for (const [regExpStr, handler] of Object.entries(globalShortcutHandlers)) {
+      const regExp = new RegExp(regExpStr)
+      const shortcut = Object.entries(shortcuts).find(([key, value]) => regExp.test(key))
+
+      if (!shortcut) continue
+
+      const [key, accelerator] = shortcut
+      const regExpResult = regExp.exec(key)
+
+      const success = globalShortcut.register(accelerator, () => {
+        console.info(`Global shortcut "${ key }" (${ accelerator }) triggered`)
+        handler(...regExpResult!)
+      })
+
+      if (!success) {
+        console.error(`Failed to register global shortcut: "${ key }" (${ accelerator })`)
+      }
+    }
+  }
+
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', () => {
     const displayManager = new DisplayManager()
-    settings = new SettingsStore()
+
+    settings = getSettingsStore()
+    if (!settings) return
+
     const secretStore = new SecretStore({
       defaults: {
         httpApi: { jwtSecret: crypto.randomBytes(48).toString('base64') },
@@ -111,6 +213,8 @@ export default function main() {
     Store.initRenderer()
     mainWindow = createWindow()
     setupIpc({ displayManager, sessionJwt, httpApiPort })
+
+    registerGlobalShortcuts(settings.store.globalShortcuts, displayManager)
 
     // App tray
     try {
@@ -152,5 +256,9 @@ export default function main() {
 
   app.on('before-quit', () => {
     shouldQuit = true
+  })
+
+  app.on('will-quit', () => {
+    globalShortcut.unregisterAll()
   })
 }

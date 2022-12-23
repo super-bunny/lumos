@@ -4,6 +4,9 @@ import Center from '../atoms/Center'
 import Loader from '../atoms/Loader'
 import GenericDisplay from '../../classes/GenericDisplay'
 import RefreshIcon from '@mui/icons-material/Refresh'
+import { IpcEvents } from '../../../types/Ipc'
+import type { IpcDisplayUpdateArgs } from '../../../main/utils/ipc'
+import VCPFeatures from '../../../types/VCPFeatures'
 
 export type Monitor = GenericDisplay
 
@@ -75,6 +78,19 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   useEffect(() => {
     refreshBrightness()
   }, [refreshBrightness])
+
+  useEffect(() => {
+    const listener = window.lumos.ipc.on(IpcEvents.DISPLAY_UPDATE, ({
+      displayId,
+      vcpFeature,
+    }: IpcDisplayUpdateArgs) => {
+      if (displayId === monitor.info.displayId && vcpFeature === VCPFeatures.ImageAdjustment.Luminance) {
+        refreshBrightness(false)
+      }
+    })
+
+    return () => window.lumos.ipc.removeListener(IpcEvents.DISPLAY_UPDATE, listener)
+  }, [monitor.info.displayId, refreshBrightness])
 
   // Register scroll event to set monitor brightness
   useEffect(() => {

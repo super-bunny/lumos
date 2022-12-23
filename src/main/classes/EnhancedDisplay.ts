@@ -1,8 +1,12 @@
 import { Display, DisplayManager, VCPFeatures } from 'ddc-rs'
 import AbstractDisplay, { Continuous, DisplayInfo, VCPValue, VCPValueType } from './AbstractDisplay'
 
+export interface GetVcpValueOptions {
+  useCache?: boolean
+}
+
 export default class EnhancedDisplay extends AbstractDisplay {
-  cache: Record<number, VCPValue | undefined> = {}
+  cache: Record<number | string, VCPValue | boolean> = {}
 
   constructor(readonly display: Display) {
     super()
@@ -26,11 +30,19 @@ export default class EnhancedDisplay extends AbstractDisplay {
     }
   }
 
-  supportDDC(): boolean {
+  supportDDC(useCache: boolean = true): boolean {
+    const cachedValue = this.cache['supportDDC']
+
+    if (useCache && cachedValue) {
+      return cachedValue as boolean
+    }
+
     try {
       this.display.getVcpFeature(VCPFeatures.DisplayControl.Version)
+      this.cache['supportDDC'] = true
       return true
     } catch (e) {
+      this.cache['supportDDC'] = false
       return false
     }
   }
@@ -39,30 +51,34 @@ export default class EnhancedDisplay extends AbstractDisplay {
     return this.info.modelName ?? this.info.displayId
   }
 
-  getVcpValue(featureCode: number): VCPValue {
-    return this.display.getVcpFeature(featureCode)
-  }
+  getVcpValue(featureCode: number, options?: GetVcpValueOptions): VCPValue {
+    const { useCache = true } = options ?? {}
 
-  setVcpValue(featureCode: number, value: number): void {
-    return this.display.setVcpFeature(featureCode, value)
-  }
-
-  getVcpValueFromCache(featureCode: number, forceRefresh = false): VCPValue {
     const cachedValue = this.cache[featureCode]
 
-    if (cachedValue && !forceRefresh) {
-      return cachedValue
+    if (useCache && cachedValue) {
+      return cachedValue as VCPValue
     }
 
-    const value = this.getVcpValue(featureCode)
+    const value = this.display.getVcpFeature(featureCode)
 
     this.cache[featureCode] = value
 
     return value
   }
 
-  getVcpLuminance(useCache = false): Continuous {
-    const value = this.getVcpValueFromCache(VCPFeatures.ImageAdjustment.Luminance, !useCache)
+  setVcpValue(featureCode: number, value: number): void {
+    const cachedValue = this.cache[featureCode]
+
+    if (typeof cachedValue === 'object' && cachedValue.type === VCPValueType.CONTINUOUS) {
+      this.cache[featureCode] = { ...cachedValue, currentValue: value }
+    }
+
+    return this.display.setVcpFeature(featureCode, value)
+  }
+
+  getVcpLuminance(useCache = true): Continuous {
+    const value = this.getVcpValue(VCPFeatures.ImageAdjustment.Luminance, { useCache })
 
     if (value.type !== VCPValueType.CONTINUOUS) {
       throw new Error('VCP Luminance (brightness) value type not supported')
@@ -71,8 +87,8 @@ export default class EnhancedDisplay extends AbstractDisplay {
     return value
   }
 
-  getBrightnessPercentage(): number {
-    const { currentValue, maximumValue } = this.getVcpLuminance()
+  getBrightnessPercentage(useCache = true): number {
+    const { currentValue, maximumValue } = this.getVcpLuminance(useCache)
 
     return Math.round(currentValue * 100 / maximumValue)
   }
