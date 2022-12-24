@@ -9,7 +9,7 @@ import openInBrowser from '../../utils/openInBrowser'
 import AppVersionManager, { GithubRelease } from '../../classes/AppVersionManager'
 
 export default function HeaderExtraMenu() {
-  const {version} = packageJson
+  const { version } = packageJson
   const popupState = usePopupState({ variant: 'popover', popupId: 'demoMenu' })
   const [newRelease, setNewRelease] = useState<GithubRelease | null>(null)
 
@@ -17,7 +17,8 @@ export default function HeaderExtraMenu() {
     new AppVersionManager(version)
       .getUpdate()
       .then(update => setNewRelease(update))
-  }, [])
+      .catch(error => console.error('Can not check for update: ', error))
+  }, [version])
 
   return (
     <div>
