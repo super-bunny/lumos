@@ -9,7 +9,7 @@ export default function App() {
   const themeContext = useAppSelector(state => state.theme)
 
   return (
-    <ThemeProvider theme={ themeConfigs[themeContext] ?? Themes.DEFAULT }>
+    <ThemeProvider theme={ themeConfigs[themeContext] ?? themeConfigs[Themes.DEFAULT] }>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */ }
       <CssBaseline/>
       <PageTemplate/>
