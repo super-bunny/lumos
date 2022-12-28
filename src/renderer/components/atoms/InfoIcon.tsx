@@ -13,7 +13,7 @@ export interface Props {
 export default function InfoIcon({ message, TooltipProps, IconProps }: Props) {
   return (
     <Tooltip title={ message } placement={ 'top' } { ...TooltipProps }>
-      <InfoMaterialIcon fontSize={ 'small' } style={ { color: 'grey' } } { ...IconProps }/>
+      <InfoMaterialIcon fontSize={ 'small' } sx={ { color: 'grey' } } { ...IconProps }/>
     </Tooltip>
   )
 }
