@@ -66,6 +66,8 @@ export const LumosApi = {
   env,
   sentryEnabled,
   restartApp: () => ipcRenderer.invoke(IpcEvents.RESTART_APP),
+  registerAllShortcuts: () => ipcRenderer.invoke(IpcEvents.REGISTER_ALL_SHORTCUTS),
+  unregisterAllShortcuts: () => ipcRenderer.invoke(IpcEvents.UNREGISTER_ALL_SHORTCUTS),
   ipcRenderer,
 }
 

@@ -3,6 +3,11 @@ export enum Themes {
   ORIGIN = 'origin',
 }
 
+export enum GlobalShortcutsStaticActions {
+  DIM_ALL_DISPLAYS = 'dimAllDisplays',
+  BRIGHT_ALL_DISPLAYS = 'brightAllDisplays',
+}
+
 export default interface Settings {
   runAppOnStartup?: boolean
   minimizeAppOnStartup?: boolean
@@ -14,8 +19,5 @@ export default interface Settings {
     host?: string,
     port?: number,
   }
-  globalShortcuts: {
-    dimAllDisplays?: string,
-    brightAllDisplays?: string,
-  } & Record<string, string>
+  globalShortcuts: Partial<Record<GlobalShortcutsStaticActions | string, string>>
 }

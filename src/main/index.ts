@@ -13,6 +13,7 @@ import type Settings from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import { sendIpcDisplayUpdate } from './utils/ipc'
 import { VCPFeatures } from 'ddc-rs'
+import registerGlobalShortcuts from './utils/registerGlobalShortcuts'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -98,80 +99,6 @@ export default function main() {
     }
   }
 
-  const registerGlobalShortcuts = (shortcuts: Settings['globalShortcuts'], displayManager: DisplayManager) => {
-    const globalShortcutHandlers: Record<keyof Settings['globalShortcuts'] | string, (...matches: Array<string>) => void> = {
-      dimAllDisplays: () => {
-        displayManager.list.forEach((display) => {
-          if (!display.supportDDC()) return
-          const brightnessPercentage = display.getBrightnessPercentage(true)
-          display.setBrightnessPercentage(brightnessPercentage - 5)
-
-          mainWindow && sendIpcDisplayUpdate(mainWindow, {
-            displayId: display.info.displayId,
-            vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
-          })
-        })
-      },
-      brightAllDisplays: () => {
-        displayManager.list.forEach((display) => {
-          if (!display.supportDDC()) return
-          const brightnessPercentage = display.getBrightnessPercentage(true)
-          display.setBrightnessPercentage(brightnessPercentage + 5)
-
-          mainWindow && sendIpcDisplayUpdate(mainWindow, {
-            displayId: display.info.displayId,
-            vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
-          })
-        })
-      },
-      'dimDisplay(.*)': (key, displayId) => {
-        const display = displayManager.list.find((display) => display.info.displayId === displayId)
-
-        if (!display || !display.supportDDC()) return
-
-        const brightnessPercentage = display.getBrightnessPercentage(true)
-        display.setBrightnessPercentage(brightnessPercentage - 5)
-
-        mainWindow && sendIpcDisplayUpdate(mainWindow, {
-          displayId: display.info.displayId,
-          vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
-        })
-      },
-      'brightDisplay(.*)': (key, displayId) => {
-        const display = displayManager.list.find((display) => display.info.displayId === displayId)
-
-        if (!display || !display.supportDDC()) return
-
-        const brightnessPercentage = display.getBrightnessPercentage(true)
-        display.setBrightnessPercentage(brightnessPercentage + 5)
-
-        mainWindow && sendIpcDisplayUpdate(mainWindow, {
-          displayId: display.info.displayId,
-          vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
-        })
-      },
-    }
-
-    for (const [regExpStr, handler] of Object.entries(globalShortcutHandlers)) {
-      const regExp = new RegExp(regExpStr)
-      const shortcut = Object.entries(shortcuts).find(([key, value]) => regExp.test(key))
-
-      if (!shortcut) continue
-
-      const [key, accelerator] = shortcut
-      const regExpResult = regExp.exec(key)
-
-      const success = globalShortcut.register(accelerator, () => {
-        console.info(`Global shortcut "${ key }" (${ accelerator }) triggered`)
-        handler(...regExpResult!)
-      })
-
-      if (!success) {
-        console.error(`Failed to register global shortcut: "${ key }" (${ accelerator })`)
-      }
-    }
-  }
-
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
@@ -212,9 +139,8 @@ export default function main() {
     setupAutoStartup(settings.store.runAppOnStartup ?? defaultSettings.runAppOnStartup)
     Store.initRenderer()
     mainWindow = createWindow()
-    setupIpc({ displayManager, sessionJwt, httpApiPort })
-
-    registerGlobalShortcuts(settings.store.globalShortcuts, displayManager)
+    setupIpc({ mainWindow, displayManager, sessionJwt, httpApiPort })
+    registerGlobalShortcuts(settings.store.globalShortcuts, displayManager, mainWindow)
 
     // App tray
     try {

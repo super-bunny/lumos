@@ -8,6 +8,7 @@ import InterfaceSettings from '../molecules/Settings/InterfaceSettings'
 import ApplicationSettings from '../molecules/Settings/ApplicationSettings'
 import ExperimentalSettings from '../molecules/Settings/ExperimentalSettings'
 import useSettingsStore from '../../hooks/useSettingsStore'
+import GlobalShortcutsSettings from '../molecules/Settings/GlobalShortcutsSettings'
 
 export interface Props {
   sx?: SxProps
@@ -16,6 +17,7 @@ export interface Props {
 enum SETTINGS_TABS {
   APPLICATION = 'application',
   INTERFACE = 'interface',
+  GLOBAL_SHORTCUT = 'global_shortcut',
   EXPERIMENTAL = 'experimental',
 }
 
@@ -87,6 +89,7 @@ export default function Settings({ sx }: Props) {
           >
             <Tab label="Application" value={ SETTINGS_TABS.APPLICATION }/>
             <Tab label="Interface" value={ SETTINGS_TABS.INTERFACE }/>
+            <Tab label="Global shortcuts" value={ SETTINGS_TABS.GLOBAL_SHORTCUT }/>
             <Tab label="Experimental" value={ SETTINGS_TABS.EXPERIMENTAL }/>
           </Tabs>
 
@@ -98,6 +101,10 @@ export default function Settings({ sx }: Props) {
 
             <SettingsTabPanel value={ SETTINGS_TABS.INTERFACE }>
               <InterfaceSettings settings={ settings! } onChange={ saveSettings }/>
+            </SettingsTabPanel>
+
+            <SettingsTabPanel value={ SETTINGS_TABS.GLOBAL_SHORTCUT }>
+              <GlobalShortcutsSettings settings={ settings! } onChange={ saveSettings }/>
             </SettingsTabPanel>
 
             <SettingsTabPanel value={ SETTINGS_TABS.EXPERIMENTAL }>

@@ -79,6 +79,7 @@
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.3",
+    "material-ui-confirm": "^3.0.7",
     "material-ui-popup-state": "^4.0.1",
     "node-cache": "^5.1.2",
     "react": "^18.0.0",
