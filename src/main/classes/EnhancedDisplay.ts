@@ -95,8 +95,9 @@ export default class EnhancedDisplay extends AbstractDisplay {
 
   setBrightnessPercentage(value: number): void {
     const { maximumValue } = this.getVcpLuminance(true)
+    const percentage = Math.round(value * maximumValue / 100)
 
-    this.display.setVcpFeature(VCPFeatures.ImageAdjustment.Luminance, Math.round(value * maximumValue / 100))
+    this.setVcpValue(VCPFeatures.ImageAdjustment.Luminance, Math.max(0, Math.min(percentage, 100)))
   }
 
   clearCache(): void {
