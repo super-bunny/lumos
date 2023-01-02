@@ -1,0 +1,26 @@
+{
+  "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/releases/tag/{{currentTag}}",
+  "types": [
+    {"type": "feat", "section": "Features"},
+    {"type": "fix", "section": "Bug Fixes"},
+    {"type": "docs", "hidden": false},
+    {"type": "style", "hidden": false},
+    {"type": "perf", "hidden": false},
+    {"type": "deps", "hidden": false},
+    {"type": "refactor", "hidden": true},
+    {"type": "chore", "hidden": true},
+    {"type": "test", "hidden": true},
+    {"type": "build", "hidden": true},
+    {"type": "ci", "hidden": true},
+    {"type": "revert", "hidden": true}
+  ],
+  "writerOpts": {
+    "commitsSort": false
+  },
+  "skip": {
+    "bump": false,
+    "changelog": false,
+    "commit": false,
+    "tag": true
+  }
+}
