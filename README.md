@@ -6,22 +6,30 @@
 <p align="center">Lumos is a desktop application that allow you to control monitor brightness.</p>
 
 <p align="center">
-    <img alt="Electron" src="https://img.shields.io/static/v1?style=for-the-badge&message=Electron&color=47848F&logo=Electron&logoColor=FFFFFF&label=">
-    <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white">
-    <img alt="React" src="https://img.shields.io/static/v1?style=for-the-badge&message=React&color=222222&logo=React&logoColor=61DAFB&label=">
+    <a href="https://www.electronjs.org">
+        <img alt="Electron" src="https://img.shields.io/static/v1?style=for-the-badge&message=Electron&color=47848F&logo=Electron&logoColor=FFFFFF&label=">
+    </a>
+    <a href="https://www.typescriptlang.org">
+        <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white">
+    </a>
+    <a href="https://fr.reactjs.org">
+        <img alt="React" src="https://img.shields.io/static/v1?style=for-the-badge&message=React&color=222222&logo=React&logoColor=61DAFB&label=">
+    </a>
 </p>
 
 <p align="center">
     <a href="https://github.com/super-bunny/lumos/releases">
-    <img src="https://img.shields.io/github/v/release/super-bunny/lumos?style=for-the-badge&sort=semver" alt="tag"/>
+        <img src="https://img.shields.io/github/v/release/super-bunny/lumos?style=for-the-badge&sort=semver" alt="tag"/>
     </a>
     <a href="https://github.com/super-bunny/lumos/issues">
-    <img src="https://img.shields.io/github/issues-raw/super-bunny/lumos?style=for-the-badge" alt="issues"/>
+        <img src="https://img.shields.io/github/issues-raw/super-bunny/lumos?style=for-the-badge" alt="issues"/>
     </a>
     <a href="https://github.com/super-bunny/lumos/pulls">
-    <img src="https://img.shields.io/github/issues-pr-raw/super-bunny/lumos?style=for-the-badge" alt="pull-requests"/>
+        <img src="https://img.shields.io/github/issues-pr-raw/super-bunny/lumos?style=for-the-badge" alt="pull-requests"/>
     </a>
-    <img alt="License" src="https://img.shields.io/github/license/super-bunny/lumos?style=for-the-badge">
+    <a href="LICENSE.md">
+        <img alt="License" src="https://img.shields.io/github/license/super-bunny/lumos?style=for-the-badge">
+    </a>
 </p>
 
 ## Features
