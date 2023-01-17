@@ -1204,6 +1204,48 @@
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
+"@ddc-node/ddc-node-darwin-arm64@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ddc-node/ddc-node-darwin-arm64/-/ddc-node-darwin-arm64-1.0.0.tgz#f058042d71d61d649dc9b88ac1c12200ce4b1a73"
+  integrity sha512-PNFXR84jP6g+f4ZrJn5PVds2NXgSIhF/z8aYlJ+p2ChsEnN+8wOHXSUcN8Cv1DXUUCYE08Ey1ZX6wm6hAXqNjA==
+
+"@ddc-node/ddc-node-darwin-x64@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ddc-node/ddc-node-darwin-x64/-/ddc-node-darwin-x64-1.0.0.tgz#4a97dc72d89161ecf66a28d83cd85a627fdb7d86"
+  integrity sha512-ZOwKFBIYpAVQk6GJjBCCAbAGNxNJ9wI8QV+lJUt2zmGtDHLVQYj19AuhowWbv1DKw3JHdAW40hsZ/D7/ybCrLw==
+
+"@ddc-node/ddc-node-linux-arm64-gnu@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ddc-node/ddc-node-linux-arm64-gnu/-/ddc-node-linux-arm64-gnu-1.0.0.tgz#fa21c8713c99d83ccfbd7f7094196ac2f3368450"
+  integrity sha512-nmpLltatvmSz6KwOMr+qUfHlZ00jJCU+vxCmYHYt8YrWjfg2krq6PURmFmzR/LrWznmGxyQ1gcAGxEU7BmjCVA==
+
+"@ddc-node/ddc-node-linux-x64-gnu@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ddc-node/ddc-node-linux-x64-gnu/-/ddc-node-linux-x64-gnu-1.0.0.tgz#9a193bb54247e399bc0e12ec28016da32e91582d"
+  integrity sha512-bmrJtSIpkN0ILwktFpVDOUvacCfgMsrxCGsdOhIigsZMV8y7XJ0LQ8Vc0fF5FWLFmUJrJ/RSRduI51XBkboQDg==
+
+"@ddc-node/ddc-node-win32-arm64-msvc@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ddc-node/ddc-node-win32-arm64-msvc/-/ddc-node-win32-arm64-msvc-1.0.0.tgz#2cad1266712ff8e966ea6292f11bf2096e9185eb"
+  integrity sha512-Ltsz4zzq/5KgsKlyJwQYqD4Mp/l0MKXNncYjDpJ6km+0YOnZ9k5Sr3tD8rXhpeDYQqM4Nq8JobhpGvXusbNXiQ==
+
+"@ddc-node/ddc-node-win32-x64-msvc@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ddc-node/ddc-node-win32-x64-msvc/-/ddc-node-win32-x64-msvc-1.0.0.tgz#6047f6d64e26e6d71cd6fc638cfdb1282a44ecaa"
+  integrity sha512-6InyWlOyD1D2BmZmrHUhIctRFlAo1DyfDHvq5zG70o9PNoph2VDyC+CfdYRW6QmgALw8EGu7Nwpknj7pSL3skg==
+
+"@ddc-node/ddc-node@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ddc-node/ddc-node/-/ddc-node-1.0.0.tgz#97ed2a1a2d008d619e63d204a7d3e625ee7d2d86"
+  integrity sha512-b0GiQHLF7PC9Cz5+vK5B2CDhfgVT6gbkB04l0jOs4uaqFX7skYTDdvG4PMx16ryNh2renrRPFlDTZ0dkw9q+6g==
+  optionalDependencies:
+    "@ddc-node/ddc-node-darwin-arm64" "1.0.0"
+    "@ddc-node/ddc-node-darwin-x64" "1.0.0"
+    "@ddc-node/ddc-node-linux-arm64-gnu" "1.0.0"
+    "@ddc-node/ddc-node-linux-x64-gnu" "1.0.0"
+    "@ddc-node/ddc-node-win32-arm64-msvc" "1.0.0"
+    "@ddc-node/ddc-node-win32-x64-msvc" "1.0.0"
+
 "@electron-forge/cli@^6.0.4":
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/@electron-forge/cli/-/cli-6.0.4.tgz#0a98ebdf2ec09744129209effd3f10606ef5083c"
@@ -3674,11 +3716,6 @@ caniuse-lite@^1.0.30001359:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001364.tgz#1e118f0e933ed2b79f8d461796b8ce45398014a0"
   integrity sha512-9O0xzV3wVyX0SlegIQ6knz+okhBB5pE0PC40MNdwcipjwpxoUEHL24uJ+gG42cgklPjfO5ZjZPme9FTSN3QT2Q==
 
-cargo-cp-artifact@^0.1:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/cargo-cp-artifact/-/cargo-cp-artifact-0.1.6.tgz#df1bc9dad036ae0f4230639a869182e1d5850f89"
-  integrity sha512-CQw0doK/aaF7j041666XzuilHxqMxaKkn+I5vmBsd8SAwS0cO5CqVEVp0xJwOKstyqWZ6WK4Ww3O6p26x/Goyg==
-
 chalk@^2.0.0, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz"
@@ -4423,13 +4460,6 @@ dateformat@^3.0.0:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
   integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
-
-ddc-rs@^0.1.8:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/ddc-rs/-/ddc-rs-0.1.9.tgz#656dbbbb7a3375e56afa8f65c1ad28563cd5f83f"
-  integrity sha512-tRIE1o6PnmwEnYrrteljp+koT6Vfe5FRzkzev55UutHhBYI+sf5WFH/YB3wgaxvi42SCJGIo4n0CuGzbyXyI5Q==
-  dependencies:
-    cargo-cp-artifact "^0.1"
 
 debounce-fn@^4.0.0:
   version "4.0.0"

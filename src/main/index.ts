@@ -9,10 +9,7 @@ import generateSessionJwt from './utils/generateSessionJwt'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import AppTray from './classes/AppTray'
 import setupAutoStartup from './utils/setupAutoStartup'
-import type Settings from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
-import { sendIpcDisplayUpdate } from './utils/ipc'
-import { VCPFeatures } from 'ddc-rs'
 import registerGlobalShortcuts from './utils/registerGlobalShortcuts'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string

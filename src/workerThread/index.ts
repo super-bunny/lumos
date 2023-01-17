@@ -8,6 +8,7 @@ export default function workerThread(): void {
   const displayManager = new DisplayManager()
 
   displayManager.refresh()
+    .then()
 
   if (enableHttpApi) {
     initHttpApi({

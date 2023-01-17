@@ -1,59 +1,65 @@
 import Settings from '../../types/Settings'
 import DisplayManager from '../classes/DisplayManager'
 import { sendIpcDisplayUpdate } from './ipc'
-import { VCPFeatures } from 'ddc-rs'
 import { BrowserWindow, globalShortcut } from 'electron'
+import VCPFeatures from '../../types/VCPFeatures'
 
 export default function registerGlobalShortcuts(
   shortcuts: Settings['globalShortcuts'],
   displayManager: DisplayManager,
   browserWindow?: BrowserWindow,
 ) {
-  const globalShortcutHandlers: Record<keyof Settings['globalShortcuts'] | string, (...matches: Array<string>) => void> = {
+  const globalShortcutHandlers: Record<keyof Settings['globalShortcuts'] | string, (...matches: Array<string>) => Promise<void>> = {
     '^dimAllDisplays$': () => {
-      displayManager.list.forEach((display) => {
-        if (!display.supportDDC()) return
-        const brightnessPercentage = display.getBrightnessPercentage(true)
-        display.setBrightnessPercentage(brightnessPercentage - 5)
+      return Promise.any(
+        displayManager.list.map(async (display) => {
+          if (!await display.supportDDC()) return
+          const brightnessPercentage = await display.getBrightnessPercentage(true)
+          return display.setBrightnessPercentage(brightnessPercentage - 5)
+            .then(() => {
+              browserWindow && sendIpcDisplayUpdate(browserWindow, {
+                displayId: display.info.displayId,
+                vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+              })
 
-        browserWindow && sendIpcDisplayUpdate(browserWindow, {
-          displayId: display.info.displayId,
-          vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
-        })
-      })
+            })
+        }),
+      )
     },
     '^brightAllDisplays$': () => {
-      displayManager.list.forEach((display) => {
-        if (!display.supportDDC()) return
-        const brightnessPercentage = display.getBrightnessPercentage(true)
-        display.setBrightnessPercentage(brightnessPercentage + 5)
-
-        browserWindow && sendIpcDisplayUpdate(browserWindow, {
-          displayId: display.info.displayId,
-          vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
-        })
-      })
+      return Promise.any(
+        displayManager.list.map(async (display) => {
+          if (!await display.supportDDC()) return
+          const brightnessPercentage = await display.getBrightnessPercentage(true)
+          display.setBrightnessPercentage(brightnessPercentage + 5)
+            .then(() => {
+              browserWindow && sendIpcDisplayUpdate(browserWindow, {
+                displayId: display.info.displayId,
+                vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+              })
+            })
+        }))
     },
-    '^dimDisplay(.*)$': (key, displayId) => {
+    '^dimDisplay(.*)$': async (key, displayId) => {
       const display = displayManager.list.find((display) => display.info.displayId === displayId)
 
-      if (!display || !display.supportDDC()) return
+      if (!display || !await display.supportDDC()) return
 
-      const brightnessPercentage = display.getBrightnessPercentage(true)
-      display.setBrightnessPercentage(brightnessPercentage - 5)
+      const brightnessPercentage = await display.getBrightnessPercentage(true)
+      await display.setBrightnessPercentage(brightnessPercentage - 5)
 
       browserWindow && sendIpcDisplayUpdate(browserWindow, {
         displayId: display.info.displayId,
         vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
       })
     },
-    '^brightDisplay(.*)$': (key, displayId) => {
+    '^brightDisplay(.*)$': async (key, displayId) => {
       const display = displayManager.list.find((display) => display.info.displayId === displayId)
 
-      if (!display || !display.supportDDC()) return
+      if (!display || !await display.supportDDC()) return
 
-      const brightnessPercentage = display.getBrightnessPercentage(true)
-      display.setBrightnessPercentage(brightnessPercentage + 5)
+      const brightnessPercentage = await display.getBrightnessPercentage(true)
+      await display.setBrightnessPercentage(brightnessPercentage + 5)
 
       browserWindow && sendIpcDisplayUpdate(browserWindow, {
         displayId: display.info.displayId,
@@ -75,6 +81,7 @@ export default function registerGlobalShortcuts(
       const success = globalShortcut.register(accelerator, () => {
         console.info(`Global shortcut "${ key }" (${ accelerator }) triggered`)
         handler(...regExpResult!)
+          .then()
       })
 
       if (!success) {

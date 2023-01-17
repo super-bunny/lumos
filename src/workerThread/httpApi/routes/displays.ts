@@ -27,7 +27,7 @@ router.post(
     const { id } = ctx.request.body
 
     try {
-      const supportDDC = ctx.displayManager.supportDDCById(id)
+      const supportDDC = await ctx.displayManager.supportDDCById(id)
 
       ctx.body = {
         supportDDC,
@@ -48,7 +48,7 @@ router.post(
     const { id, featureCode } = ctx.request.body as { id: string, featureCode: number, value: number }
 
     try {
-      const vpcValue = ctx.displayManager.getVcpValueById(id, featureCode)
+      const vpcValue = await ctx.displayManager.getVcpValueById(id, featureCode)
 
       ctx.body = {
         vpcValue,
@@ -69,7 +69,7 @@ router.post(
     const { id, featureCode, value } = ctx.request.body as { id: string, featureCode: number, value: number }
 
     try {
-      ctx.displayManager.setVcpValueById(id, featureCode, value)
+      await ctx.displayManager.setVcpValueById(id, featureCode, value)
     } catch (err) {
       console.error(err)
       ctx.status = 404

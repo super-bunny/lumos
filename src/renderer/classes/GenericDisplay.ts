@@ -1,4 +1,4 @@
-import { Continuous, DisplayInfo, VCPValue, VCPValueType } from '../../main/classes/AbstractDisplay'
+import { DisplayInfo, VCPValue, VcpValueType , Continuous} from '../../main/classes/AbstractDisplay'
 import VCPFeatures from '../../types/VCPFeatures'
 import BackendClient from '../../shared/classes/BackendClient'
 import NodeCache from 'node-cache'
@@ -57,7 +57,7 @@ export default class GenericDisplay {
   async getVcpLuminance(useCache?: boolean): Promise<Continuous> {
     const value = await this.getVcpValueFromCache(VCPFeatures.ImageAdjustment.Luminance, useCache)
 
-    if (value.type !== VCPValueType.CONTINUOUS) {
+    if (value.type !== VcpValueType.Continuous) {
       throw new Error('VCP Luminance (brightness) value type not supported')
     }
 

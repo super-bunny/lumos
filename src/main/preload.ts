@@ -1,6 +1,5 @@
 import { contextBridge, ipcRenderer, shell } from 'electron'
-import { VCPValue } from 'ddc-rs'
-import { DisplayInfo } from './classes/AbstractDisplay'
+import { DisplayInfo, VCPValue } from './classes/AbstractDisplay'
 import ElectronStore from 'electron-store'
 import Settings from '../types/Settings'
 import SettingsType from '../types/Settings'

@@ -1,11 +1,11 @@
 import { BrowserWindow } from 'electron'
 import { IpcEvents } from '../../types/Ipc'
 import { DisplayInfo, VCPValue } from '../classes/AbstractDisplay'
-import { VCPFeatureCode } from 'ddc-rs'
+import { VCPFeaturesCode } from '../../types/VCPFeatures'
 
 export interface IpcDisplayUpdateArgs {
   displayId: DisplayInfo['displayId']
-  vcpFeature: VCPFeatureCode
+  vcpFeature: VCPFeaturesCode
   vcpValue?: VCPValue
 }
 

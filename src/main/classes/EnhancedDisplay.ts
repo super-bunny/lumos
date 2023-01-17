@@ -1,5 +1,5 @@
-import { Display, DisplayManager, VCPFeatures } from 'ddc-rs'
-import AbstractDisplay, { Continuous, DisplayInfo, VCPValue, VCPValueType } from './AbstractDisplay'
+import { Display, DisplayManager, VCPFeatureCode } from '@ddc-node/ddc-node'
+import AbstractDisplay, { DisplayInfo, VCPValue, Continuous, VcpValueType } from './AbstractDisplay'
 
 export interface GetVcpValueOptions {
   useCache?: boolean
@@ -30,7 +30,7 @@ export default class EnhancedDisplay extends AbstractDisplay {
     }
   }
 
-  supportDDC(useCache: boolean = true): boolean {
+  async supportDDC(useCache: boolean = true): Promise<boolean> {
     const cachedValue = this.cache['supportDDC']
 
     if (useCache && cachedValue) {
@@ -38,7 +38,7 @@ export default class EnhancedDisplay extends AbstractDisplay {
     }
 
     try {
-      this.display.getVcpFeature(VCPFeatures.DisplayControl.Version)
+      await this.display.getVcpFeature(VCPFeatureCode.DisplayControl.Version)
       this.cache['supportDDC'] = true
       return true
     } catch (e) {
@@ -51,7 +51,7 @@ export default class EnhancedDisplay extends AbstractDisplay {
     return this.info.modelName ?? this.info.displayId
   }
 
-  getVcpValue(featureCode: number, options?: GetVcpValueOptions): VCPValue {
+  async getVcpValue(featureCode: number, options?: GetVcpValueOptions): Promise<VCPValue> {
     const { useCache = true } = options ?? {}
 
     const cachedValue = this.cache[featureCode]
@@ -60,52 +60,52 @@ export default class EnhancedDisplay extends AbstractDisplay {
       return cachedValue as VCPValue
     }
 
-    const value = this.display.getVcpFeature(featureCode)
+    const value = await this.display.getVcpFeature(featureCode) as unknown as VCPValue
 
     this.cache[featureCode] = value
 
     return value
   }
 
-  setVcpValue(featureCode: number, value: number): void {
+  async setVcpValue(featureCode: number, value: number): Promise<void> {
     const cachedValue = this.cache[featureCode]
 
-    if (typeof cachedValue === 'object' && cachedValue.type === VCPValueType.CONTINUOUS) {
+    if (typeof cachedValue === 'object' && cachedValue.type === VcpValueType.Continuous) {
       this.cache[featureCode] = { ...cachedValue, currentValue: value }
     }
 
     return this.display.setVcpFeature(featureCode, value)
   }
 
-  getVcpLuminance(useCache = true): Continuous {
-    const value = this.getVcpValue(VCPFeatures.ImageAdjustment.Luminance, { useCache })
+  async getVcpLuminance(useCache = true): Promise<Continuous> {
+    const value = await this.getVcpValue(VCPFeatureCode.ImageAdjustment.Luminance, { useCache })
 
-    if (value.type !== VCPValueType.CONTINUOUS) {
+    if (value.type !== VcpValueType.Continuous) {
       throw new Error('VCP Luminance (brightness) value type not supported')
     }
 
     return value
   }
 
-  getBrightnessPercentage(useCache = true): number {
-    const { currentValue, maximumValue } = this.getVcpLuminance(useCache)
+  async getBrightnessPercentage(useCache = true): Promise<number> {
+    const { currentValue, maximumValue } = await this.getVcpLuminance(useCache)
 
     return Math.round(currentValue * 100 / maximumValue)
   }
 
-  setBrightnessPercentage(value: number): void {
-    const { maximumValue } = this.getVcpLuminance(true)
+  async setBrightnessPercentage(value: number): Promise<void> {
+    const { maximumValue } = await this.getVcpLuminance(true)
     const percentage = Math.round(value * maximumValue / 100)
 
-    this.setVcpValue(VCPFeatures.ImageAdjustment.Luminance, Math.max(0, Math.min(percentage, 100)))
+    return this.setVcpValue(VCPFeatureCode.ImageAdjustment.Luminance, Math.max(0, Math.min(percentage, 100)))
   }
 
   clearCache(): void {
     this.cache = {}
   }
 
-  static list(): Array<EnhancedDisplay> {
-    const displays = new DisplayManager().list()
+  static async list(): Promise<Array<EnhancedDisplay>> {
+    const displays = await (new DisplayManager()).list()
 
     return displays.map(display => new EnhancedDisplay(display))
   }

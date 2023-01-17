@@ -1,26 +1,25 @@
-export enum VCPValueType {
-  CONTINUOUS = 'CONTINUOUS',
-  NON_CONTINUOUS = 'NON_CONTINUOUS',
-  TABLE = 'TABLE'
+export enum VcpValueType {
+  Continuous = 0,
+  NonContinuous = 1,
+  Table = 2
 }
 
 export interface Continuous {
-  currentValue: number;
-  maximumValue: number;
-  type: VCPValueType.CONTINUOUS;
+  currentValue: number
+  maximumValue: number
+  type: VcpValueType.Continuous
 }
 
 export interface NonContinuous {
-  /** The first element is the number representation and the second one is the string representation if existing. */
-  currentValue: [number, string | undefined];
-  /** This map all possibles values number representation into their string representation if existing. */
-  possibleValues: Record<number, string | undefined>;
-  type: VCPValueType.NON_CONTINUOUS;
+  currentValue: number
+  currentValueRepresentation?: string
+  possibleValues: Record<string, string | undefined | null>
+  type: VcpValueType.NonContinuous
 }
 
 export interface Table {
-  currentData: ArrayBuffer;
-  type: VCPValueType.TABLE;
+  currentData: Array<number>
+  type: VcpValueType.Table
 }
 
 export declare type VCPValue = Continuous | NonContinuous | Table;
@@ -51,17 +50,17 @@ export interface DisplayInfo {
 export default abstract class AbstractDisplay {
   abstract get info(): DisplayInfo
 
-  abstract supportDDC(): boolean
+  abstract supportDDC(): Promise<boolean>
 
   abstract getDisplayName(): string
 
-  abstract getVcpValue(featureCode: number): VCPValue
+  abstract getVcpValue(featureCode: number): Promise<VCPValue>
 
-  abstract setVcpValue(featureCode: number, value: number): void
+  abstract setVcpValue(featureCode: number, value: number): Promise<void>
 
-  abstract getVcpLuminance(useCache: boolean): Continuous
+  abstract getVcpLuminance(useCache: boolean): Promise<Continuous>
 
-  abstract getBrightnessPercentage(): number
+  abstract getBrightnessPercentage(): Promise<number>
 
-  abstract setBrightnessPercentage(value: number): void
+  abstract setBrightnessPercentage(value: number): Promise<void>
 }

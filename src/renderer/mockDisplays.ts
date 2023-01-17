@@ -1,4 +1,4 @@
-import { Backends, VCPValueType } from '../main/classes/AbstractDisplay'
+import { Backends, VcpValueType } from '../main/classes/AbstractDisplay'
 import IpcBackendClient from './classes/IpcBackendClient'
 
 export function mockDisplays(): void {
@@ -55,7 +55,7 @@ export function mockDisplays(): void {
     await new Promise(resolve => setTimeout(resolve, Math.random() * 1000))
 
     return Promise.resolve({
-        type: VCPValueType.CONTINUOUS,
+        type: VcpValueType.Continuous,
         currentValue: Math.round(Math.random() * maximum),
         maximumValue: maximum,
       },

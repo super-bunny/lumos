@@ -180,4 +180,13 @@ const VCPFeatures = {
   DigitalPacketVideoLink,
 }
 
+export type VCPFeaturesCode =
+  Audio
+  | DisplayControl
+  | Geometry
+  | Miscellaneous
+  | ImageAdjustment
+  | DigitalPacketVideoLink
+  | PresetOperation
+
 export default VCPFeatures

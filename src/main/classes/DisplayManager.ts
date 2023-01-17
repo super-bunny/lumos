@@ -1,5 +1,5 @@
 import EnhancedDisplay, { GetVcpValueOptions } from './EnhancedDisplay'
-import { Continuous, VCPValue } from 'ddc-rs'
+import { VCPValue, Continuous } from './AbstractDisplay'
 
 export default class DisplayManager {
   constructor(public list: Array<EnhancedDisplay> = []) {
@@ -19,43 +19,43 @@ export default class DisplayManager {
     return display
   }
 
-  supportDDCById(id: string): boolean {
+  supportDDCById(id: string): Promise<boolean> {
     const display = this.getDisplayByIdOrThrow(id)
 
     return display.supportDDC()
   }
 
-  getVcpValueById(id: string, featureCode: number, options?: GetVcpValueOptions): VCPValue {
+  getVcpValueById(id: string, featureCode: number, options?: GetVcpValueOptions): Promise<VCPValue> {
     const display = this.getDisplayByIdOrThrow(id)
 
     return display.getVcpValue(featureCode, options)
   }
 
-  setVcpValueById(id: string, featureCode: number, value: number): void {
+  setVcpValueById(id: string, featureCode: number, value: number): Promise<void> {
     const display = this.getDisplayByIdOrThrow(id)
 
     return display.setVcpValue(featureCode, value)
   }
 
-  getVcpLuminanceById(id: string, useCache: boolean = true): Continuous {
+  getVcpLuminanceById(id: string, useCache: boolean = true): Promise<Continuous> {
     const display = this.getDisplayByIdOrThrow(id)
 
     return display.getVcpLuminance(useCache)
   }
 
-  getBrightnessPercentageById(id: string, useCache: boolean = true): number {
+  getBrightnessPercentageById(id: string, useCache: boolean = true): Promise<number> {
     const display = this.getDisplayByIdOrThrow(id)
 
     return display.getBrightnessPercentage(useCache)
   }
 
-  setBrightnessPercentageById(id: string, value: number): void {
+  setBrightnessPercentageById(id: string, value: number): Promise<void> {
     const display = this.getDisplayByIdOrThrow(id)
 
     return display.setBrightnessPercentage(value)
   }
 
-  refresh(): void {
-    this.list = EnhancedDisplay.list()
+  async refresh(): Promise<void> {
+    this.list = await EnhancedDisplay.list()
   }
 }
