@@ -148,7 +148,7 @@ export default function main() {
       appTray.config.onAppOpen = onAppOpen
       appTray.reloadContextMenu()
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
   })
 

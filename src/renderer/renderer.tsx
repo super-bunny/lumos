@@ -32,6 +32,4 @@ console.debug('Env:', window.lumos.env)
 window.lumos.sessionJwt()
   .then(jwt => console.info('Session jwt:', jwt))
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack')
-
 window.lumos.ipc.on(IpcEvents.PING, message => console.info('Received ping from main process:', message))
