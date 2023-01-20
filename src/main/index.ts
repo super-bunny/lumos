@@ -51,6 +51,7 @@ export default function main() {
 
     // and load the index.html of the app.
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+      .then()
 
     // Open the DevTools in development.
     if (process.env.NODE_ENV === 'development') {
