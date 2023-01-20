@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import SettingsType, { Themes } from '../../../../types/Settings'
 import { FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Switch, SxProps } from '@mui/material'
 import { useAppDispatch } from '../../../store/store'
 import { setTheme } from '../../../store/slices/themeSlice'
+import getThemeLabel from '../../../../shared/utils/labelGetters/getThemeLabel'
 
 export interface Props {
   settings: SettingsType
@@ -13,13 +14,19 @@ export interface Props {
 export default function InterfaceSettings({ settings, onChange, sx }: Props) {
   const dispatch = useAppDispatch()
 
+  const currentTheme = useMemo(() => {
+    const themes = Object.values(Themes)
+    if (settings.theme && themes.includes(settings.theme)) return settings.theme
+    return Themes.DEFAULT
+  }, [settings.theme])
+
   return (
     <Grid container gap={ 2 } sx={ sx }>
       <Grid item xs={ 12 } md={ 6 }>
         <FormControl fullWidth>
           <InputLabel id="theme-setting-label">Theme</InputLabel>
           <Select
-            value={ settings.theme ?? Themes.DEFAULT }
+            value={ currentTheme }
             labelId="theme-setting-label"
             label="Theme"
             onChange={ (event) => {
@@ -28,7 +35,7 @@ export default function InterfaceSettings({ settings, onChange, sx }: Props) {
             } }
           >
             { Object.entries(Themes).map(([key, value]) => (
-              <MenuItem value={ value } key={ value }>{ key }</MenuItem>
+              <MenuItem value={ value } key={ value }>{ getThemeLabel(value as Themes) }</MenuItem>
             )) }
           </Select>
         </FormControl>

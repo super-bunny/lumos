@@ -21,11 +21,17 @@ export const OriginTheme = createTheme({
 })
 
 
-const defaultTheme = createTheme({})
+const materialLight = createTheme({
+  palette: {
+    primary: {
+      main: '#f15025',
+    },
+  },
+})
 
 const themeConfigs: Record<Themes, Theme> = {
-  default: defaultTheme,
-  origin: OriginTheme,
+  default: OriginTheme,
+  materialLight,
 }
 
 export default themeConfigs
