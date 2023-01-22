@@ -5,6 +5,7 @@ export const defaultSettings: Required<Settings> = {
   runAppOnStartup: false,
   minimizeAppOnStartup: false,
   minimizeAppOnWindowClose: true,
+  developerMode: false,
   theme: Themes.DEFAULT,
   enableAnimations: true,
   enableHttpApi: false,

@@ -20,4 +20,5 @@ export default interface Settings {
     port?: number,
   }
   globalShortcuts: Partial<Record<GlobalShortcutsStaticActions | string, string>>
+  developerMode?: boolean
 }

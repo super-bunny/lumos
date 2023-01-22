@@ -9,6 +9,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import useSwr from 'swr'
 import { useConfirm } from 'material-ui-confirm'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
+import useSettingsStore from '../../../hooks/useSettingsStore'
 
 export interface Props {
   monitor: Monitor
@@ -20,6 +21,9 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
   const confirm = useConfirm()
   const popupState = usePopupState({ variant: 'popover', popupId: 'demoMenu' })
   const { enqueueSnackbar } = useSnackbar()
+
+  const { settingsStore } = useSettingsStore()
+  const developerMode = settingsStore?.settings.developerMode
 
   const { data: supportDDC } = useSwr([
       `${ monitor.info.displayId }-supportDDC`,
@@ -82,7 +86,7 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
           <ListItemText>Copy ID</ListItemText>
         </MenuItem>
 
-        { monitor.info.capabilities && (
+        { monitor.info.capabilities && developerMode && (
           <MenuItem
             onClick={ () => {
               confirm({

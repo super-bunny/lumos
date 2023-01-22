@@ -9,6 +9,7 @@ import ApplicationSettings from '../molecules/Settings/ApplicationSettings'
 import ExperimentalSettings from '../molecules/Settings/ExperimentalSettings'
 import useSettingsStore from '../../hooks/useSettingsStore'
 import GlobalShortcutsSettings from '../molecules/Settings/GlobalShortcutsSettings'
+import AdvancedSettings from '../molecules/Settings/AdvancedSettings'
 
 export interface Props {
   sx?: SxProps
@@ -19,6 +20,7 @@ enum SETTINGS_TABS {
   INTERFACE = 'interface',
   GLOBAL_SHORTCUT = 'global_shortcut',
   EXPERIMENTAL = 'experimental',
+  ADVANCED = 'advanced',
 }
 
 function checkIfNeedRestart(settings: SettingsType) {
@@ -91,6 +93,7 @@ export default function Settings({ sx }: Props) {
             <Tab label="Interface" value={ SETTINGS_TABS.INTERFACE }/>
             <Tab label="Global shortcuts" value={ SETTINGS_TABS.GLOBAL_SHORTCUT }/>
             <Tab label="Experimental" value={ SETTINGS_TABS.EXPERIMENTAL }/>
+            <Tab label="Advanced" value={ SETTINGS_TABS.ADVANCED }/>
           </Tabs>
 
 
@@ -109,6 +112,10 @@ export default function Settings({ sx }: Props) {
 
             <SettingsTabPanel value={ SETTINGS_TABS.EXPERIMENTAL }>
               <ExperimentalSettings settings={ settings! } onChange={ saveSettings }/>
+            </SettingsTabPanel>
+
+            <SettingsTabPanel value={ SETTINGS_TABS.ADVANCED }>
+              <AdvancedSettings settings={ settings! } onChange={ saveSettings }/>
             </SettingsTabPanel>
           </Box>
         </TabContext>
