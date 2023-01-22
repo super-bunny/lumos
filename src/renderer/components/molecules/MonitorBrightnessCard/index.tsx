@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Divider, IconButton, Input, Paper, Slider, Stack, styled, Tooltip, Typography } from '@mui/material'
-import Center from '../atoms/Center'
-import Loader from '../atoms/Loader'
-import GenericDisplay from '../../classes/GenericDisplay'
+import Center from '../../atoms/Center'
+import Loader from '../../atoms/Loader'
+import GenericDisplay from '../../../classes/GenericDisplay'
 import RefreshIcon from '@mui/icons-material/Refresh'
-import { IpcEvents } from '../../../types/Ipc'
-import type { IpcDisplayUpdateArgs } from '../../../main/utils/ipc'
-import VCPFeatures from '../../../types/VCPFeatures'
+import { IpcEvents } from '../../../../types/Ipc'
+import type { IpcDisplayUpdateArgs } from '../../../../main/utils/ipc'
+import VCPFeatures from '../../../../types/VCPFeatures'
+import MonitorBrightnessCardExtraMenu from './MonitorBrightnessCardExtraMenu'
 
 export type Monitor = GenericDisplay
 
@@ -110,11 +111,19 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   return (
     <Paper ref={ ref } sx={ { width: 250, height: 250, p: 2, pb: 1, textAlign: 'center' } }>
       <Stack height={ 1 } direction={ 'column' }>
-        <Typography
-          variant={ 'h5' }
-          textAlign={ 'center' }
-          noWrap
-        >{ monitor.getDisplayName() }</Typography>
+        <Stack alignItems={ 'center' } justifyContent={ 'center' } style={ { position: 'relative' } }>
+          <Typography
+            width={ 0.9 }
+            variant={ 'h5' }
+            textAlign={ 'center' }
+            noWrap
+          >{ monitor.getDisplayName() }</Typography>
+
+          <MonitorBrightnessCardExtraMenu
+            monitor={ monitor }
+            style={ { position: 'absolute', top: 0, bottom: 0, right: -14 } }
+          />
+        </Stack>
 
         <Divider sx={ { my: 1 } }/>
 
