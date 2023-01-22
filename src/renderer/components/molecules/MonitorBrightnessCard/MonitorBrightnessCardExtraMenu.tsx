@@ -67,7 +67,7 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
           </ListItemText>
         </MenuItem>
 
-        { supportDDC === true && (
+        { supportDDC === true && developerMode && (
           <MenuItem disabled>
             <ListItemIcon>
               <InfoIcon/>
