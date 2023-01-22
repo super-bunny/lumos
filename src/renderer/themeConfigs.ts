@@ -18,13 +18,38 @@ export const OriginTheme = createTheme({
     },
     divider: '#808080',
   },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: theme => ({
+        code: {
+          padding: theme.spacing(1),
+          borderRadius: theme.shape.borderRadius,
+          color: 'lightgray',
+          background: '#232931',
+          display: 'block',
+        },
+      }),
+    },
+  },
 })
-
 
 const materialLight = createTheme({
   palette: {
     primary: {
       main: '#f15025',
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: theme => ({
+        code: {
+          padding: theme.spacing(1),
+          borderRadius: theme.shape.borderRadius,
+          color: 'lightgray',
+          background: '#232931',
+          display: 'block',
+        },
+      }),
     },
   },
 })
