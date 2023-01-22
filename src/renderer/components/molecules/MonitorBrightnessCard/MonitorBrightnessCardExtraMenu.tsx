@@ -105,7 +105,7 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
             <ListItemIcon>
               <AssignmentTurnedInIcon/>
             </ListItemIcon>
-            <ListItemText>Capability string</ListItemText>
+            <ListItemText>Show capability string</ListItemText>
           </MenuItem>
         ) }
       </Menu>
