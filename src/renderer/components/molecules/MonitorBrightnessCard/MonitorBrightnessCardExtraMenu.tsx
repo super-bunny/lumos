@@ -10,6 +10,7 @@ import useSwr from 'swr'
 import { useConfirm } from 'material-ui-confirm'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import useSettingsStore from '../../../hooks/useSettingsStore'
+import InfoIcon from '@mui/icons-material/Info'
 
 export interface Props {
   monitor: Monitor
@@ -44,7 +45,7 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
 
   const vcpVersionStr = useMemo(() => {
     if (vcpVersion === undefined) {
-      return 'Unknown'
+      return 'unknown'
     }
 
     return `${ vcpVersion.version }.${ vcpVersion.revision }`
@@ -68,7 +69,10 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
 
         { supportDDC === true && (
           <MenuItem disabled>
-            <ListItemText>VCP version: { vcpVersionStr }</ListItemText>
+            <ListItemIcon>
+              <InfoIcon/>
+            </ListItemIcon>
+            <ListItemText>VCP version { vcpVersionStr }</ListItemText>
           </MenuItem>
         ) }
 
