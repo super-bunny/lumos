@@ -1,4 +1,4 @@
-import { DisplayInfo, VCPValue, VcpValueType , Continuous} from '../../main/classes/AbstractDisplay'
+import { DisplayInfo, VCPValue, VcpValueType, Continuous } from '../../main/classes/AbstractDisplay'
 import VCPFeatures from '../../types/VCPFeatures'
 import BackendClient from '../../shared/classes/BackendClient'
 import NodeCache from 'node-cache'
@@ -52,6 +52,20 @@ export default class GenericDisplay {
     this.cache[featureCode] = value
 
     return value
+  }
+
+  async getVcpVersion() {
+    const value = await this.getVcpValue(VCPFeatures.DisplayControl.Version)
+
+    if (value.type !== VcpValueType.Continuous) {
+      throw new Error('VCP Version value type not supported')
+    }
+
+    return {
+      version: value.currentValue >> 8, // High order byte of value is the version
+      revision: value.currentValue & 0xFF, // Low order byte of value is the revision
+      rawValue: value.currentValue,
+    }
   }
 
   async getVcpLuminance(useCache?: boolean): Promise<Continuous> {
