@@ -84,6 +84,7 @@
     "material-ui-confirm": "^3.0.7",
     "material-ui-popup-state": "^4.0.1",
     "node-cache": "^5.1.2",
+    "notistack": "^2.0.8",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-redux": "^8.0.2",
