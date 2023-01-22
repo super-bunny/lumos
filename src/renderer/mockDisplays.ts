@@ -32,11 +32,13 @@ export function mockDisplays(): void {
           index: 4,
           backend: Backends.NV_API,
           displayId: 'Mi Monitor',
+          capabilities: '(prot(monitor)type(lcd)MStarcmds(01 02 03 07 0C E3 F3)vcp(02 04 05 08 10 12 14(05 08 0B 0C) 16 18 1A 52 60( 11 12 0F) AA(01 02) AC AE B2 B6 C6 C8 C9 D6(01 04 05) DC(00 02 03 05 ) DF FD)mccs_ver(2.1)mswhql(1))',
         },
         {
           index: 5,
           backend: Backends.NV_API,
           displayId: '632du689TT6YDtcnonzdoz753poa',
+          capabilities: '(prot(monitor)type(lcd)MStarcmds(01 02 03 07 0C E3 F3)vcp(02 04 05 08 10 12 14(05 08 0B 0C) 16 18 1A 52 60( 11 12 0F) AA(01 02) AC AE B2 B6 C6 C8 C9 D6(01 04 05) DC(00 02 03 05 ) DF FD)mccs_ver(2.1)mswhql(1))'
         },
       ],
     )

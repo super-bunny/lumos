@@ -27,6 +27,7 @@ export default class EnhancedDisplay extends AbstractDisplay {
       manufacturerId: this.display.manufacturerId,
       manufactureYear: this.display.manufactureYear,
       manufactureWeek: this.display.manufactureWeek,
+      capabilities: this.display.capabilities,
     }
   }
 

@@ -45,6 +45,7 @@ export interface DisplayInfo {
   manufacturerId?: string
   manufactureYear?: number
   manufactureWeek?: number
+  capabilities?: string
 }
 
 export default abstract class AbstractDisplay {
