@@ -16,7 +16,7 @@ export interface SetupIpcArgs {
 
 const settingsStore = new SettingsStore()
 
-export default function setupIpc({ mainWindow,displayManager, sessionJwt, httpApiPort }: SetupIpcArgs): void {
+export default function setupIpc({ mainWindow, displayManager, sessionJwt, httpApiPort }: SetupIpcArgs): void {
   ipcMain.handle(IpcEvents.LIST_DISPLAYS, async () => {
     await displayManager.refresh()
     return displayManager.list.map(display => display.info)

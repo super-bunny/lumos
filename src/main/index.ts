@@ -143,10 +143,11 @@ export default function main() {
 
     // App tray
     try {
-      const appTray = new AppTray()
+      const appTray = new AppTray({
+        onAppOpen,
+      })
 
       appTray.tray.on('double-click', onAppOpen)
-      appTray.config.onAppOpen = onAppOpen
       appTray.reloadContextMenu()
     } catch (e) {
       console.error(e)
