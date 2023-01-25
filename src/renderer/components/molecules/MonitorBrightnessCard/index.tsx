@@ -8,6 +8,7 @@ import { IpcEvents } from '../../../../types/Ipc'
 import type { IpcDisplayUpdateArgs } from '../../../../main/utils/ipc'
 import VCPFeatures from '../../../../types/VCPFeatures'
 import MonitorBrightnessCardExtraMenu from './MonitorBrightnessCardExtraMenu'
+import { useSnackbar } from 'notistack'
 
 export type Monitor = GenericDisplay
 
@@ -29,6 +30,7 @@ const StyledInput = styled(Input)({
 })
 
 export default function MonitorBrightnessCard({ monitor }: Props) {
+  const { enqueueSnackbar } = useSnackbar()
   const ref = useRef<HTMLDivElement>(null)
 
   const [supportDDC, setSupportDDC] = useState<boolean>()
@@ -61,18 +63,25 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   // Check if monitor support DDC protocol and retrieve monitor brightness if supported
   const refreshBrightness = useCallback(async (useCache: boolean = true) => {
     setLoading(true)
-
-    const supportDDC = await monitor.supportDDC()
-
-    if (!supportDDC) {
-      setSupportDDC(false)
-      setLoading(false)
-      return
-    }
-
-    setBrightnessState(await monitor.getBrightnessPercentage(useCache))
-    setSupportDDC(true)
-    setLoading(false)
+    await monitor.supportDDC()
+      .then(supportDDC => {
+        setSupportDDC(supportDDC)
+        return supportDDC
+      }, error => {
+        console.error(`Error while checking if monitor ${ monitor.getDisplayName() } support DDC:`, error)
+        throw error
+      })
+      .then(async supportDDC => {
+        if (!supportDDC) return
+        const brightness = await monitor.getBrightnessPercentage(useCache)
+        setBrightnessState(brightness)
+      }, error => {
+        console.error(`Error while getting brightness of monitor ${ monitor.getDisplayName() }:`, error)
+        throw error
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [monitor])
 
   // Check if monitor support DDC protocol and retrieve monitor brightness if supported
@@ -152,7 +161,10 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
               <Tooltip title={ 'Refresh brightness for this monitor' } placement={ 'top' }>
                 <IconButton
-                  onClick={ () => refreshBrightness(false) }
+                  onClick={ () => {
+                    refreshBrightness(false)
+                      .catch(() => enqueueSnackbar('Fail to refresh brightness', { variant: 'error' }))
+                  } }
                   color={ 'primary' }
                   sx={ { p: 0, position: 'absolute', top: 0, right: -32 } }
                 ><RefreshIcon/></IconButton>
