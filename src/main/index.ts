@@ -44,6 +44,7 @@ export default function main() {
         preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         nodeIntegration: false,
         contextIsolation: true,
+        sandbox: false,
       },
     })
 

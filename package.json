@@ -49,7 +49,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^4.2.1",
-    "electron": "^19.1.9",
+    "electron": "^22.0.3",
     "eslint": "^8.0.0",
     "eslint-config-react-app": "^7.0.1",
     "fork-ts-checker-webpack-plugin": "^5.0.14",
@@ -61,7 +61,7 @@
     "webpack-bundle-analyzer": "^4.5.0"
   },
   "dependencies": {
-    "@ddc-node/ddc-node": "^1.0.0",
+    "@ddc-node/ddc-node": "^1.0.2",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@koa/cors": "^3.3.0",
