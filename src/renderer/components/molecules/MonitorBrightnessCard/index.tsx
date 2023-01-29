@@ -159,7 +159,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
                 textAlign={ 'center' }
               >Brightness</Typography>
 
-              <Tooltip title={ 'Refresh brightness for this monitor' } placement={ 'top' }>
+              <Tooltip title={ 'Refresh brightness for this monitor' } enterDelay={ 500 } placement={ 'top' }>
                 <IconButton
                   onClick={ () => {
                     refreshBrightness(false)
