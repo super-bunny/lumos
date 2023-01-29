@@ -1,14 +1,11 @@
 import { contextBridge, ipcRenderer, shell } from 'electron'
 import { DisplayInfo, VCPValue } from './classes/AbstractDisplay'
-import ElectronStore from 'electron-store'
-import Settings from '../types/Settings'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore from './classes/SettingsStore'
 import { sentryIsEnabled } from '../shared/utils/sentry'
 import type { GetVcpValueOptions } from './classes/EnhancedDisplay'
 
-export type StoreOptions = Pick<ElectronStore.Options<Settings>, 'name'>
 export type IpcWrappedListener = (event: Electron.IpcRendererEvent, ...args: Array<any>) => void
 
 const settings = new SettingsStore()

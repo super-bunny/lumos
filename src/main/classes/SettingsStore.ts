@@ -1,5 +1,6 @@
-import ElectronStore from 'electron-store'
+import Conf from 'conf'
 import Settings, { Themes } from '../../types/Settings'
+import getUserDataPath from '../../shared/utils/getUserDataPath'
 
 export const defaultSettings: Required<Settings> = {
   runAppOnStartup: false,
@@ -16,10 +17,13 @@ export const defaultSettings: Required<Settings> = {
   globalShortcuts: {},
 }
 
-export default class SettingsStore extends ElectronStore<Settings> {
+export default class SettingsStore extends Conf<Settings> {
   constructor() {
     super({
       defaults: defaultSettings,
+      configName: 'config',
+      projectName: 'lumos',
+      cwd: getUserDataPath(),
     })
   }
 

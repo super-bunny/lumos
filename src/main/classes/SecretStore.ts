@@ -1,5 +1,5 @@
-import ElectronStore, { Options } from 'electron-store'
-import { safeStorage } from 'electron'
+import Conf, { Options } from 'conf'
+import { app, safeStorage } from 'electron'
 
 export interface StoreData {
   httpApi: {
@@ -9,15 +9,17 @@ export interface StoreData {
 
 export type StoreOptions<T> = Pick<Options<T>, 'defaults'>
 
-export default class SecretStore extends ElectronStore<StoreData> {
+export default class SecretStore extends Conf<StoreData> {
   constructor(options?: StoreOptions<StoreData>) {
 
     super({
       ...options,
-      name: 'secrets',
+      configName: 'secrets',
+      fileExtension: '',
+      projectName: 'lumos',
+      cwd: app.getPath('userData'),
       serialize: SecretStore.serialize,
       deserialize: SecretStore.deserialize,
-      fileExtension: '',
       watch: false,
       clearInvalidConfig: true,
     })

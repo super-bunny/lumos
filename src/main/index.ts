@@ -1,5 +1,4 @@
 import { app, BrowserWindow, dialog, globalShortcut, session } from 'electron'
-import Store from 'electron-store'
 import setupIpc from './contextBridge'
 import DisplayManager from './classes/DisplayManager'
 import SecretStore from './classes/SecretStore'
@@ -136,7 +135,6 @@ export default function main() {
     })
 
     setupAutoStartup(settings.store.runAppOnStartup ?? defaultSettings.runAppOnStartup)
-    Store.initRenderer()
     setupIpc({
       displayManager,
       sessionJwt,

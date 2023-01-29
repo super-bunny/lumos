@@ -21,6 +21,10 @@ export default function setupIpc({
   httpApiPort,
   onRegisterGlobalShortcuts,
 }: SetupIpcArgs): void {
+  ipcMain.on(IpcEvents.GET_USER_DATA_PATH_SYNC, event => {
+    event.returnValue = app.getPath('userData')
+  })
+
   ipcMain.handle(IpcEvents.LIST_DISPLAYS, async () => {
     await displayManager.refresh()
     return displayManager.list.map(display => display.info)
