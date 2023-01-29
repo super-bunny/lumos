@@ -3,7 +3,7 @@ import { DisplayInfo, VCPValue } from './classes/AbstractDisplay'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore from './classes/SettingsStore'
-import { sentryIsEnabled } from '../shared/utils/sentry'
+import { canEnableSentry } from '../shared/utils/sentry'
 import type { GetVcpValueOptions } from './classes/EnhancedDisplay'
 
 export type IpcWrappedListener = (event: Electron.IpcRendererEvent, ...args: Array<any>) => void
@@ -13,7 +13,7 @@ const env = {
   MOCK_DISPLAYS: process.env.MOCK_DISPLAYS,
   NODE_ENV: process.env.NODE_ENV,
 }
-const sentryEnabled = sentryIsEnabled()
+const sentryEnabled = canEnableSentry()
 const validListenableIpcChannels = [IpcEvents.PING, IpcEvents.DISPLAY_UPDATE]
 
 export const LumosApi = {

@@ -1,9 +1,9 @@
 import { isMainThread } from 'worker_threads'
 import workerThread from './workerThread'
-import { sentryIsEnabled } from './shared/utils/sentry'
+import { canEnableSentry } from './shared/utils/sentry'
 
 if (isMainThread) {
-  if (sentryIsEnabled()) {
+  if (canEnableSentry()) {
     console.info('Sentry is enabled')
     require('./main/utils/initSentry').default()
   }
