@@ -137,8 +137,15 @@ export default function main() {
 
     setupAutoStartup(settings.store.runAppOnStartup ?? defaultSettings.runAppOnStartup)
     Store.initRenderer()
+    setupIpc({
+      displayManager,
+      sessionJwt,
+      httpApiPort,
+      onRegisterGlobalShortcuts: () => {
+        registerGlobalShortcuts(settings!.store.globalShortcuts, displayManager, mainWindow)
+      },
+    })
     mainWindow = createWindow()
-    setupIpc({ mainWindow, displayManager, sessionJwt, httpApiPort })
     registerGlobalShortcuts(settings.store.globalShortcuts, displayManager, mainWindow)
 
     // App tray

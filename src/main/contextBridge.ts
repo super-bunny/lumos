@@ -1,22 +1,26 @@
-import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron'
+import { app, globalShortcut, ipcMain } from 'electron'
 import DisplayManager from './classes/DisplayManager'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import setupAutoStartup from './utils/setupAutoStartup'
 import { GetVcpValueOptions } from './classes/EnhancedDisplay'
-import registerGlobalShortcuts from './utils/registerGlobalShortcuts'
 
 export interface SetupIpcArgs {
-  mainWindow: BrowserWindow
   displayManager: DisplayManager
   sessionJwt: string
   httpApiPort: number
+  onRegisterGlobalShortcuts: () => void
 }
 
 const settingsStore = new SettingsStore()
 
-export default function setupIpc({ mainWindow, displayManager, sessionJwt, httpApiPort }: SetupIpcArgs): void {
+export default function setupIpc({
+  displayManager,
+  sessionJwt,
+  httpApiPort,
+  onRegisterGlobalShortcuts,
+}: SetupIpcArgs): void {
   ipcMain.handle(IpcEvents.LIST_DISPLAYS, async () => {
     await displayManager.refresh()
     return displayManager.list.map(display => display.info)
@@ -57,7 +61,7 @@ export default function setupIpc({ mainWindow, displayManager, sessionJwt, httpA
   })
   ipcMain.handle(IpcEvents.REGISTER_ALL_SHORTCUTS, () => {
     globalShortcut.unregisterAll()
-    registerGlobalShortcuts(settingsStore.store.globalShortcuts, displayManager, mainWindow)
+    onRegisterGlobalShortcuts()
   })
   ipcMain.handle(IpcEvents.UNREGISTER_ALL_SHORTCUTS, () => {
     globalShortcut.unregisterAll()
