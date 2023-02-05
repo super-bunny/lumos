@@ -131,7 +131,7 @@ export default function main() {
     const sessionJwtSecret = crypto.randomBytes(48).toString('base64')
     const httpApiPort = settings.store.httpApi?.port ?? 8787
     const httpApiHost = settings.store.httpApi?.host ?? 'localhost'
-    const backendWorker = new BackendWorker({
+    new BackendWorker({
       enableHttpApi: settings.store.enableHttpApi ?? defaultSettings.enableHttpApi,
       httpApiHost,
       httpApiPort,
