@@ -11,7 +11,12 @@ import { init as reactInit } from '@sentry/react'
 import { IpcEvents } from '../types/Ipc'
 
 if (window.lumos.sentryEnabled) {
-  Sentry.init(sentryBaseDefaultOptions, reactInit)
+  Sentry.init({
+    ...sentryBaseDefaultOptions,
+    beforeSend: event => {
+      return window.lumos.initSettings.enableErrorReporting ? event : null
+    },
+  }, reactInit)
 }
 
 const root = createRoot(document.getElementById('root')!)

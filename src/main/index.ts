@@ -10,6 +10,8 @@ import AppTray from './classes/AppTray'
 import setupAutoStartup from './utils/setupAutoStartup'
 import { IpcEvents } from '../types/Ipc'
 import registerGlobalShortcuts from './utils/registerGlobalShortcuts'
+import { envVarAllowSentry } from '../shared/utils/sentry'
+import initSentry from './utils/initSentry'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -19,6 +21,7 @@ let mainWindow: BrowserWindow | undefined
 let settings: SettingsStore | undefined
 // Use to handle window hiding/showing without prevent app from quit by closing all windows
 let shouldQuit: boolean = false
+let shouldReportError: boolean = false
 
 export default function main() {
   // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -31,6 +34,15 @@ export default function main() {
   if (!singleInstanceLock) {
     app.quit()
     return
+  }
+
+  if (envVarAllowSentry()) {
+    console.info('Sentry is enabled')
+    initSentry({
+      beforeSend: (event) => {
+        return shouldReportError ? event : null
+      },
+    })
   }
 
   const createWindow = (): BrowserWindow => {
@@ -105,6 +117,11 @@ export default function main() {
 
     settings = getSettingsStore()
     if (!settings) return
+
+    if (settings.store.enableErrorReporting) {
+      console.info('Error reporting with Sentry is enabled')
+      shouldReportError = true
+    }
 
     const secretStore = new SecretStore({
       defaults: {

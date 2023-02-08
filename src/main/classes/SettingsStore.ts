@@ -9,6 +9,7 @@ export const defaultSettings: Required<Settings> = {
   developerMode: false,
   theme: Themes.DEFAULT,
   enableAnimations: true,
+  enableErrorReporting: true,
   enableHttpApi: false,
   httpApi: {
     host: 'localhost',

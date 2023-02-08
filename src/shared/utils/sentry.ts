@@ -3,7 +3,7 @@ import packageJson from '../../../package.json'
 
 // Must be a function to allow this file to be import in renderer process.
 // The "process" global is not defined in renderer process.
-export function canEnableSentry(): boolean {
+export function envVarAllowSentry(): boolean {
   return process.env.NODE_ENV === 'production' && process.env.ENABLE_SENTRY === 'true'
 }
 

@@ -14,6 +14,7 @@ export default interface Settings {
   minimizeAppOnWindowClose?: boolean
   theme?: Themes
   enableAnimations?: boolean
+  enableErrorReporting?: boolean
   enableHttpApi?: boolean
   httpApi?: {
     host?: string,
