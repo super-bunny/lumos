@@ -126,6 +126,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
             variant={ 'h5' }
             textAlign={ 'center' }
             noWrap
+            data-sentry-mask
           >{ monitor.getDisplayName() }</Typography>
 
           <MonitorBrightnessCardExtraMenu
