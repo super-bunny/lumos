@@ -25,7 +25,7 @@ export default function PrivacySettings({ settings, onChange, sx }: Props) {
           label="Enable error reporting"
         />
         <InfoIcon
-          message={ 'Error reporting id handled by a third party tool (Sentry).' }
+          message={ 'Error reporting is handled by a third party tool (Sentry).' }
         />
       </Grid>
     </Grid>
