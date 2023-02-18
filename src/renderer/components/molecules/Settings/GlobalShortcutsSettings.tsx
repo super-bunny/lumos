@@ -46,6 +46,7 @@ interface Action {
   regExp: GlobalShortcutRegExp
   keyGetter: (displayId?: string) => string
   type: GlobalShortcutType
+  unique: boolean
 }
 
 export interface Props {
@@ -156,24 +157,28 @@ const actions: Array<Action> = [
     keyGetter: () => 'dimAllDisplays',
     regExp: GlobalShortcutRegExp.DIM_ALL_DISPLAYS,
     type: GlobalShortcutType.STATIC,
+    unique: true,
   },
   {
     label: 'Brighten all displays',
     keyGetter: () => 'brightAllDisplays',
     regExp: GlobalShortcutRegExp.BRIGHT_ALL_DISPLAYS,
     type: GlobalShortcutType.STATIC,
+    unique: true,
   },
   {
     label: 'Dim display ...',
     keyGetter: (displayId) => `dimDisplay${ displayId }`,
     regExp: GlobalShortcutRegExp.DIM_DISPLAY,
     type: GlobalShortcutType.DISPLAY,
+    unique: false,
   },
   {
     label: 'Brighten display ...',
     keyGetter: (displayId) => `brightDisplay${ displayId }`,
     regExp: GlobalShortcutRegExp.BRIGHT_DISPLAY,
     type: GlobalShortcutType.DISPLAY,
+    unique: false,
   },
 ]
 
@@ -185,7 +190,7 @@ export default function GlobalShortcutsSettings({ settings, onChange, sx }: Prop
 
   const remainingActions = useMemo(() => {
     const currentGlobalShortcutsActions = Object.keys(settings.globalShortcuts)
-    return actions.filter(action => !currentGlobalShortcutsActions.find(key => new RegExp(action.regExp).test(key)))
+    return actions.filter(action => !(currentGlobalShortcutsActions.find(key => new RegExp(action.regExp).test(key)) && action.unique))
   }, [settings.globalShortcuts])
 
   const addShortcut = useCallback(() => {
