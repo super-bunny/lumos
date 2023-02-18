@@ -1,4 +1,4 @@
-import { DisplayInfo, VCPValue, VcpValueType, Continuous } from '../../main/classes/AbstractDisplay'
+import { Backends, Continuous, DisplayInfo, VCPValue, VcpValueType } from '../../main/classes/AbstractDisplay'
 import VCPFeatures from '../../types/VCPFeatures'
 import BackendClient from '../../shared/classes/BackendClient'
 import NodeCache from 'node-cache'
@@ -111,5 +111,16 @@ export default class GenericDisplay {
     cache.set(DISPLAY_LIST_CACHE_KEY, genericDisplayListPromise)
 
     return genericDisplayListPromise
+  }
+
+  static filterDuplicateDisplay(displayList: Array<GenericDisplay>): Array<GenericDisplay> {
+    const backendList = displayList.map(display => display.info.backend)
+
+    // If nvapi backend is detected filter out all other backend to avoid duplicate monitors
+    if (backendList.includes(Backends.NV_API)) {
+      return displayList.filter(display => display.info.backend === Backends.NV_API)
+    }
+
+    return displayList
   }
 }

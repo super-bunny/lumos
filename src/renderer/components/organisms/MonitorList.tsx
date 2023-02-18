@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Alert, Button, Grow, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard'
 import Loader from '../atoms/Loader'
-import { Backends } from '../../../main/classes/AbstractDisplay'
 import GenericDisplay from '../../classes/GenericDisplay'
 import IpcBackendClient from '../../classes/IpcBackendClient'
 import useSettingsStore from '../../hooks/useSettingsStore'
@@ -26,17 +25,7 @@ export default function MonitorList({ sx }: Props) {
     try {
       const monitors = await GenericDisplay.list(new IpcBackendClient(), { useCache })
       console.info('Monitor list:', monitors)
-      const backendList = monitors.map(display => display.info.backend)
-
-      // If nvapi backend is detected filter out all other backend to avoid duplicate monitors
-      if (backendList.includes(Backends.NV_API)) {
-        const filteredMonitors = monitors
-          .filter(display => display.info.backend === Backends.NV_API)
-
-        setMonitors(filteredMonitors)
-      } else {
-        setMonitors(monitors)
-      }
+      setMonitors(GenericDisplay.filterDuplicateDisplay(monitors))
     } catch (e) {
       console.error(e)
       setError('An error occurred during the monitor list retrieval')

@@ -17,7 +17,9 @@ export default function MonitorSelect({ label = 'Monitor', helperText, monitor, 
 
   useEffect(() => {
     GenericDisplay.list(new IpcBackendClient(), { useCache: true })
-      .then(monitors => setMonitors(monitors))
+      .then(monitors => {
+        setMonitors(GenericDisplay.filterDuplicateDisplay(monitors))
+      })
   }, [])
 
   return (
