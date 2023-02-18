@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.0](https://github.com/super-bunny/lumos/releases/tag/v0.1.0) (2023-02-18)
+
+
+### Features
+
+* add option to disable sentry error reporting ([04794cb](https://github.com/super-bunny/lumos/commit/04794cb2e5bbe34aaae1fe6e4b1d52ee485372c8))
+* delay display of refresh brightness button tooltip (500ms) ([fb0feb4](https://github.com/super-bunny/lumos/commit/fb0feb4951d88bc94ba1da1ac3d00e95478585ac))
+* add developer mode setting ([1d87af9](https://github.com/super-bunny/lumos/commit/1d87af9817aab452d3ef7866366bba8d77012b53))
+* add "more menu" on monitor brightness card ([3385c76](https://github.com/super-bunny/lumos/commit/3385c76e090146b28b1f56a288c50866cc858119))
+* add method to get vcp version from monitor ([511055a](https://github.com/super-bunny/lumos/commit/511055a4e28ed0427132df4bcba7d6c72961c253))
+* make backend return capability string in monitor info ([8de72ab](https://github.com/super-bunny/lumos/commit/8de72abbe490de4b1e52b6e0d2a90cd0272027b6))
+* replace old synchronous ddc/ci library by a new asynchronous
+  one ([4a224d](https://github.com/super-bunny/lumos/commit/4a224de85386c3ddda28d4adde138f6726688799))
+
+
+### Bug Fixes
+
+* allow non unique shortcuts to be set multiple times ([85fc725](https://github.com/super-bunny/lumos/commit/85fc725fd5f4b82501250d01f2b7d4278b5a566a))
+* remove duplicates from monitor list on settings shortcut page  ([1a7be49](https://github.com/super-bunny/lumos/commit/1a7be496d2ab43052ac71a85f111428a7d3e99aa))
+* handle brightness refresh error  ([5b39583](https://github.com/super-bunny/lumos/commit/5b395839ad4f9e2d1821a2e56d9cf7366f34a99e))
+
+
+### Dependencies
+
+* update electron from v19 to v22 ([368e9fa](https://github.com/super-bunny/lumos/commit/368e9fa4d61f807d970477026198370949015377))
+* add notistack npm package ([14b3263](https://github.com/super-bunny/lumos/commit/14b32639a9b63ee06c2e6143afb0954681d911ff))
+
 ## [0.1.0-alpha.9](https://github.com/super-bunny/lumos/releases/tag/v0.1.0-alpha.9) (2023-01-02)
 
 
