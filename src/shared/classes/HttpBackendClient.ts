@@ -1,6 +1,6 @@
-import { DisplayInfo, VCPValue } from '../../main/classes/AbstractDisplay'
 import axios, { AxiosInstance } from 'axios'
 import BackendClient from './BackendClient'
+import { DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
 
 export interface Options {
   host?: string

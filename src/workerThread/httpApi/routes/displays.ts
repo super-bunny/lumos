@@ -9,10 +9,7 @@ const router = new Router<DefaultState, GlobalContext>({
 router.get(
   '/',
   async ctx => {
-    if (ctx.displayManager.list.length === 0) {
-      ctx.displayManager.refresh()
-    }
-
+    ctx.displayManager.refresh()
     const displays = ctx.displayManager.list.map(display => display.info)
 
     ctx.body = {
@@ -27,7 +24,7 @@ router.post(
     const { id } = ctx.request.body
 
     try {
-      const supportDDC = await ctx.displayManager.supportDDCById(id)
+      const supportDDC = await ctx.displayManager.getDisplayByIdOrThrow(id).supportDDC()
 
       ctx.body = {
         supportDDC,
@@ -48,7 +45,7 @@ router.post(
     const { id, featureCode } = ctx.request.body as { id: string, featureCode: number, value: number }
 
     try {
-      const vpcValue = await ctx.displayManager.getVcpValueById(id, featureCode)
+      const vpcValue = await ctx.displayManager.getDisplayByIdOrThrow(id).getVcpValue(featureCode)
 
       ctx.body = {
         vpcValue,
@@ -69,7 +66,7 @@ router.post(
     const { id, featureCode, value } = ctx.request.body as { id: string, featureCode: number, value: number }
 
     try {
-      await ctx.displayManager.setVcpValueById(id, featureCode, value)
+      await ctx.displayManager.getDisplayByIdOrThrow(id).setVcpValue(featureCode, value)
     } catch (err) {
       console.error(err)
       ctx.status = 404

@@ -3,7 +3,7 @@ import cors from '@koa/cors'
 import bodyParser from 'koa-bodyparser'
 import jwtMiddleware from 'koa-jwt'
 import router from './routes'
-import DisplayManager from '../../main/classes/DisplayManager'
+import GenericDisplayManager from '../../main/classes/GenericDisplayManager'
 import GlobalContext from './types/GlobalContext'
 
 export interface InitHttpApiArgs {
@@ -12,7 +12,7 @@ export interface InitHttpApiArgs {
   sessionJwtSecret: string,
   jwtSecret: string,
   context: {
-    displayManager: DisplayManager
+    displayManager: GenericDisplayManager
   }
 }
 

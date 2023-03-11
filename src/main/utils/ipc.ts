@@ -1,7 +1,7 @@
 import { BrowserWindow } from 'electron'
 import { IpcEvents } from '../../types/Ipc'
-import { DisplayInfo, VCPValue } from '../classes/AbstractDisplay'
 import { VCPFeaturesCode } from '../../types/VCPFeatures'
+import { DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
 
 export interface IpcDisplayUpdateArgs {
   displayId: DisplayInfo['displayId']

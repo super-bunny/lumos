@@ -1,23 +1,16 @@
 import BackendClient from '../../shared/classes/BackendClient'
-import { DisplayInfo, VCPValue } from '../../main/classes/AbstractDisplay'
-import EnhancedDisplay from '../../main/classes/EnhancedDisplay'
+import EnhancedDDCDisplay from './EnhancedDDCDisplay'
+import { DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
 
+// Backend client for DDC library. Keep an internal DDC display list updated at each list method call.
 export default class DdcBackendClient extends BackendClient {
-  displayList: Array<EnhancedDisplay> = []
+  protected displayList: Array<EnhancedDDCDisplay> | null = null
 
-  async refresh(): Promise<void> {
-    this.displayList = await EnhancedDisplay.list()
+  protected async getDisplayById(id: string): Promise<EnhancedDDCDisplay | undefined> {
+    return this.displayList?.find(display => display.info.displayId === id)
   }
 
-  async getDisplayById(id: string): Promise<EnhancedDisplay | undefined> {
-    if (this.displayList.length === 0) {
-      await this.refresh()
-    }
-
-    return this.displayList.find(display => display.info.displayId === id)
-  }
-
-  async getDisplayByIdOrThrow(id: string): Promise<EnhancedDisplay> {
+  protected async getDisplayByIdOrThrow(id: string): Promise<EnhancedDDCDisplay> {
     const display = await this.getDisplayById(id)
 
     if (!display) {
@@ -25,6 +18,10 @@ export default class DdcBackendClient extends BackendClient {
     }
 
     return display
+  }
+
+  async refresh(): Promise<void> {
+    this.displayList = await EnhancedDDCDisplay.list()
   }
 
   async supportDDC(id: string): Promise<boolean> {
@@ -46,8 +43,7 @@ export default class DdcBackendClient extends BackendClient {
   }
 
   async list(): Promise<Array<DisplayInfo>> {
-    const displays = await EnhancedDisplay.list()
-
-    return displays.map(display => display.info)
+    await this.refresh()
+    return this.displayList!.map(display => display.info)
   }
 }

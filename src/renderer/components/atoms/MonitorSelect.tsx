@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import GenericDisplay from '../../classes/GenericDisplay'
+import GenericDisplay from '../../../shared/classes/GenericDisplay'
 import IpcBackendClient from '../../classes/IpcBackendClient'
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select, SxProps } from '@mui/material'
 

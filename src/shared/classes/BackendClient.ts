@@ -1,4 +1,4 @@
-import { DisplayInfo, VCPValue } from '../../main/classes/AbstractDisplay'
+import { DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
 
 export default abstract class BackendClient {
   abstract supportDDC(id: string): Promise<boolean>

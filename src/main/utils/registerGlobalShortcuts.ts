@@ -1,12 +1,12 @@
 import Settings from '../../types/Settings'
-import DisplayManager from '../classes/DisplayManager'
+import GenericDisplayManager from '../classes/GenericDisplayManager'
 import { sendIpcDisplayUpdate } from './ipc'
 import { BrowserWindow, globalShortcut } from 'electron'
 import VCPFeatures from '../../types/VCPFeatures'
 
 export default function registerGlobalShortcuts(
   shortcuts: Settings['globalShortcuts'],
-  displayManager: DisplayManager,
+  displayManager: GenericDisplayManager,
   browserWindow?: BrowserWindow,
 ) {
   const globalShortcutHandlers: Record<keyof Settings['globalShortcuts'] | string, (...matches: Array<string>) => Promise<void>> = {
@@ -41,7 +41,7 @@ export default function registerGlobalShortcuts(
         }))
     },
     '^dimDisplay(.*)$': async (key, displayId) => {
-      const display = displayManager.list.find((display) => display.info.displayId === displayId)
+      const display = displayManager.getDisplayById(displayId)
 
       if (!display || !await display.supportDDC()) return
 
@@ -54,7 +54,7 @@ export default function registerGlobalShortcuts(
       })
     },
     '^brightDisplay(.*)$': async (key, displayId) => {
-      const display = displayManager.list.find((display) => display.info.displayId === displayId)
+      const display = displayManager.getDisplayById(displayId)
 
       if (!display || !await display.supportDDC()) return
 

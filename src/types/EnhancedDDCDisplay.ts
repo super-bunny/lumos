@@ -47,21 +47,3 @@ export interface DisplayInfo {
   manufactureWeek?: number
   capabilities?: string
 }
-
-export default abstract class AbstractDisplay {
-  abstract get info(): DisplayInfo
-
-  abstract supportDDC(): Promise<boolean>
-
-  abstract getDisplayName(): string
-
-  abstract getVcpValue(featureCode: number): Promise<VCPValue>
-
-  abstract setVcpValue(featureCode: number, value: number): Promise<void>
-
-  abstract getVcpLuminance(useCache: boolean): Promise<Continuous>
-
-  abstract getBrightnessPercentage(): Promise<number>
-
-  abstract setBrightnessPercentage(value: number): Promise<void>
-}

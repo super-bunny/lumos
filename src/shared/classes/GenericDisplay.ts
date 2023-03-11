@@ -1,7 +1,11 @@
-import { Backends, Continuous, DisplayInfo, VCPValue, VcpValueType } from '../../main/classes/AbstractDisplay'
 import VCPFeatures from '../../types/VCPFeatures'
-import BackendClient from '../../shared/classes/BackendClient'
+import BackendClient from './BackendClient'
 import NodeCache from 'node-cache'
+import { Backends, Continuous, DisplayInfo, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
+
+export interface GetVcpValueOptions {
+  useCache?: boolean
+}
 
 const cache = new NodeCache({ useClones: false })
 const DISPLAY_LIST_CACHE_KEY = 'display-list'
@@ -9,7 +13,7 @@ const DISPLAY_LIST_CACHE_KEY = 'display-list'
 export default class GenericDisplay {
   cache: Record<number | string, any> = {}
 
-  protected constructor(public client: BackendClient, public info: DisplayInfo) {
+  constructor(public client: BackendClient, public info: DisplayInfo) {
   }
 
   getDisplayName(): string {
@@ -31,8 +35,20 @@ export default class GenericDisplay {
     return supportDDCPromise
   }
 
-  async getVcpValue(featureCode: number): Promise<VCPValue> {
-    return this.client.getVcpValue(this.info.displayId, featureCode)
+  async getVcpValue(featureCode: number, options?: GetVcpValueOptions): Promise<VCPValue> {
+    const { useCache = false } = options ?? {}
+
+    const cachedValue = this.cache[featureCode]
+
+    if (useCache && cachedValue) {
+      return cachedValue as VCPValue
+    }
+
+    const value = await this.client.getVcpValue(this.info.displayId, featureCode)
+
+    this.cache[featureCode] = value
+
+    return value
   }
 
   async setVcpValue(featureCode: number, value: number): Promise<void> {
@@ -95,22 +111,44 @@ export default class GenericDisplay {
   }
 
   static async list(client: BackendClient, options?: { useCache?: boolean }): Promise<Array<GenericDisplay>> {
-    const { useCache = true } = options ?? {}
+    // const { useCache = true } = options ?? {}
 
-    if (useCache && cache.has(DISPLAY_LIST_CACHE_KEY)) {
-      console.debug('List generic display - CACHE HIT')
-      return cache.get(DISPLAY_LIST_CACHE_KEY) as Promise<Array<GenericDisplay>>
-    }
+    // if (useCache && cache.has(DISPLAY_LIST_CACHE_KEY)) {
+    //   console.debug('List generic display - CACHE HIT')
+    //   return cache.get(DISPLAY_LIST_CACHE_KEY) as Promise<Array<GenericDisplay>>
+    // }
 
     console.debug('List generic display')
-    const genericDisplayListPromise = await client.list()
+    const genericDisplayListPromise = client.list()
       .then(displayInfoList => {
         return displayInfoList.map(displayInfo => new GenericDisplay(client, displayInfo))
       })
 
-    cache.set(DISPLAY_LIST_CACHE_KEY, genericDisplayListPromise)
+    // cache.set(DISPLAY_LIST_CACHE_KEY, genericDisplayListPromise)
 
     return genericDisplayListPromise
+  }
+
+  static async fromId(
+    client: BackendClient,
+    displayId: string,
+    options?: { useCache?: boolean },
+  ): Promise<GenericDisplay | undefined> {
+    const { useCache = true } = options ?? {}
+
+    if (useCache && cache.has(DISPLAY_LIST_CACHE_KEY)) {
+      console.debug('GenericDisplay.fromId - CACHE HIT')
+      const displayList = await (cache.get(DISPLAY_LIST_CACHE_KEY) as Promise<Array<GenericDisplay>>)
+      const display = displayList.find(display => display.info.displayId === displayId)
+
+      return display ? new GenericDisplay(client, display.info) : undefined
+    }
+
+    console.debug('GenericDisplay.fromId')
+    const displayList = await GenericDisplay.list(client, options)
+    const display = displayList.find(display => display.info.displayId === displayId)
+
+    return display ? new GenericDisplay(client, display.info) : undefined
   }
 
   static filterDuplicateDisplay(displayList: Array<GenericDisplay>): Array<GenericDisplay> {

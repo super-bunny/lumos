@@ -1,10 +1,10 @@
 import { contextBridge, ipcRenderer, shell } from 'electron'
-import { DisplayInfo, VCPValue } from './classes/AbstractDisplay'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore from './classes/SettingsStore'
 import { envVarAllowSentry } from '../shared/utils/sentry'
-import type { GetVcpValueOptions } from './classes/EnhancedDisplay'
+import type { GetVcpValueOptions } from '../shared/classes/GenericDisplay'
+import { DisplayInfo, VCPValue } from '../types/EnhancedDDCDisplay'
 
 export type IpcWrappedListener = (event: Electron.IpcRendererEvent, ...args: Array<any>) => void
 

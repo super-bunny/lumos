@@ -1,6 +1,6 @@
-import { Backends, VcpValueType } from '../main/classes/AbstractDisplay'
 import IpcBackendClient from './classes/IpcBackendClient'
 import VCPFeatures from '../types/VCPFeatures'
+import { Backends, VcpValueType } from '../types/EnhancedDDCDisplay'
 
 export function mockDisplays(): void {
   IpcBackendClient.prototype.list = async () => {

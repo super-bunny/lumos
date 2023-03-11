@@ -1,5 +1,5 @@
 import BackendClient from '../../shared/classes/BackendClient'
-import { DisplayInfo, VCPValue } from '../../main/classes/AbstractDisplay'
+import { DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
 
 export default class IpcBackendClient extends BackendClient {
   async supportDDC(id: string): Promise<boolean> {

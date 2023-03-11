@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Alert, Button, Grow, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard'
 import Loader from '../atoms/Loader'
-import GenericDisplay from '../../classes/GenericDisplay'
+import GenericDisplay from '../../../shared/classes/GenericDisplay'
 import IpcBackendClient from '../../classes/IpcBackendClient'
 import useSettingsStore from '../../hooks/useSettingsStore'
 

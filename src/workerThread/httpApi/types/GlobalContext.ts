@@ -1,5 +1,5 @@
-import DisplayManager from '../../../main/classes/DisplayManager'
+import GenericDisplayManager from '../../../main/classes/GenericDisplayManager'
 
 export default interface GlobalContext {
-  displayManager: DisplayManager
+  displayManager: GenericDisplayManager
 }

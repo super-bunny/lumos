@@ -1,13 +1,13 @@
 import { app, globalShortcut, ipcMain } from 'electron'
-import DisplayManager from './classes/DisplayManager'
+import GenericDisplayManager from './classes/GenericDisplayManager'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import setupAutoStartup from './utils/setupAutoStartup'
-import { GetVcpValueOptions } from './classes/EnhancedDisplay'
+import { GetVcpValueOptions } from '../shared/classes/GenericDisplay'
 
 export interface SetupIpcArgs {
-  displayManager: DisplayManager
+  displayManager: GenericDisplayManager
   sessionJwt: string
   httpApiPort: number
   onRegisterGlobalShortcuts: () => void
@@ -30,13 +30,13 @@ export default function setupIpc({
     return displayManager.list.map(display => display.info)
   })
   ipcMain.handle(IpcEvents.SUPPORT_DDC, (event, id: string) => {
-    return displayManager.supportDDCById(id)
+    return displayManager.getDisplayByIdOrThrow(id).supportDDC()
   })
   ipcMain.handle(IpcEvents.GET_VCP_VALUE, (event, id: string, featureCode: number, options?: GetVcpValueOptions) => {
-    return displayManager.getVcpValueById(id, featureCode, options)
+    return displayManager.getDisplayByIdOrThrow(id).getVcpValue(featureCode, options)
   })
   ipcMain.handle(IpcEvents.SET_VCP_VALUE, (event, id: string, featureCode: number, value: number) => {
-    return displayManager.setVcpValueById(id, featureCode, value)
+    return displayManager.getDisplayByIdOrThrow(id).setVcpValue(featureCode, value)
   })
 
   ipcMain.handle(IpcEvents.GET_SETTINGS, () => {

@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material'
 import ShortcutInput from '../../atoms/ShortcutInput'
-import GenericDisplay from '../../../classes/GenericDisplay'
+import GenericDisplay from '../../../../shared/classes/GenericDisplay'
 import IpcBackendClient from '../../../classes/IpcBackendClient'
 import MonitorSelect from '../../atoms/MonitorSelect'
 import InfoIcon from '../../atoms/InfoIcon'

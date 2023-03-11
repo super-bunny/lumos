@@ -1,6 +1,6 @@
 import { app, BrowserWindow, dialog, globalShortcut, session } from 'electron'
 import setupIpc from './contextBridge'
-import DisplayManager from './classes/DisplayManager'
+import GenericDisplayManager from './classes/GenericDisplayManager'
 import SecretStore from './classes/SecretStore'
 import crypto from 'crypto'
 import BackendWorker from './classes/BackendWorker'
@@ -12,6 +12,7 @@ import { IpcEvents } from '../types/Ipc'
 import registerGlobalShortcuts from './utils/registerGlobalShortcuts'
 import { envVarAllowSentry } from '../shared/utils/sentry'
 import initSentry from './utils/initSentry'
+import DdcBackendClient from '../shared/classes/DdcBackendClient'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -113,7 +114,8 @@ export default function main() {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', () => {
-    const displayManager = new DisplayManager()
+    const displayManager = new GenericDisplayManager(new DdcBackendClient())
+    displayManager.refresh().then()
 
     settings = getSettingsStore()
     if (!settings) return
