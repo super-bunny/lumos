@@ -10,4 +10,4 @@ build_dev_windows:
 	  -o=./out/make
 
 build_dev_deb:
-	NODE_ENV=development yarn make --targets @electron-forge/maker-deb
+	ENABLE_SENTRY=false NODE_ENV=production yarn make --targets @electron-forge/maker-deb
