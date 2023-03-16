@@ -5,6 +5,7 @@ import { IpcEvents } from '../types/Ipc'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import setupAutoStartup from './utils/setupAutoStartup'
 import { GetVcpValueOptions } from '../shared/classes/GenericDisplay'
+import autoShutdownMonitors from './utils/autoShutdownMonitors'
 
 export interface SetupIpcArgs {
   displayManager: GenericDisplayManager
@@ -69,5 +70,8 @@ export default function setupIpc({
   })
   ipcMain.handle(IpcEvents.UNREGISTER_ALL_SHORTCUTS, () => {
     globalShortcut.unregisterAll()
+  })
+  ipcMain.handle(IpcEvents.FORCE_TRIGGER_AUTO_MONITORS_POWER_OFF, () => {
+    return autoShutdownMonitors(settingsStore, displayManager)
   })
 }

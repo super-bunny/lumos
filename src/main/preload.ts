@@ -64,6 +64,7 @@ export const LumosApi = {
   restartApp: () => ipcRenderer.invoke(IpcEvents.RESTART_APP),
   registerAllShortcuts: () => ipcRenderer.invoke(IpcEvents.REGISTER_ALL_SHORTCUTS),
   unregisterAllShortcuts: () => ipcRenderer.invoke(IpcEvents.UNREGISTER_ALL_SHORTCUTS),
+  forceTriggerAutoMonitorsPowerOff: () => ipcRenderer.invoke(IpcEvents.FORCE_TRIGGER_AUTO_MONITORS_POWER_OFF),
   ipcRenderer,
 }
 
