@@ -97,12 +97,12 @@ export default class AppVersionManager {
   }
 
   async getLatestVersion(): Promise<GithubRelease> {
-    const response = await axios('https://api.github.com/repos/super-bunny/lumos/releases', {
+    const response = await axios('https://api.github.com/repos/super-bunny/lumos/releases/latest', {
       params: {
         per_page: '1',
       },
     })
 
-    return response.data[0] as GithubRelease
+    return response.data as GithubRelease
   }
 }
