@@ -22,4 +22,5 @@ export default interface Settings {
   }
   globalShortcuts: Partial<Record<GlobalShortcutsStaticActions | string, string>>
   developerMode?: boolean
+  powerOffMonitorOnShutdown?: Record<string, boolean>
 }

@@ -1,4 +1,4 @@
-import VCPFeatures from '../../types/VCPFeatures'
+import VCPFeatures, { PowerMode } from '../../types/VCPFeatures'
 import BackendClient from './BackendClient'
 import NodeCache from 'node-cache'
 import { Backends, Continuous, DisplayInfo, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
@@ -14,6 +14,10 @@ export default class GenericDisplay {
   cache: Record<number | string, any> = {}
 
   constructor(public client: BackendClient, public info: DisplayInfo) {
+  }
+
+  clearCache(): void {
+    this.cache = {}
   }
 
   getDisplayName(): string {
@@ -106,8 +110,20 @@ export default class GenericDisplay {
     return this.setVcpValue(VCPFeatures.ImageAdjustment.Luminance, Math.round(value * maximumValue / 100))
   }
 
-  clearCache(): void {
-    this.cache = {}
+  async getPowerMode(): Promise<PowerMode> {
+    const value = await this.getVcpValue(VCPFeatures.DisplayControl.PowerMode)
+
+    console.log('power mode value:', value)
+    if (value.type !== VcpValueType.NonContinuous && value.type !== VcpValueType.Continuous) {
+      throw new Error('VCP Power mode value type not supported')
+    }
+
+    return value.currentValue
+  }
+
+  async setPowerMode(powerMode: PowerMode): Promise<void> {
+    console.debug(`[GENERIC DISPLAY ${ this.info.displayId }] Set VCP Power mode: ${ powerMode }`)
+    return this.setVcpValue(VCPFeatures.DisplayControl.PowerMode, powerMode)
   }
 
   static async list(client: BackendClient, options?: { useCache?: boolean }): Promise<Array<GenericDisplay>> {

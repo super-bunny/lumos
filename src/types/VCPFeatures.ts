@@ -170,6 +170,14 @@ export enum DigitalPacketVideoLink {
   PacketCount = 184
 }
 
+export enum PowerMode {
+  ON = 0x01,
+  STANDBY = 0x02,
+  SUSPEND = 0x03,
+  OFF = 0x04,
+  POWER_OFF = 0x05,
+}
+
 const VCPFeatures = {
   PresetOperation,
   ImageAdjustment,

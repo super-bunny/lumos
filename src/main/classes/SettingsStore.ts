@@ -16,6 +16,7 @@ export const defaultSettings: Required<Settings> = {
     port: 8787,
   },
   globalShortcuts: {},
+  powerOffMonitorOnShutdown: {},
 }
 
 export default class SettingsStore extends Conf<Settings> {

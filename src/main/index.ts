@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, globalShortcut, session } from 'electron'
+import { app, BrowserWindow, dialog, globalShortcut, powerMonitor, session } from 'electron'
 import setupIpc from './contextBridge'
 import GenericDisplayManager from './classes/GenericDisplayManager'
 import SecretStore from './classes/SecretStore'
@@ -13,11 +13,14 @@ import registerGlobalShortcuts from './utils/registerGlobalShortcuts'
 import { envVarAllowSentry } from '../shared/utils/sentry'
 import initSentry from './utils/initSentry'
 import DdcBackendClient from '../shared/classes/DdcBackendClient'
+import ElectronShutdownHandler from '@super-bunny/electron-shutdown-handler'
+import autoShutdownMonitors from './utils/autoShutdownMonitors'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
 const singleInstanceLock = app.requestSingleInstanceLock()
+const displayManager = new GenericDisplayManager(new DdcBackendClient())
 let mainWindow: BrowserWindow | undefined
 let settings: SettingsStore | undefined
 // Use to handle window hiding/showing without prevent app from quit by closing all windows
@@ -82,6 +85,24 @@ export default function main() {
       mainWindow.webContents.send(IpcEvents.PING, 'pong')
     })
 
+    ElectronShutdownHandler.setWindowHandle(mainWindow.getNativeWindowHandle())
+    ElectronShutdownHandler.blockShutdown('Please wait Lumos is shutting down...')
+
+    ElectronShutdownHandler.on('shutdown', () => {
+      const quit = () => {
+        ElectronShutdownHandler.releaseShutdown()
+        app.quit()
+      }
+
+      console.info('Windows shutting down handler')
+      if (!settings) return quit()
+
+      autoShutdownMonitors(settings, displayManager)
+        .finally(() => {
+          quit()
+        })
+    })
+
     return mainWindow
   }
 
@@ -114,7 +135,6 @@ export default function main() {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', () => {
-    const displayManager = new GenericDisplayManager(new DdcBackendClient())
     displayManager.refresh().then()
 
     settings = getSettingsStore()
@@ -210,5 +230,15 @@ export default function main() {
 
   app.on('will-quit', () => {
     globalShortcut.unregisterAll()
+  })
+
+  powerMonitor.on('shutdown', (event: any) => {
+    if (!settings) return
+
+    event?.preventDefault()
+    autoShutdownMonitors(settings, displayManager)
+      .finally(() => {
+        app.quit()
+      })
   })
 }

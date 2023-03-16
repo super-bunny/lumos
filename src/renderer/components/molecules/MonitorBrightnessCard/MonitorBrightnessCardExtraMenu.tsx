@@ -1,7 +1,18 @@
-import React, { CSSProperties, useMemo } from 'react'
+import React, { CSSProperties, useCallback, useMemo } from 'react'
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks'
 import MoreVert from '@mui/icons-material/MoreVert'
-import { Divider, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
+import {
+  Badge,
+  Checkbox, Chip,
+  Divider,
+  IconButton,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@mui/material'
 import MonitorIcon from '@mui/icons-material/Monitor'
 import { Monitor } from './index'
 import { useSnackbar } from 'notistack'
@@ -20,11 +31,10 @@ export interface Props {
 
 export default function MonitorBrightnessCardExtraMenu({ monitor, className, style }: Props) {
   const confirm = useConfirm()
-  const popupState = usePopupState({ variant: 'popover', popupId: 'demoMenu' })
+  const popupState = usePopupState({ variant: 'popover', popupId: 'MonitorBrightnessCardExtraMenu' })
   const { enqueueSnackbar } = useSnackbar()
-
-  const { settingsStore } = useSettingsStore()
-  const developerMode = settingsStore?.settings.developerMode
+  const { settingsStore: { settings } = {}, updateSettings } = useSettingsStore()
+  const developerMode = settings?.developerMode
 
   const { data: supportDDC } = useSwr([
       `${ monitor.info.displayId }-supportDDC`,
@@ -51,13 +61,27 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
     return `${ vcpVersion.version }.${ vcpVersion.revision }`
   }, [vcpVersion])
 
+  const powerOffOnShutdown = useMemo<boolean | undefined>(() => {
+    return settings?.powerOffMonitorOnShutdown?.[monitor.info.displayId]
+  }, [monitor.info.displayId, settings])
+
+  const setPowerOffOnShutdown = useCallback((value: boolean) => {
+    if (!settings) return
+    updateSettings({
+      powerOffMonitorOnShutdown: {
+        ...settings?.powerOffMonitorOnShutdown,
+        [monitor.info.displayId]: value,
+      },
+    })
+  }, [monitor.info.displayId, settings, updateSettings])
+
   return (
     <div className={ className } style={ style }>
       <IconButton color="inherit" { ...bindTrigger(popupState) } size={ 'small' }>
         <MoreVert/>
       </IconButton>
 
-      <Menu { ...bindMenu(popupState) } PaperProps={ { style: { minWidth: 200, maxWidth: 300 } } }>
+      <Menu { ...bindMenu(popupState) } PaperProps={ { style: { minWidth: 200, maxWidth: 330 } } }>
         <MenuItem disabled>
           <ListItemIcon>
             <MonitorIcon/>
@@ -112,6 +136,24 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
             <ListItemText>Show capability string</ListItemText>
           </MenuItem>
         ) }
+
+        <MenuItem
+          disabled={ !settings }
+          onClick={ () => {
+            setPowerOffOnShutdown(!powerOffOnShutdown)
+          } }
+        >
+          <ListItemIcon>
+            <Checkbox checked={ powerOffOnShutdown ?? false } style={ { padding: 0 } }/>
+          </ListItemIcon>
+          <ListItemText>Turn off on shutdown</ListItemText>
+          <Chip
+            label={ 'BETA' }
+            color={ 'secondary' }
+            size={ 'small' }
+            sx={ { ml: 1, lineHeight: '1em', fontWeight: 'bold' } }
+          />
+        </MenuItem>
       </Menu>
     </div>
   )
