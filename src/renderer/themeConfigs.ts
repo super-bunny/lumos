@@ -12,6 +12,9 @@ export const OriginTheme = createTheme({
     primary: {
       main: '#f15025',
     },
+    secondary: {
+      main: '#0FA3B1',
+    },
     background: {
       default: '#171717',
       paper: '#282828',
@@ -37,6 +40,9 @@ const materialLight = createTheme({
   palette: {
     primary: {
       main: '#f15025',
+    },
+    secondary: {
+      main: '#0FA3B1',
     },
   },
   components: {
