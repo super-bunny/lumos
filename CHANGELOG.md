@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.1-alpha.0](https://github.com/super-bunny/lumos/releases/tag/v0.1.1-alpha.0) (2023-03-16)
+
+
+### Features
+
+* add developer test zone in advanced settings ([44171db](https://github.com/super-bunny/lumos/commit/44171dbcdcd6015786d3ea433d01e2a435741e1e))
+* add option to power a monitor on system shutdown  ([36c46cc](https://github.com/super-bunny/lumos/commit/36c46cc107b902bc68dcf329a79d6bc61a220e77))
+* add update method to settings store hook ([eb2902f](https://github.com/super-bunny/lumos/commit/eb2902f39c622ea29fefe45e32aa26a00379af43))
+
 ## [0.1.0](https://github.com/super-bunny/lumos/releases/tag/v0.1.0) (2023-02-18)
 
 
