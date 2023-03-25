@@ -178,9 +178,8 @@ export default function main() {
       displayManager,
       sessionJwt,
       httpApiPort,
-      onRegisterGlobalShortcuts: () => {
-        registerGlobalShortcuts(settings!.store.globalShortcuts, displayManager, mainWindow)
-      },
+      onRegisterGlobalShortcuts: () => registerGlobalShortcuts(settings!.store.globalShortcuts, displayManager, mainWindow),
+      onOpenDevTools: () => mainWindow?.webContents.openDevTools(),
     })
     mainWindow = createWindow()
     registerGlobalShortcuts(settings.store.globalShortcuts, displayManager, mainWindow)

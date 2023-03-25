@@ -1,4 +1,4 @@
-import { app, globalShortcut, ipcMain } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron'
 import GenericDisplayManager from './classes/GenericDisplayManager'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
@@ -12,6 +12,7 @@ export interface SetupIpcArgs {
   sessionJwt: string
   httpApiPort: number
   onRegisterGlobalShortcuts: () => void
+  onOpenDevTools: () => void
 }
 
 const settingsStore = new SettingsStore()
@@ -21,6 +22,7 @@ export default function setupIpc({
   sessionJwt,
   httpApiPort,
   onRegisterGlobalShortcuts,
+  onOpenDevTools,
 }: SetupIpcArgs): void {
   ipcMain.on(IpcEvents.GET_USER_DATA_PATH_SYNC, event => {
     event.returnValue = app.getPath('userData')
@@ -73,5 +75,8 @@ export default function setupIpc({
   })
   ipcMain.handle(IpcEvents.FORCE_TRIGGER_AUTO_MONITORS_POWER_OFF, () => {
     return autoShutdownMonitors(settingsStore, displayManager)
+  })
+  ipcMain.handle(IpcEvents.OPEN_DEV_TOOLS, () => {
+    return onOpenDevTools()
   })
 }
