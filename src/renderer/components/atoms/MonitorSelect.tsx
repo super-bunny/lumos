@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import GenericDisplay from '../../../shared/classes/GenericDisplay'
-import IpcBackendClient from '../../classes/IpcBackendClient'
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select, SxProps } from '@mui/material'
+import useMonitors from '../../hooks/useMonitors'
 
 export interface Props {
   label?: string
@@ -13,14 +13,7 @@ export interface Props {
 }
 
 export default function MonitorSelect({ label = 'Monitor', helperText, monitor, onChange, disabled, sx }: Props) {
-  const [monitors, setMonitors] = useState<Array<GenericDisplay>>()
-
-  useEffect(() => {
-    GenericDisplay.list(new IpcBackendClient(), { useCache: true })
-      .then(monitors => {
-        setMonitors(GenericDisplay.filterDuplicateDisplay(monitors))
-      })
-  }, [])
+  const { monitors } = useMonitors()
 
   return (
     <FormControl fullWidth sx={ sx }>

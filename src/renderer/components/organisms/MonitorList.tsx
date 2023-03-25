@@ -1,43 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React from 'react'
 import { Alert, Button, Grow, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard'
 import Loader from '../atoms/Loader'
-import GenericDisplay from '../../../shared/classes/GenericDisplay'
-import IpcBackendClient from '../../classes/IpcBackendClient'
 import useSettingsStore from '../../hooks/useSettingsStore'
+import useMonitors from '../../hooks/useMonitors'
 
 export interface Props {
   sx?: SxProps
 }
 
 export default function MonitorList({ sx }: Props) {
-  const [monitors, setMonitors] = useState<Array<GenericDisplay>>()
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>()
-
   const { settingsStore } = useSettingsStore()
-
-  const getMonitors = useCallback(async (useCache?: boolean) => {
-    console.info('Getting monitor list...')
-    setLoading(true)
-    setError(null)
-
-    try {
-      const monitors = await GenericDisplay.list(new IpcBackendClient(), { useCache })
-      console.info('Monitor list:', monitors)
-      setMonitors(GenericDisplay.filterDuplicateDisplay(monitors))
-    } catch (e) {
-      console.error(e)
-      setError('An error occurred during the monitor list retrieval')
-    }
-
-    setLoading(false)
-    console.info('Monitor list retrieved')
-  }, [])
-
-  useEffect(() => {
-    getMonitors(true)
-  }, [getMonitors])
+  const {
+    monitors,
+    isValidating: loading,
+    error,
+    refreshMonitors,
+  } = useMonitors()
 
   return (
     <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 } sx={ sx }>
@@ -74,7 +53,10 @@ export default function MonitorList({ sx }: Props) {
       ) }
 
       { !loading &&
-        <Button onClick={ () => getMonitors(false) } variant={ 'text' }>{ error ? 'Retry' : 'Refresh' }</Button> }
+        <Button
+          onClick={ () => refreshMonitors() }
+          variant={ 'text' }
+        >{ error ? 'Retry' : 'Refresh' }</Button> }
     </Stack>
   )
 }

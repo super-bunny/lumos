@@ -17,11 +17,11 @@ import {
 } from '@mui/material'
 import ShortcutInput from '../../atoms/ShortcutInput'
 import GenericDisplay from '../../../../shared/classes/GenericDisplay'
-import IpcBackendClient from '../../../classes/IpcBackendClient'
 import MonitorSelect from '../../atoms/MonitorSelect'
 import InfoIcon from '../../atoms/InfoIcon'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useConfirm } from 'material-ui-confirm'
+import useMonitors from '../../../hooks/useMonitors'
 
 type GlobalShortcutInfo = {
   label: string
@@ -183,10 +183,11 @@ const actions: Array<Action> = [
 ]
 
 export default function GlobalShortcutsSettings({ settings, onChange, sx }: Props) {
-  const [monitors, setMonitors] = useState<Array<GenericDisplay>>()
   const [newAction, setNewAction] = useState<Action>()
   const [newActionMonitor, setNewActionMonitor] = useState<GenericDisplay>()
   const [newActionAccelerator, setNewActionAccelerator] = useState<string>()
+
+  const { monitors } = useMonitors()
 
   const remainingActions = useMemo(() => {
     const currentGlobalShortcutsActions = Object.keys(settings.globalShortcuts)
@@ -209,11 +210,6 @@ export default function GlobalShortcutsSettings({ settings, onChange, sx }: Prop
     setNewActionMonitor(undefined)
     setNewActionAccelerator(undefined)
   }, [newAction, newActionAccelerator, newActionMonitor, onChange, settings])
-
-  useEffect(() => {
-    GenericDisplay.list(new IpcBackendClient(), { useCache: true })
-      .then(monitors => setMonitors(monitors))
-  }, [])
 
   useEffect(() => {
     window.lumos.unregisterAllShortcuts()

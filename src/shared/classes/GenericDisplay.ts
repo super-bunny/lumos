@@ -1,13 +1,11 @@
 import VCPFeatures, { PowerMode } from '../../types/VCPFeatures'
 import BackendClient from './BackendClient'
-import NodeCache from 'node-cache'
 import { Backends, Continuous, DisplayInfo, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
 
 export interface GetVcpValueOptions {
   useCache?: boolean
 }
 
-const cache = new NodeCache({ useClones: false })
 const DISPLAY_LIST_CACHE_KEY = 'display-list'
 
 export default class GenericDisplay {
@@ -126,45 +124,19 @@ export default class GenericDisplay {
     return this.setVcpValue(VCPFeatures.DisplayControl.PowerMode, powerMode)
   }
 
-  static async list(client: BackendClient, options?: { useCache?: boolean }): Promise<Array<GenericDisplay>> {
-    // const { useCache = true } = options ?? {}
-
-    // if (useCache && cache.has(DISPLAY_LIST_CACHE_KEY)) {
-    //   console.debug('List generic display - CACHE HIT')
-    //   return cache.get(DISPLAY_LIST_CACHE_KEY) as Promise<Array<GenericDisplay>>
-    // }
-
-    console.debug('List generic display')
-    const genericDisplayListPromise = client.list()
+  static async list(client: BackendClient): Promise<Array<GenericDisplay>> {
+    return client.list()
       .then(displayInfoList => {
         return displayInfoList.map(displayInfo => new GenericDisplay(client, displayInfo))
       })
-
-    // cache.set(DISPLAY_LIST_CACHE_KEY, genericDisplayListPromise)
-
-    return genericDisplayListPromise
   }
 
   static async fromId(
     client: BackendClient,
     displayId: string,
-    options?: { useCache?: boolean },
   ): Promise<GenericDisplay | undefined> {
-    const { useCache = true } = options ?? {}
-
-    if (useCache && cache.has(DISPLAY_LIST_CACHE_KEY)) {
-      console.debug('GenericDisplay.fromId - CACHE HIT')
-      const displayList = await (cache.get(DISPLAY_LIST_CACHE_KEY) as Promise<Array<GenericDisplay>>)
-      const display = displayList.find(display => display.info.displayId === displayId)
-
-      return display ? new GenericDisplay(client, display.info) : undefined
-    }
-
-    console.debug('GenericDisplay.fromId')
-    const displayList = await GenericDisplay.list(client, options)
-    const display = displayList.find(display => display.info.displayId === displayId)
-
-    return display ? new GenericDisplay(client, display.info) : undefined
+    const displayList = await GenericDisplay.list(client)
+    return displayList.find(display => display.info.displayId === displayId)
   }
 
   static filterDuplicateDisplay(displayList: Array<GenericDisplay>): Array<GenericDisplay> {
