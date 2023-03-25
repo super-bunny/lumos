@@ -69,7 +69,7 @@ export default function AdvancedSettings({ settings, onChange, sx }: Props) {
                       GenericDisplay.list(new IpcBackendClient())
                         .then(monitors => {
                           enqueueSnackbar('Monitors retrieved, checkout the developer tools console', { variant: 'success' })
-                          console.info(monitors)
+                          console.info('[Debug] monitor list', monitors)
                         })
                         .catch((error) => {
                           enqueueSnackbar('Fail to retrieve monitors', { variant: 'error' })
