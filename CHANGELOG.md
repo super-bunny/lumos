@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.1-alpha.1](https://github.com/super-bunny/lumos/releases/tag/v0.1.1-alpha.1) (2023-03-25)
+
+
+### Features
+
+* **settings:** rework debug zone in advanced setting ([e1d6c16](https://github.com/super-bunny/lumos/commit/e1d6c16b05d6b7fd83c0989326036ea3b132868d))
+
+
+### Bug Fixes
+
+* restore cache on monitor list ([cf3eb16](https://github.com/super-bunny/lumos/commit/cf3eb163def720c1e2ecb93102c557497e12a2a2))
+* make update checker ignore pre-release ([2f9a821](https://github.com/super-bunny/lumos/commit/2f9a8219e1b15df6532ee2f1b6848e3b3fb7fc0d))
+
 ### [0.1.1-alpha.0](https://github.com/super-bunny/lumos/releases/tag/v0.1.1-alpha.0) (2023-03-16)
 
 
