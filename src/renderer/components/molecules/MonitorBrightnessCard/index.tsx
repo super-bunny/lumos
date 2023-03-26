@@ -144,8 +144,14 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
         ) }
 
         { !loading && !supportDDC && (
-          <Center sx={ { height: 'auto', flexGrow: 1 } }>
+          <Center sx={ { height: 'auto', flexGrow: 1, position: 'relative' } }>
             <Typography fontSize={ '1.2em' } sx={ { color: 'gray' } }>Monitor not supported</Typography>
+            <Typography
+              variant={ 'body2' }
+              fontSize={ '0.8em' }
+              color={ 'gray' }
+              style={ { position: 'absolute', bottom: 0, left: 0, right: 0 } }
+            >{ monitor.info.backend.toUpperCase() }</Typography>
           </Center>
         ) }
 
