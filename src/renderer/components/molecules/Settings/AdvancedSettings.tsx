@@ -1,6 +1,18 @@
 import React from 'react'
 import SettingsType from '../../../../types/Settings'
-import { Button, Divider, FormControlLabel, Grid, Stack, Switch, SxProps } from '@mui/material'
+import {
+  Button,
+  Collapse,
+  Divider,
+  Fade,
+  FormControlLabel,
+  Grid,
+  Grow, Slide,
+  Stack,
+  Switch,
+  SxProps,
+  Zoom,
+} from '@mui/material'
 import InfoIcon from '../../atoms/InfoIcon'
 import { useSnackbar } from 'notistack'
 import GenericDisplay from '../../../../shared/classes/GenericDisplay'
@@ -18,20 +30,23 @@ export default function AdvancedSettings({ settings, onChange, sx }: Props) {
 
   return (
     <Grid container gap={ 2 } sx={ sx }>
-      <Grid item display={ 'flex' } alignItems={ 'center' } xs={ 12 }>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={ settings.developerMode }
-              onChange={ (event) =>
-                onChange?.({ ...settings, developerMode: event.target.checked } as SettingsType)
-              }
-            />
-          }
-          label="Developer mode"
-        />
-
-        <InfoIcon message={ 'Add additional info/actions useful for developers in application interface' }/>
+      <Grid item xs={ 12 }>
+        <Stack gap={ 2 } divider={ <Divider/> }>
+          <SettingItem
+            labelFor={ 'developer-mode' }
+            label={ 'Developer mode' }
+            description={ 'Show additional info and actions useful for developers in the application interface' }
+            action={
+              <Switch
+                checked={ settings.developerMode }
+                onChange={ (event) =>
+                  onChange?.({ ...settings, developerMode: event.target.checked } as SettingsType)
+                }
+                id={ 'developer-mode' }
+              />
+            }
+          />
+        </Stack>
       </Grid>
 
       { settings.developerMode && (
