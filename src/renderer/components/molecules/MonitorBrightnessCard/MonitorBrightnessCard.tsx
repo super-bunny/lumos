@@ -67,7 +67,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   // Check if monitor support DDC protocol and retrieve monitor brightness if supported
   const refreshBrightness = useCallback(async (useCache: boolean = true) => {
     setLoading(true)
-    await monitor.supportDDC()
+    await monitor.supportDDC(false)
       .then(supportDDC => {
         setSupportDDC(supportDDC)
         return supportDDC
