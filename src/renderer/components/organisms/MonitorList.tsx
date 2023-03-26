@@ -1,6 +1,6 @@
 import React from 'react'
 import { Alert, Button, Grow, Stack, SxProps, Typography } from '@mui/material'
-import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard'
+import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard/MonitorBrightnessCard'
 import Loader from '../atoms/Loader'
 import useSettingsStore from '../../hooks/useSettingsStore'
 import useMonitors from '../../hooks/useMonitors'

@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import MonitorIcon from '@mui/icons-material/Monitor'
-import { Monitor } from './index'
+import { Monitor } from './MonitorBrightnessCard'
 import { useSnackbar } from 'notistack'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import useSwr from 'swr'
