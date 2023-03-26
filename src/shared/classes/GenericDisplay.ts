@@ -138,15 +138,4 @@ export default class GenericDisplay {
     const displayList = await GenericDisplay.list(client)
     return displayList.find(display => display.info.displayId === displayId)
   }
-
-  static filterDuplicateDisplay(displayList: Array<GenericDisplay>): Array<GenericDisplay> {
-    const backendList = displayList.map(display => display.info.backend)
-
-    // If nvapi backend is detected filter out all other backend to avoid duplicate monitors
-    if (backendList.includes(Backends.NV_API)) {
-      return displayList.filter(display => display.info.backend === Backends.NV_API)
-    }
-
-    return displayList
-  }
 }

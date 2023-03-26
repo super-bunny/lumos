@@ -16,7 +16,7 @@ export default function MonitorList({ sx }: Props) {
     isValidating: loading,
     error,
     refreshMonitors,
-  } = useMonitors()
+  } = useMonitors({ ignoreWinApi: settingsStore?.settings.ignoreWinApi })
 
   return (
     <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 } sx={ sx }>

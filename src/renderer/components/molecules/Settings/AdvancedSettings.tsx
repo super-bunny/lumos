@@ -33,6 +33,21 @@ export default function AdvancedSettings({ settings, onChange, sx }: Props) {
       <Grid item xs={ 12 }>
         <Stack gap={ 2 } divider={ <Divider/> }>
           <SettingItem
+            labelFor={ 'ignore-win-api' }
+            label={ 'Ignore monitors from Windows API' }
+            description={ 'Lumos use different ways to control your monitors (API). Windows provides its own API, but it can cause duplicates if some of your monitors are connected on a non CPU integrated graphic card.' }
+            action={
+              <Switch
+                checked={ settings.ignoreWinApi }
+                onChange={ (event) =>
+                  onChange?.({ ...settings, ignoreWinApi: event.target.checked } as SettingsType)
+                }
+                id={ 'ignore-win-api' }
+              />
+            }
+          />
+
+          <SettingItem
             labelFor={ 'developer-mode' }
             label={ 'Developer mode' }
             description={ 'Show additional info and actions useful for developers in the application interface' }
