@@ -119,7 +119,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
   return (
     <Paper ref={ ref } sx={ { width: 250, height: 250, p: 2, pb: 1, textAlign: 'center' } }>
-      <Stack height={ 1 } direction={ 'column' }>
+      <Stack height={ 1 }>
         <Stack alignItems={ 'center' } justifyContent={ 'center' } style={ { position: 'relative' } }>
           <Typography
             width={ 0.9 }
@@ -157,9 +157,8 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
         { !loading && supportDDC && (
           <>
-            <div style={ { alignSelf: 'center', position: 'relative' } }>
+            <Stack direction={ 'row' } alignItems={ 'center' } justifyContent={ 'center' } gap={ 0 }>
               <Typography
-                mt={ 1 }
                 variant={ 'overline' }
                 fontSize={ '1em' }
                 lineHeight={ '1em' }
@@ -173,28 +172,28 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
                       .catch(() => enqueueSnackbar('Fail to refresh brightness', { variant: 'error' }))
                   } }
                   color={ 'primary' }
-                  sx={ { p: 0, position: 'absolute', top: 0, right: -32 } }
-                ><RefreshIcon/></IconButton>
+                  style={ { padding: 0, marginLeft: 8, marginRight: -32 } }
+                >
+                  <RefreshIcon/>
+                </IconButton>
               </Tooltip>
-            </div>
+            </Stack>
 
-            <Center sx={ { height: 'auto', flexGrow: 1 } }>
-              <StyledInput
-                disabled={ loading }
-                value={ brightness.toString() }
-                onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
-                onWheelCapture={ event => {
-                  if (event.target === document.activeElement) {
-                    event.stopPropagation()
-                    addBrightnessInRange(Math.sign(event.deltaY) * -1)
-                  }
-                } }
-                inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
-                endAdornment={ <Typography variant={ 'caption' } color={ 'gray' } fontSize={ '0.3em' }>%</Typography> }
-                color={ 'primary' }
-                sx={ { fontSize: 65, color: theme => theme.palette.primary.main, flexGrow: 1 } }
-              />
-            </Center>
+            <StyledInput
+              disabled={ loading }
+              value={ brightness.toString() }
+              onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
+              onWheelCapture={ event => {
+                if (event.target === document.activeElement) {
+                  event.stopPropagation()
+                  addBrightnessInRange(Math.sign(event.deltaY) * -1)
+                }
+              } }
+              inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
+              endAdornment={ <Typography variant={ 'caption' } color={ 'gray' } fontSize={ '0.3em' }>%</Typography> }
+              color={ 'primary' }
+              sx={ { height: '105px', fontSize: 65, color: theme => theme.palette.primary.main } }
+            />
 
             <Slider
               disabled={ loading }
