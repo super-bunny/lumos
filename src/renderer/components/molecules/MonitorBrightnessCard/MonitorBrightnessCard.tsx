@@ -44,21 +44,24 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   const setMonitorBrightness = useCallback(async (brightnessPercentage: number) => {
     console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightnessPercentage)
 
-    try {
-      await monitor.setBrightnessPercentage(brightnessPercentage)
-    } catch (e) {
-      console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, e)
-    }
-  }, [monitor])
+    return monitor.setBrightnessPercentage(brightnessPercentage)
+      .catch(error => {
+        console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, error)
+        enqueueSnackbar(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }`, {
+          variant: 'error',
+          preventDuplicate: true,
+        })
+      })
+  }, [enqueueSnackbar, monitor])
 
-  const setBrightness = useCallback(async (brightness: number) => {
+  const setBrightness = useCallback((brightness: number) => {
     setBrightnessState(brightness)
-    await setMonitorBrightness(brightness)
+    return setMonitorBrightness(brightness)
   }, [setMonitorBrightness])
 
-  const setBrightnessInRange = useCallback(async (value: number) => {
-    await setBrightness(Math.max(0, Math.min(100, value || 0)))
-  }, [setBrightness])
+  const setBrightnessInRange = useCallback((value: number) => (
+    setBrightness(Math.max(0, Math.min(100, value || 0)))
+  ), [setBrightness])
 
   const addBrightnessInRange = useCallback(async (valueToAdd: number) => {
     await setBrightness(Math.max(0, Math.min(100, (brightness + valueToAdd) || 0)))
