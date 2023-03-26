@@ -111,7 +111,6 @@ export default class GenericDisplay {
   async getPowerMode(): Promise<PowerMode> {
     const value = await this.getVcpValue(VCPFeatures.DisplayControl.PowerMode)
 
-    console.log('power mode value:', value)
     if (value.type !== VcpValueType.NonContinuous && value.type !== VcpValueType.Continuous) {
       throw new Error('VCP Power mode value type not supported')
     }
