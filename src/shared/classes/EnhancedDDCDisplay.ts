@@ -1,5 +1,5 @@
 import { Display, DisplayManager, VCPFeatureCode } from '@ddc-node/ddc-node'
-import { DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
+import { Backends, DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
 
 // Light utility wrapper around Display class from @ddc-node/ddc-node
 export default class EnhancedDDCDisplay {
@@ -13,7 +13,9 @@ export default class EnhancedDDCDisplay {
       edidData: this.display.edidData,
       version: this.display.version,
       mccsVersion: this.display.mccsVersion,
-      displayId: this.display.displayId,
+      displayId: this.display.backend === Backends.WIN_API
+        ? `${ this.display.displayId }-${ this.display.index }`
+        : this.display.displayId,
       serial: this.display.serial,
       serialNumber: this.display.serialNumber,
       modelId: this.display.modelId,
