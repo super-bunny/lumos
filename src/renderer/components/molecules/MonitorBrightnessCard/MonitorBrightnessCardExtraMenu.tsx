@@ -114,8 +114,9 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
           <ListItemText>Copy ID</ListItemText>
         </MenuItem>
 
-        { monitor.info.capabilities && developerMode && (
+        { developerMode && (
           <MenuItem
+            disabled={!monitor.info.capabilities}
             onClick={ () => {
               confirm({
                 title: `${ monitor.getDisplayName() } capability string`,
