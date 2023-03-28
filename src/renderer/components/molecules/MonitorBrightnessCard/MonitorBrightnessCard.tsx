@@ -38,19 +38,20 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   const { settingsStore } = useSettingsStore()
   const developerMode = settingsStore?.settings?.developerMode
 
+  const [forcedLoading, setForcedLoading] = useState<boolean>(false)
+
   const { data: supportDDC, isLoading: supportDDCLoading, mutate: mutateSupportDDC } = useSwr([
-      `${ monitor.info.displayId }-supportDDC`,
-    ], () => monitor.supportDDC(false)
-    , {
-      revalidateOnReconnect: false,
-      revalidateOnFocus: false,
-      revalidateIfStale: false,
-      errorRetryInterval: 500,
-      errorRetryCount: 3,
-      onError: error => {
-        console.error(`Error while checking if monitor ${ monitor.getDisplayName() } support DDC:`, error)
-      },
-    })
+    `${ monitor.info.displayId }-supportDDC`,
+  ], () => monitor.supportDDC(false), {
+    revalidateOnReconnect: false,
+    revalidateOnFocus: false,
+    revalidateIfStale: false,
+    errorRetryInterval: 500,
+    errorRetryCount: 3,
+    onError: error => {
+      console.error(`Error while checking if monitor ${ monitor.getDisplayName() } support DDC:`, error)
+    },
+  })
   const { data: brightness, isLoading: brightnessLoading, mutate: mutateBrightness } = useSwr([
       supportDDC === true ? `${ monitor.info.displayId }-getBrightnessPercentage` : null,
     ], () => monitor.getBrightnessPercentage(false)
@@ -65,7 +66,12 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
       },
     })
 
-  const loading = brightnessLoading || supportDDCLoading
+  const loading = brightnessLoading || supportDDCLoading || forcedLoading
+
+  const forceLoading = useCallback((ms: number = 1000) => {
+    setForcedLoading(true)
+    setTimeout(() => setForcedLoading(false), ms)
+  }, [])
 
   const setMonitorBrightness = useCallback(async (brightnessPercentage: number) => {
     console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightnessPercentage)
@@ -154,7 +160,12 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
         { !loading && !supportDDC && (
           <Center sx={ { height: 'auto', flexDirection: 'column', flexGrow: 1, position: 'relative' } }>
             <Typography fontSize={ '1.2em' } sx={ { color: 'gray' } }>Monitor not supported</Typography>
-            <Button onClick={ () => mutateSupportDDC(undefined, { revalidate: true }) } size={ 'small' }>Retry</Button>
+            <Button
+              onClick={ () => {
+                forceLoading(1000)
+                mutateSupportDDC(undefined, { revalidate: true }).then()
+              } } size={ 'small' }
+            >Retry</Button>
             { developerMode && (
               <Typography
                 variant={ 'body2' }
