@@ -28,20 +28,28 @@ export default class EnhancedDDCDisplay {
   }
 
   async supportDDC(): Promise<boolean> {
+    console.debug(`[${ this.info.displayId }] EnhancedDDCDisplay.supportDDC() called`)
+
     return this.display.getVcpFeature(VCPFeatureCode.DisplayControl.Version)
       .then(() => true)
       .catch(() => false)
   }
 
   async getVcpValue(featureCode: number): Promise<VCPValue> {
+    console.debug(`[${ this.info.displayId }] EnhancedDDCDisplay.getVcpValue(featureCode: ${ featureCode }) called`)
+
     return await this.display.getVcpFeature(featureCode) as unknown as VCPValue
   }
 
   async setVcpValue(featureCode: number, value: number): Promise<void> {
+    console.debug(`[${ this.info.displayId }] EnhancedDDCDisplay.setVcpValue(featureCode: ${ featureCode }, value: ${ value }) called`)
+
     return this.display.setVcpFeature(featureCode, value)
   }
 
   static async list(): Promise<Array<EnhancedDDCDisplay>> {
+    console.debug(`EnhancedDDCDisplay.list() called`)
+
     return new DisplayManager().list()
       .then(displayList => displayList.map(display => new EnhancedDDCDisplay(display)))
   }
