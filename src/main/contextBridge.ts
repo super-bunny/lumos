@@ -1,4 +1,4 @@
-import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron'
+import { app, globalShortcut, ipcMain } from 'electron'
 import GenericDisplayManager from './classes/GenericDisplayManager'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
@@ -33,7 +33,7 @@ export default function setupIpc({
     return displayManager.list.map(display => display.info)
   })
   ipcMain.handle(IpcEvents.SUPPORT_DDC, (event, id: string) => {
-    return displayManager.getDisplayByIdOrThrow(id).supportDDC()
+    return displayManager.getDisplayByIdOrThrow(id).supportDDC(false)
   })
   ipcMain.handle(IpcEvents.GET_VCP_VALUE, (event, id: string, featureCode: number, options?: GetVcpValueOptions) => {
     return displayManager.getDisplayByIdOrThrow(id).getVcpValue(featureCode, options)
