@@ -40,7 +40,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
   const { data: supportDDC, isLoading: supportDDCLoading, mutate: mutateSupportDDC } = useSwr([
       `${ monitor.info.displayId }-supportDDC`,
-    ], () => monitor.supportDDC(true)
+    ], () => monitor.supportDDC(false)
     , {
       revalidateOnReconnect: false,
       revalidateOnFocus: false,

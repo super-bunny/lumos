@@ -38,7 +38,7 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
 
   const { data: supportDDC } = useSwr([
       `${ monitor.info.displayId }-supportDDC`,
-    ], () => monitor.supportDDC(true)
+    ], () => monitor.supportDDC(false)
     , {
       revalidateOnReconnect: false,
       revalidateOnFocus: false,
