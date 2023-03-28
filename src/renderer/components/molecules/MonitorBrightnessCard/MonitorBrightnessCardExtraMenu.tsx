@@ -96,7 +96,7 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
             <ListItemIcon>
               <InfoIcon/>
             </ListItemIcon>
-            <ListItemText>VCP version { vcpVersionStr }</ListItemText>
+            <ListItemText>MCCS version { vcpVersionStr }</ListItemText>
           </MenuItem>
         ) }
 
@@ -116,7 +116,7 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
 
         { developerMode && (
           <MenuItem
-            disabled={!monitor.info.capabilities}
+            disabled={ !monitor.info.capabilities }
             onClick={ () => {
               confirm({
                 title: `${ monitor.getDisplayName() } capability string`,
