@@ -91,12 +91,12 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
           </ListItemText>
         </MenuItem>
 
-        { supportDDC === true && developerMode && (
+        { developerMode && (
           <MenuItem disabled>
             <ListItemIcon>
               <InfoIcon/>
             </ListItemIcon>
-            <ListItemText>MCCS version { vcpVersionStr }</ListItemText>
+            <ListItemText>MCCS { supportDDC === true ? `v${ vcpVersionStr }` : 'unsupported' }</ListItemText>
           </MenuItem>
         ) }
 
