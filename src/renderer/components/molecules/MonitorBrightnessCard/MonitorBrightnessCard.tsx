@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Divider, IconButton, Input, Paper, Slider, Stack, styled, Tooltip, Typography } from '@mui/material'
+import { Button, Divider, IconButton, Input, Paper, Slider, Stack, styled, Tooltip, Typography } from '@mui/material'
 import Center from '../../atoms/Center'
 import Loader from '../../atoms/Loader'
 import GenericDisplay from '../../../../shared/classes/GenericDisplay'
@@ -152,8 +152,9 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
         ) }
 
         { !loading && !supportDDC && (
-          <Center sx={ { height: 'auto', flexGrow: 1, position: 'relative' } }>
+          <Center sx={ { height: 'auto', flexDirection: 'column', flexGrow: 1, position: 'relative' } }>
             <Typography fontSize={ '1.2em' } sx={ { color: 'gray' } }>Monitor not supported</Typography>
+            <Button onClick={ () => mutateSupportDDC(undefined, { revalidate: true }) } size={ 'small' }>Retry</Button>
             { developerMode && (
               <Typography
                 variant={ 'body2' }
