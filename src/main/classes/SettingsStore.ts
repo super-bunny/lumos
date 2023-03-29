@@ -18,6 +18,7 @@ export const defaultSettings: Required<Settings> = {
   globalShortcuts: {},
   powerOffMonitorOnShutdown: {},
   ignoreWinApi: false,
+  concurrentDdcRequest: true,
 }
 
 export default class SettingsStore extends Conf<Settings> {

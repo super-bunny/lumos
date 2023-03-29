@@ -1,19 +1,6 @@
 import React from 'react'
 import SettingsType from '../../../../types/Settings'
-import {
-  Button,
-  Collapse,
-  Divider,
-  Fade,
-  FormControlLabel,
-  Grid,
-  Grow, Slide,
-  Stack,
-  Switch,
-  SxProps,
-  Zoom,
-} from '@mui/material'
-import InfoIcon from '../../atoms/InfoIcon'
+import { Button, Divider, Grid, Stack, Switch, SxProps, TextField } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import GenericDisplay from '../../../../shared/classes/GenericDisplay'
 import IpcBackendClient from '../../../classes/IpcBackendClient'
@@ -24,6 +11,8 @@ export interface Props {
   onChange?: (settings: SettingsType) => void
   sx?: SxProps
 }
+
+const MAX_DDC_REQUEST_DELAY = 10000
 
 export default function AdvancedSettings({ settings, onChange, sx }: Props) {
   const { enqueueSnackbar } = useSnackbar()
@@ -40,9 +29,24 @@ export default function AdvancedSettings({ settings, onChange, sx }: Props) {
               <Switch
                 checked={ settings.ignoreWinApi }
                 onChange={ (event) =>
-                  onChange?.({ ...settings, ignoreWinApi: event.target.checked } as SettingsType)
+                  onChange?.({ ...settings, ignoreWinApi: event.target.checked })
                 }
                 id={ 'ignore-win-api' }
+              />
+            }
+          />
+
+          <SettingItem
+            labelFor={ 'concurrent-ddc-request' }
+            label={ 'Concurrent DDC request' }
+            description={ 'Allow more than one DDC request at once. In some cases disabling this can avoid unexpected error in communication with monitors.\nEnabled by default.' }
+            action={
+              <Switch
+                checked={ settings.concurrentDdcRequest }
+                onChange={ (event) =>
+                  onChange?.({ ...settings, concurrentDdcRequest: event.target.checked })
+                }
+                id={ 'concurrent-ddc-request' }
               />
             }
           />

@@ -24,4 +24,5 @@ export default interface Settings {
   developerMode?: boolean
   powerOffMonitorOnShutdown?: Record<string, boolean>
   ignoreWinApi?: boolean
+  concurrentDdcRequest?: boolean
 }

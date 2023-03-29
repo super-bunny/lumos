@@ -2,11 +2,10 @@ import React, { CSSProperties, useCallback, useMemo } from 'react'
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks'
 import MoreVert from '@mui/icons-material/MoreVert'
 import {
-  Badge,
-  Checkbox, Chip,
+  Checkbox,
+  Chip,
   Divider,
   IconButton,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
   Menu,
@@ -36,9 +35,9 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
   const { settingsStore: { settings } = {}, updateSettings } = useSettingsStore()
   const developerMode = settings?.developerMode
 
-  const { data: supportDDC } = useSwr([
-      `${ monitor.info.displayId }-supportDDC`,
-    ], () => monitor.supportDDC(false)
+  const { data: supportDDC } = useSwr(
+    `${ monitor.info.displayId }-supportDDC`,
+    () => monitor.supportDDC(false)
     , {
       revalidateOnReconnect: false,
       revalidateOnFocus: false,

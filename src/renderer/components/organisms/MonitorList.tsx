@@ -39,7 +39,9 @@ export default function MonitorList({ sx }: Props) {
               key={ monitor.info.index }
             >
               <div>
-                <MonitorBrightnessCard monitor={ monitor }/>
+                <MonitorBrightnessCard
+                  monitor={ monitor }
+                />
               </div>
             </Grow>)) }
         </Stack>

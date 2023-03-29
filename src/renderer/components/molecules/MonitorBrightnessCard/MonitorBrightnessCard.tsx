@@ -40,21 +40,21 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
   const [forcedLoading, setForcedLoading] = useState<boolean>(false)
 
-  const { data: supportDDC, isLoading: supportDDCLoading, mutate: mutateSupportDDC } = useSwr([
-    `${ monitor.info.displayId }-supportDDC`,
-  ], () => monitor.supportDDC(false), {
-    revalidateOnReconnect: false,
-    revalidateOnFocus: false,
-    revalidateIfStale: false,
-    errorRetryInterval: 500,
-    errorRetryCount: 3,
-    onError: error => {
-      console.error(`Error while checking if monitor ${ monitor.getDisplayName() } support DDC:`, error)
-    },
-  })
-  const { data: brightness, isLoading: brightnessLoading, mutate: mutateBrightness } = useSwr([
-      supportDDC === true ? `${ monitor.info.displayId }-getBrightnessPercentage` : null,
-    ], () => monitor.getBrightnessPercentage(false)
+  const { data: supportDDC, isLoading: supportDDCLoading, mutate: mutateSupportDDC } = useSwr(
+    `${ monitor.info.displayId }-supportDDC`
+    , () => monitor.supportDDC(false), {
+      revalidateOnReconnect: false,
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      errorRetryInterval: 500,
+      errorRetryCount: 3,
+      onError: error => {
+        console.error(`Error while checking if monitor ${ monitor.getDisplayName() } support DDC:`, error)
+      },
+    })
+  const { data: brightness, isLoading: brightnessLoading, mutate: mutateBrightness } = useSwr(
+    supportDDC === true ? `${ monitor.info.displayId }-getBrightnessPercentage` : null,
+    () => monitor.getBrightnessPercentage(false)
     , {
       revalidateOnReconnect: false,
       revalidateOnFocus: true,

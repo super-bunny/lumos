@@ -15,6 +15,7 @@ import initSentry from './utils/initSentry'
 import DdcBackendClient from '../shared/classes/DdcBackendClient'
 import ElectronShutdownHandler from '@super-bunny/electron-shutdown-handler'
 import autoShutdownMonitors from './utils/autoShutdownMonitors'
+import AsyncQueue from '../shared/classes/AsyncQueue'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -139,6 +140,8 @@ export default function main() {
 
     settings = getSettingsStore()
     if (!settings) return
+
+    displayManager.client = new DdcBackendClient(settings.store.concurrentDdcRequest ? undefined : new AsyncQueue())
 
     if (settings.store.enableErrorReporting) {
       console.info('Error reporting with Sentry is enabled')
