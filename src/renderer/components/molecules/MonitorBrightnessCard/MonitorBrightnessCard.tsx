@@ -10,6 +10,7 @@ import VCPFeatures from '../../../../types/VCPFeatures'
 import MonitorBrightnessCardExtraMenu from './MonitorBrightnessCardExtraMenu'
 import { useSnackbar } from 'notistack'
 import useSettingsStore from '../../../hooks/useSettingsStore'
+import useSwr from 'swr'
 
 export type Monitor = GenericDisplay
 
@@ -34,12 +35,37 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   const { enqueueSnackbar } = useSnackbar()
   const ref = useRef<HTMLDivElement>(null)
 
-  const [supportDDC, setSupportDDC] = useState<boolean>()
-  const [brightness, setBrightnessState] = useState<number>(0)
-  const [loading, setLoading] = useState(true)
-
   const { settingsStore } = useSettingsStore()
   const developerMode = settingsStore?.settings?.developerMode
+
+  const { data: supportDDC, isLoading: supportDDCLoading, mutate: mutateSupportDDC } = useSwr([
+      `${ monitor.info.displayId }-supportDDC`,
+    ], () => monitor.supportDDC(true)
+    , {
+      revalidateOnReconnect: false,
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      errorRetryInterval: 500,
+      errorRetryCount: 3,
+      onError: error => {
+        console.error(`Error while checking if monitor ${ monitor.getDisplayName() } support DDC:`, error)
+      },
+    })
+  const { data: brightness, isLoading: brightnessLoading, mutate: mutateBrightness } = useSwr([
+      supportDDC === true ? `${ monitor.info.displayId }-getBrightnessPercentage` : null,
+    ], () => monitor.getBrightnessPercentage(false)
+    , {
+      revalidateOnReconnect: false,
+      revalidateOnFocus: true,
+      revalidateIfStale: false,
+      errorRetryInterval: 500,
+      errorRetryCount: 3,
+      onError: error => {
+        console.error(`Error while getting brightness of monitor ${ monitor.getDisplayName() }:`, error)
+      },
+    })
+
+  const loading = brightnessLoading || supportDDCLoading
 
   const setMonitorBrightness = useCallback(async (brightnessPercentage: number) => {
     console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightnessPercentage)
@@ -54,55 +80,30 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
       })
   }, [enqueueSnackbar, monitor])
 
-  const setBrightness = useCallback((brightness: number) => {
-    setBrightnessState(brightness)
-    return setMonitorBrightness(brightness)
-  }, [setMonitorBrightness])
+  const setBrightness = useCallback(async (brightness: number) => {
+    await mutateBrightness(brightness, { revalidate: false })
+    await setMonitorBrightness(brightness)
+  }, [mutateBrightness, setMonitorBrightness])
 
   const setBrightnessInRange = useCallback((value: number) => (
     setBrightness(Math.max(0, Math.min(100, value || 0)))
   ), [setBrightness])
 
   const addBrightnessInRange = useCallback(async (valueToAdd: number) => {
-    await setBrightness(Math.max(0, Math.min(100, (brightness + valueToAdd) || 0)))
+    if (brightness === undefined) return
+    return setBrightness(Math.max(0, Math.min(100, (brightness + valueToAdd) || 0)))
   }, [brightness, setBrightness])
 
-  // Check if monitor support DDC protocol and retrieve monitor brightness if supported
-  const refreshBrightness = useCallback(async (useCache: boolean = true) => {
-    setLoading(true)
-    await monitor.supportDDC(false)
-      .then(supportDDC => {
-        setSupportDDC(supportDDC)
-        return supportDDC
-      }, error => {
-        console.error(`Error while checking if monitor ${ monitor.getDisplayName() } support DDC:`, error)
-        throw error
-      })
-      .then(async supportDDC => {
-        if (!supportDDC) return
-        const brightness = await monitor.getBrightnessPercentage(useCache)
-        setBrightnessState(brightness)
-      }, error => {
-        console.error(`Error while getting brightness of monitor ${ monitor.getDisplayName() }:`, error)
-        throw error
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [monitor])
+  const refreshBrightness = useCallback(() => mutateBrightness(), [mutateBrightness])
 
-  // Check if monitor support DDC protocol and retrieve monitor brightness if supported
-  useEffect(() => {
-    refreshBrightness()
-  }, [refreshBrightness])
-
+  // Refresh brightness on monitor update event from main process
   useEffect(() => {
     const listener = window.lumos.ipc.on(IpcEvents.DISPLAY_UPDATE, ({
       displayId,
       vcpFeature,
     }: IpcDisplayUpdateArgs) => {
       if (displayId === monitor.info.displayId && vcpFeature === VCPFeatures.ImageAdjustment.Luminance) {
-        refreshBrightness(false)
+        refreshBrightness()
       }
     })
 
@@ -177,7 +178,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
               <Tooltip title={ 'Refresh brightness for this monitor' } enterDelay={ 500 } placement={ 'top' }>
                 <IconButton
                   onClick={ () => {
-                    refreshBrightness(false)
+                    refreshBrightness()
                       .catch(() => enqueueSnackbar('Fail to refresh brightness', { variant: 'error' }))
                   } }
                   color={ 'primary' }
@@ -190,7 +191,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
             <StyledInput
               disabled={ loading }
-              value={ brightness.toString() }
+              value={ brightness?.toString() }
               onChange={ event => setBrightnessInRange(parseInt(event.target.value)) }
               onWheelCapture={ event => {
                 if (event.target === document.activeElement) {
