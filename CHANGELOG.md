@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.1-alpha.2](https://github.com/super-bunny/lumos/releases/tag/v0.1.1-alpha.2) (2023-04-02)
+
+
+### Features
+
+* add option to delay ddc support request  ([63f921e](https://github.com/super-bunny/lumos/commit/63f921e992e4698975076063f9e1f01eacfdaf87))
+* add a retry button to check if monitor support DDC ([bb725a3](https://github.com/super-bunny/lumos/commit/bb725a362147c4bf14f83c1bdff35cd0b2775b76))
+* stop deduplicate monitors and add an option to ignore windows api  ([e462298](https://github.com/super-bunny/lumos/commit/e462298e5ee97665efd19c1673ddc21a7f6edfce))
+* show monitor backend only in developer mode ([5aa33c1](https://github.com/super-bunny/lumos/commit/5aa33c16d84e24a8cf4108a2d883128fa9527b34))
+* improve design of settings pages ([ca04c9e](https://github.com/super-bunny/lumos/commit/ca04c9e49cc968f46f5acf65781d5dcbd6224c2c))
+
+
+### Bug Fixes
+
+* clear cache for DDC support check on monitor list refresh ([be204d5](https://github.com/super-bunny/lumos/commit/be204d5ff90ef4e6bf1fe3d2f6541b44c1a5ffcd))
+* remove unexpected cache on monitor DDC support check ([e39ab3b](https://github.com/super-bunny/lumos/commit/e39ab3bf7b0e01db1896982e268518e321aa010d))
+* use index in display id if monitor is provider by winApi backend ([44ebbfd](https://github.com/super-bunny/lumos/commit/44ebbfd502e8d1007605ea45c07f029d848317f9))
+* toast error if fail to set monitor brightness ([f490e76](https://github.com/super-bunny/lumos/commit/f490e765de6180e51356ab209375245b611506b0))
+* disable cache on monitor ddc support  ([117f315](https://github.com/super-bunny/lumos/commit/117f31593bb1a517b15f625c75b4119626103605))
+* show backend name even if monitor is marked as not support ([5458444](https://github.com/super-bunny/lumos/commit/5458444fff88d9bd846d0a602826c206111f153d))
+
 ### [0.1.1-alpha.1](https://github.com/super-bunny/lumos/releases/tag/v0.1.1-alpha.1) (2023-03-25)
 
 

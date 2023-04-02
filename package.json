@@ -1,7 +1,7 @@
 {
   "name": "lumos",
   "productName": "lumos",
-  "version": "0.1.1-alpha.1",
+  "version": "0.1.1-alpha.2",
   "description": "Control your monitors brightness",
   "main": ".webpack/main",
   "scripts": {
