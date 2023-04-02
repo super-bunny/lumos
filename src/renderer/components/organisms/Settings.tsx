@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Collapse, Grid, Link, Stack, styled, SxProps, Tab, Tabs } from '@mui/material'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { TabContext, TabPanel } from '@mui/lab'
 import SettingsType from '../../../types/Settings'
 import Center from '../atoms/Center'
@@ -37,18 +37,12 @@ const SettingsTabPanel = styled(TabPanel)`
 `
 
 export default function Settings({ sx }: Props) {
-  const { settingsStore, isLoading, mutate } = useSettingsStore()
+  const { settingsStore, isLoading, updateSettings } = useSettingsStore()
   const { settings, path } = settingsStore ?? {}
 
   const [tabIndex, setTabIndex] = useState<SETTINGS_TABS>(SETTINGS_TABS.APPLICATION)
 
   const needRestart = useMemo(() => settings ? checkIfNeedRestart(settings) : false, [settings])
-
-  const saveSettings = useCallback(async (newSettings: SettingsType) => {
-    if (!settingsStore) return
-    await mutate({ ...settingsStore, settings: newSettings }, { revalidate: false })
-    return window.lumos.store.setSettings(newSettings)
-  }, [mutate, settingsStore])
 
   if (isLoading) {
     return (
@@ -103,27 +97,27 @@ export default function Settings({ sx }: Props) {
 
           <Box px={ 4 } py={ 1 } flexGrow={ 1 } overflow={ 'auto' }>
             <SettingsTabPanel value={ SETTINGS_TABS.APPLICATION }>
-              <ApplicationSettings settings={ settings! } onChange={ saveSettings }/>
+              <ApplicationSettings settings={ settings! } onChange={ updateSettings }/>
             </SettingsTabPanel>
 
             <SettingsTabPanel value={ SETTINGS_TABS.INTERFACE }>
-              <InterfaceSettings settings={ settings! } onChange={ saveSettings }/>
+              <InterfaceSettings settings={ settings! } onChange={ updateSettings }/>
             </SettingsTabPanel>
 
             <SettingsTabPanel value={ SETTINGS_TABS.PRIVACY }>
-              <PrivacySettings settings={ settings! } onChange={ saveSettings }/>
+              <PrivacySettings settings={ settings! } onChange={ updateSettings }/>
             </SettingsTabPanel>
 
             <SettingsTabPanel value={ SETTINGS_TABS.GLOBAL_SHORTCUT }>
-              <GlobalShortcutsSettings settings={ settings! } onChange={ saveSettings }/>
+              <GlobalShortcutsSettings settings={ settings! } onChange={ updateSettings }/>
             </SettingsTabPanel>
 
             <SettingsTabPanel value={ SETTINGS_TABS.EXPERIMENTAL }>
-              <ExperimentalSettings settings={ settings! } onChange={ saveSettings }/>
+              <ExperimentalSettings settings={ settings! } onChange={ updateSettings }/>
             </SettingsTabPanel>
 
             <SettingsTabPanel value={ SETTINGS_TABS.ADVANCED }>
-              <AdvancedSettings settings={ settings! } onChange={ saveSettings }/>
+              <AdvancedSettings settings={ settings! } onChange={ updateSettings }/>
             </SettingsTabPanel>
           </Box>
         </TabContext>
