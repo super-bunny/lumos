@@ -4,6 +4,7 @@ import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard/MonitorBri
 import Loader from '../atoms/Loader'
 import useSettingsStore from '../../hooks/useSettingsStore'
 import useMonitors from '../../hooks/useMonitors'
+import { mutate } from 'swr'
 
 export interface Props {
   sx?: SxProps
@@ -54,7 +55,11 @@ export default function MonitorList({ sx }: Props) {
 
       { !loading &&
         <Button
-          onClick={ () => refreshMonitors() }
+          onClick={ () => mutate(
+            key => typeof key === 'string' && key.endsWith('-supportDDC'),
+            undefined,
+            { revalidate: false },
+          ).then(() => refreshMonitors()) }
           variant={ 'text' }
         >{ error ? 'Retry' : 'Refresh' }</Button> }
     </Stack>
