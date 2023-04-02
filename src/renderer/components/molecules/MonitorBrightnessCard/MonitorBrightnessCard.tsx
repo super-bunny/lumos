@@ -153,7 +153,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
         { loading && (
           <Center sx={ { height: 'auto', flexGrow: 1 } }>
-            <Loader title={ 'Loading monitor brightness...' }/>
+            <Loader title={ supportDDCLoading ? 'Checking DDC support...' : 'Loading monitor brightness...' }/>
           </Center>
         ) }
 
