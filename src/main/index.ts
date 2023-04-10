@@ -16,6 +16,7 @@ import DdcBackendClient from '../shared/classes/DdcBackendClient'
 import ElectronShutdownHandler from '@super-bunny/electron-shutdown-handler'
 import autoShutdownMonitors from './utils/autoShutdownMonitors'
 import AsyncQueue from '../shared/classes/AsyncQueue'
+import { mockDisplays } from './utils/mockDisplays'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -105,6 +106,11 @@ export default function main() {
         return shouldReportError ? event : null
       },
     })
+  }
+
+  if (process.env.MOCK_DISPLAYS === 'true') {
+    console.info('Mocking Displays')
+    mockDisplays()
   }
 
   const onAppOpen = () => {

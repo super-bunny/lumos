@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client'
 import Router from './components/Router'
 import store from './store/store'
 import { Provider } from 'react-redux'
-import { mockDisplays } from './mockDisplays'
 import * as Sentry from '@sentry/electron/renderer'
 import { sentryBaseDefaultOptions } from '../shared/utils/sentry'
 import { init as reactInit, Replay } from '@sentry/react'
@@ -47,11 +46,6 @@ root.render(
     <Router/>
   </Provider>,
 )
-
-if (window.lumos.env.MOCK_DISPLAYS === 'true') {
-  console.info('Mocking Displays')
-  mockDisplays()
-}
 
 console.debug('Sentry enabled:', window.lumos.sentryEnabled)
 console.debug('Env:', window.lumos.env)

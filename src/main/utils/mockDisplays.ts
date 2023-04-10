@@ -1,12 +1,12 @@
-import IpcBackendClient from './classes/IpcBackendClient'
-import VCPFeatures from '../types/VCPFeatures'
-import { Backends, VcpValueType } from '../types/EnhancedDDCDisplay'
+import DdcBackendClient from '../../shared/classes/DdcBackendClient'
+import { Backends, VcpValueType } from '../../types/EnhancedDDCDisplay'
+import VCPFeatures from '../../types/VCPFeatures'
 
 export function mockDisplays(): void {
-  IpcBackendClient.prototype.list = async () => {
+  DdcBackendClient.prototype.list = async () => {
     console.debug('Display.list() mock called')
 
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 5000))
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 3000))
 
     return Promise.resolve([
         {
@@ -45,12 +45,12 @@ export function mockDisplays(): void {
     )
   }
 
-  IpcBackendClient.prototype.setVcpValue = (...args) => {
+  DdcBackendClient.prototype.setVcpValue = (...args) => {
     console.debug('Display.setVcpValue() mock called with args:', args)
 
     return Promise.resolve(undefined)
   }
-  IpcBackendClient.prototype.getVcpValue = async (...args) => {
+  DdcBackendClient.prototype.getVcpValue = async (...args) => {
     console.debug('Display.getVcpValue() mock called with args:', args)
     const [, vcpCode] = args
 
@@ -74,7 +74,7 @@ export function mockDisplays(): void {
     )
   }
 
-  IpcBackendClient.prototype.supportDDC = () => {
+  DdcBackendClient.prototype.supportDDC = () => {
     console.debug('Display.supportDDC() mock called')
 
     return Promise.resolve(Math.random() > 0.5)
