@@ -5,7 +5,7 @@ export interface Props {
   label: ReactNode
   labelFor?: string
   description?: ReactNode
-  action: ReactNode
+  action?: ReactNode
 }
 
 export default function SettingItem({ label, labelFor, description, action }: Props) {

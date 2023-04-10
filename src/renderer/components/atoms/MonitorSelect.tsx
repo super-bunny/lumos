@@ -1,6 +1,6 @@
 import React from 'react'
 import GenericDisplay from '../../../shared/classes/GenericDisplay'
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select, SxProps } from '@mui/material'
+import { FormControl, FormControlProps, FormHelperText, InputLabel, MenuItem, Select, SxProps } from '@mui/material'
 import useMonitors from '../../hooks/useMonitors'
 
 export interface Props {
@@ -9,14 +9,23 @@ export interface Props {
   monitor?: GenericDisplay
   onChange?: (monitor: GenericDisplay) => void
   disabled?: boolean
+  size?: FormControlProps['size']
   sx?: SxProps
 }
 
-export default function MonitorSelect({ label = 'Monitor', helperText, monitor, onChange, disabled, sx }: Props) {
+export default function MonitorSelect({
+  label = 'Monitor',
+  helperText,
+  monitor,
+  onChange,
+  disabled,
+  size,
+  sx,
+}: Props) {
   const { monitors } = useMonitors()
 
   return (
-    <FormControl fullWidth sx={ sx }>
+    <FormControl size={ size } fullWidth sx={ sx }>
       <InputLabel>{ label }</InputLabel>
 
       <Select

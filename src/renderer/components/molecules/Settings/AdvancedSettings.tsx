@@ -1,10 +1,11 @@
 import React from 'react'
 import SettingsType from '../../../../types/Settings'
-import { Button, Divider, Grid, Stack, Switch, SxProps, TextField } from '@mui/material'
+import { Button, Divider, Grid, Stack, Switch, SxProps } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import GenericDisplay from '../../../../shared/classes/GenericDisplay'
 import IpcBackendClient from '../../../classes/IpcBackendClient'
 import SettingItem from '../SettingItem'
+import VcpDevTool from '../VcpDevTool'
 
 export interface Props {
   settings: SettingsType
@@ -76,6 +77,14 @@ export default function AdvancedSettings({ settings, onChange, sx }: Props) {
 
           <Grid item xs={ 12 }>
             <Stack gap={ 2 } divider={ <Divider/> }>
+              <Stack spacing={ 2 }>
+                <SettingItem
+                  label={ 'Send VCP command' }
+                  description={ 'Send a VCP command to any monitor.' }
+                />
+                <VcpDevTool/>
+              </Stack>
+
               <SettingItem
                 label={ 'Auto monitor power off' }
                 description={ 'Test if your monitor wil power off monitor on system shutdown.' }
