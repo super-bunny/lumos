@@ -52,9 +52,9 @@ module.exports = {
           config: './webpack.renderer.config.js',
           entryPoints: [
             {
-              html: './src/renderer/index.html',
-              js: './src/renderer/renderer.tsx',
               name: 'main_window',
+              html: './src/renderer/index.html',
+              js: './src/renderer/index.tsx',
               preload: {
                 js: './src/main/preload.ts',
               },
