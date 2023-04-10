@@ -13,8 +13,6 @@ export interface Props {
   sx?: SxProps
 }
 
-const MAX_DDC_REQUEST_DELAY = 10000
-
 export default function AdvancedSettings({ settings, onChange, sx }: Props) {
   const { enqueueSnackbar } = useSnackbar()
 
