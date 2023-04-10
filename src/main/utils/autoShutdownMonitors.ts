@@ -4,7 +4,6 @@ import { PowerMode } from '../../types/VCPFeatures'
 
 // Walk through all monitor and power off them if they are enabled in the powerOffMonitorOnShutdown setting
 export default async function autoShutdownMonitors(settings: SettingsStore, displayManager: GenericDisplayManager) {
-  console.log(settings.store.powerOffMonitorOnShutdown)
   if (!settings.store.powerOffMonitorOnShutdown) return
 
   const promiseList = displayManager.list.map(display => {
