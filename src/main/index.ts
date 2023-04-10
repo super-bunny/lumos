@@ -28,6 +28,63 @@ let settings: SettingsStore | undefined
 let shouldQuit: boolean = false
 let shouldReportError: boolean = false
 
+function createMainWindow(): BrowserWindow {
+  // Create the browser window.
+  const mainWindow = new BrowserWindow({
+    height: 720,
+    width: 1280,
+    show: !settings?.store.minimizeAppOnStartup,
+    webPreferences: {
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: false,
+    },
+  })
+
+  // mainWindow.setMenuBarVisibility(false)
+
+  // and load the index.html of the app.
+  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+    .then()
+
+  // Open the DevTools in development.
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools()
+  }
+
+  mainWindow.on('close', (event) => {
+    if (!shouldQuit && settings?.store.minimizeAppOnWindowClose) {
+      event.preventDefault()
+      mainWindow?.hide()
+    }
+  })
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.send(IpcEvents.PING, 'pong')
+  })
+
+  ElectronShutdownHandler.setWindowHandle(mainWindow.getNativeWindowHandle())
+  ElectronShutdownHandler.blockShutdown('Please wait Lumos is shutting down...')
+
+  ElectronShutdownHandler.on('shutdown', () => {
+    const quit = () => {
+      ElectronShutdownHandler.releaseShutdown()
+      app.quit()
+    }
+
+    console.info('Windows shutting down handler')
+    if (!settings) return quit()
+
+    autoShutdownMonitors(settings, displayManager)
+      .finally(() => {
+        quit()
+      })
+  })
+
+  return mainWindow
+}
+
 export default function main() {
   // Handle creating/removing shortcuts on Windows when installing/uninstalling.
   if (require('electron-squirrel-startup')) {
@@ -50,66 +107,9 @@ export default function main() {
     })
   }
 
-  const createWindow = (): BrowserWindow => {
-    // Create the browser window.
-    const mainWindow = new BrowserWindow({
-      height: 720,
-      width: 1280,
-      show: !settings?.store.minimizeAppOnStartup,
-      webPreferences: {
-        preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-        nodeIntegration: false,
-        contextIsolation: true,
-        sandbox: false,
-      },
-    })
-
-    // mainWindow.setMenuBarVisibility(false)
-
-    // and load the index.html of the app.
-    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
-      .then()
-
-    // Open the DevTools in development.
-    if (process.env.NODE_ENV === 'development') {
-      mainWindow.webContents.openDevTools()
-    }
-
-    mainWindow.on('close', (event) => {
-      if (!shouldQuit && settings?.store.minimizeAppOnWindowClose) {
-        event.preventDefault()
-        mainWindow?.hide()
-      }
-    })
-
-    mainWindow.webContents.on('did-finish-load', () => {
-      mainWindow.webContents.send(IpcEvents.PING, 'pong')
-    })
-
-    ElectronShutdownHandler.setWindowHandle(mainWindow.getNativeWindowHandle())
-    ElectronShutdownHandler.blockShutdown('Please wait Lumos is shutting down...')
-
-    ElectronShutdownHandler.on('shutdown', () => {
-      const quit = () => {
-        ElectronShutdownHandler.releaseShutdown()
-        app.quit()
-      }
-
-      console.info('Windows shutting down handler')
-      if (!settings) return quit()
-
-      autoShutdownMonitors(settings, displayManager)
-        .finally(() => {
-          quit()
-        })
-    })
-
-    return mainWindow
-  }
-
   const onAppOpen = () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      mainWindow = createWindow()
+      mainWindow = createMainWindow()
     } else {
       mainWindow?.show()
     }
@@ -184,7 +184,7 @@ export default function main() {
       onRegisterGlobalShortcuts: () => registerGlobalShortcuts(settings!.store.globalShortcuts, displayManager, mainWindow),
       onOpenDevTools: () => mainWindow?.webContents.openDevTools(),
     })
-    mainWindow = createWindow()
+    mainWindow = createMainWindow()
     registerGlobalShortcuts(settings.store.globalShortcuts, displayManager, mainWindow)
 
     // App tray
