@@ -103,10 +103,39 @@ export default function AdvancedSettings({ settings, onChange, sx }: Props) {
                       GenericDisplay.list(new IpcBackendClient())
                         .then(monitors => {
                           enqueueSnackbar('Monitors retrieved, checkout the developer tools console', { variant: 'success' })
-                          console.info('[Debug] monitor list', monitors)
+                          console.info('[Debug] Monitor list', monitors)
                         })
                         .catch((error) => {
                           enqueueSnackbar('Fail to retrieve monitors', { variant: 'error' })
+                          console.error(error)
+                        })
+                        .then(() => window.lumos.openDevTools())
+                        .catch((error) => {
+                          enqueueSnackbar('Fail to open developer tools', { variant: 'error' })
+                          console.error(error)
+                        })
+                    } }
+                    variant={ 'contained' }
+                    color={ 'secondary' }
+                    size={ 'small' }
+                  >Run</Button>
+                }
+              />
+
+              <SettingItem
+                label={ 'List Electron monitors to console' }
+                description={ 'This will list monitors from the Electron API and print them to the developer tools console.' }
+                action={
+                  <Button
+                    onClick={ () => {
+                      enqueueSnackbar('Retrieving Electron monitors...', { variant: 'info' })
+                      window.lumos.getElectronDisplays()
+                        .then(monitors => {
+                          enqueueSnackbar('Electron monitors retrieved, checkout the developer tools console', { variant: 'success' })
+                          console.info('[Debug] Electron monitor list', monitors)
+                        })
+                        .catch((error) => {
+                          enqueueSnackbar('Fail to retrieve Electron monitors', { variant: 'error' })
                           console.error(error)
                         })
                         .then(() => window.lumos.openDevTools())

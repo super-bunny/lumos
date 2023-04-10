@@ -1,4 +1,4 @@
-import { app, globalShortcut, ipcMain } from 'electron'
+import { app, globalShortcut, ipcMain, screen } from 'electron'
 import GenericDisplayManager from './classes/GenericDisplayManager'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
@@ -78,5 +78,8 @@ export default function setupIpc({
   })
   ipcMain.handle(IpcEvents.OPEN_DEV_TOOLS, () => {
     return onOpenDevTools()
+  })
+  ipcMain.handle(IpcEvents.GET_ELECTRON_DISPLAYS, () => {
+    return screen.getAllDisplays()
   })
 }
