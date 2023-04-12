@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.1-alpha.3](https://github.com/super-bunny/lumos/releases/tag/v0.1.1-alpha.3) (2023-04-12)
+
+
+### Features
+
+* add VCP dev tool in settings ([24890a1](https://github.com/super-bunny/lumos/commit/24890a1ff73beee18521c8319e1e26dfa95a3222))
+* add debug action to list Electron monitors ([620d570](https://github.com/super-bunny/lumos/commit/620d5704a27630caf0aef39091a6551fbd30da4e))
+
 ### [0.1.1-alpha.2](https://github.com/super-bunny/lumos/releases/tag/v0.1.1-alpha.2) (2023-04-02)
 
 
