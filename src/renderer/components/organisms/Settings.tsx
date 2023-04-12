@@ -11,6 +11,7 @@ import useSettingsStore from '../../hooks/useSettingsStore'
 import GlobalShortcutsSettings from '../molecules/Settings/GlobalShortcutsSettings'
 import AdvancedSettings from '../molecules/Settings/AdvancedSettings'
 import PrivacySettings from '../molecules/Settings/PrivacySettings'
+import Debug from '../molecules/Settings/Debug'
 
 export interface Props {
   sx?: SxProps
@@ -23,6 +24,7 @@ enum SETTINGS_TABS {
   GLOBAL_SHORTCUT = 'global_shortcut',
   EXPERIMENTAL = 'experimental',
   ADVANCED = 'advanced',
+  DEBUG = 'debug',
 }
 
 function checkIfNeedRestart(settings: SettingsType) {
@@ -92,6 +94,7 @@ export default function Settings({ sx }: Props) {
             <Tab label="Global shortcuts" value={ SETTINGS_TABS.GLOBAL_SHORTCUT }/>
             <Tab label="Experimental" value={ SETTINGS_TABS.EXPERIMENTAL }/>
             <Tab label="Advanced" value={ SETTINGS_TABS.ADVANCED }/>
+            { settings?.developerMode && <Tab label="Debug Zone" value={ SETTINGS_TABS.DEBUG }/> }
           </Tabs>
 
 
@@ -118,6 +121,10 @@ export default function Settings({ sx }: Props) {
 
             <SettingsTabPanel value={ SETTINGS_TABS.ADVANCED }>
               <AdvancedSettings settings={ settings! } onChange={ updateSettings }/>
+            </SettingsTabPanel>
+
+            <SettingsTabPanel value={ SETTINGS_TABS.DEBUG }>
+              <Debug settings={ settings! } onChange={ updateSettings }/>
             </SettingsTabPanel>
           </Box>
         </TabContext>
