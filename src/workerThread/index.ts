@@ -5,7 +5,14 @@ import { BackendWorkerData } from '../main/classes/BackendWorker'
 import DdcBackendClient from '../shared/classes/DdcBackendClient'
 
 export default function workerThread(): void {
-  const { enableHttpApi, httpApiPort, httpApiHost, jwtSecret, sessionJwtSecret } = workerData as BackendWorkerData
+  const {
+    enableHttpApi,
+    httpApiPort,
+    httpApiHost,
+    jwtSecret,
+    sessionJwtSecret,
+    enableAuthentification,
+  } = workerData as BackendWorkerData
   const displayManager = new GenericDisplayManager(new DdcBackendClient())
 
   displayManager.refresh().then()
@@ -16,7 +23,7 @@ export default function workerThread(): void {
       port: httpApiPort ?? 8787,
       jwtSecret,
       sessionJwtSecret,
-      context: { displayManager },
+      context: { displayManager, enableAuthentification },
     })
   }
 }

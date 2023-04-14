@@ -13,6 +13,7 @@ export interface InitHttpApiArgs {
   jwtSecret: string,
   context: {
     displayManager: GenericDisplayManager
+    enableAuthentification: boolean
   }
 }
 
@@ -30,13 +31,17 @@ export default function initHttpApi({ host, port, sessionJwtSecret, jwtSecret, c
   app
     .use(cors())
     .use(bodyParser())
-    .use(jwtMiddleware({
-      secret: [jwtSecret, sessionJwtSecret],
-      isRevoked: async (ctx: Context, decodedToken: Record<string, any>, token: string): Promise<boolean> => {
-        // Check if token has been created on this app session
-        return decodedToken.iat * 1000 < SESSION_JWT_MIN_CREATION_DATE
-      },
-    }).unless({ path: ['/'] }))
+    .use(
+      context.enableAuthentification
+        ? jwtMiddleware({
+          secret: [jwtSecret, sessionJwtSecret],
+          isRevoked: async (ctx: Context, decodedToken: Record<string, any>, token: string): Promise<boolean> => {
+            // Check if token has been created on this app session
+            return decodedToken.iat * 1000 < SESSION_JWT_MIN_CREATION_DATE
+          },
+        }).unless({ path: ['/'] })
+        : (ctx, next) => next(),
+    )
     // Custom error handlers
     .use(async (ctx, next) => {
       try {

@@ -14,6 +14,7 @@ export const defaultSettings: Required<Settings> = {
   httpApi: {
     host: 'localhost',
     port: 8787,
+    enableAuthentification: true,
   },
   globalShortcuts: {},
   powerOffMonitorOnShutdown: {},

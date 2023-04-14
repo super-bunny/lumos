@@ -19,6 +19,7 @@ export default interface Settings {
   httpApi?: {
     host?: string,
     port?: number,
+    enableAuthentification?: boolean,
   }
   globalShortcuts: Partial<Record<GlobalShortcutsStaticActions | string, string>>
   developerMode?: boolean

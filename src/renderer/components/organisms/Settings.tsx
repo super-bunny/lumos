@@ -31,6 +31,7 @@ function checkIfNeedRestart(settings: SettingsType) {
   if (window.lumos.initSettings.enableHttpApi !== settings.enableHttpApi) return true
   else if (window.lumos.initSettings.enableErrorReporting !== settings.enableErrorReporting) return true
   else if (window.lumos.initSettings.concurrentDdcRequest !== settings.concurrentDdcRequest) return true
+  else if (window.lumos.initSettings.httpApi?.enableAuthentification !== settings.httpApi?.enableAuthentification) return true
 
   return false
 }

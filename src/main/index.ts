@@ -168,6 +168,7 @@ export default function main() {
       httpApiPort,
       jwtSecret: secretStore.store.httpApi.jwtSecret,
       sessionJwtSecret,
+      enableAuthentification: settings.store.httpApi?.enableAuthentification ?? true,
     })
     const sessionJwt = generateSessionJwt(sessionJwtSecret)
 

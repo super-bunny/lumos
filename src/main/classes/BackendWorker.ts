@@ -7,6 +7,7 @@ export interface BackendWorkerData {
   httpApiPort: number
   jwtSecret: string
   sessionJwtSecret: string
+  enableAuthentification: boolean
 }
 
 export interface BackendWorkerPromises {
