@@ -30,6 +30,7 @@ enum SETTINGS_TABS {
 function checkIfNeedRestart(settings: SettingsType) {
   if (window.lumos.initSettings.enableHttpApi !== settings.enableHttpApi) return true
   else if (window.lumos.initSettings.enableErrorReporting !== settings.enableErrorReporting) return true
+  else if (window.lumos.initSettings.concurrentDdcRequest !== settings.concurrentDdcRequest) return true
 
   return false
 }
