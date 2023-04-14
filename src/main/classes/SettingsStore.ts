@@ -17,6 +17,7 @@ export const defaultSettings: Required<Settings> = {
   },
   globalShortcuts: {},
   powerOffMonitorOnShutdown: {},
+  monitorAliases: {},
   ignoreWinApi: false,
   concurrentDdcRequest: true,
 }

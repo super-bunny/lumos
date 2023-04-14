@@ -21,6 +21,8 @@ import { useConfirm } from 'material-ui-confirm'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import useSettingsStore from '../../../hooks/useSettingsStore'
 import InfoIcon from '@mui/icons-material/Info'
+import EditIcon from '@mui/icons-material/Edit'
+import MonitorAliasDialog from '../dialogs/MonitorAliasDialog'
 
 export interface Props {
   monitor: Monitor
@@ -31,6 +33,7 @@ export interface Props {
 export default function MonitorBrightnessCardExtraMenu({ monitor, className, style }: Props) {
   const confirm = useConfirm()
   const popupState = usePopupState({ variant: 'popover', popupId: 'MonitorBrightnessCardExtraMenu' })
+  const aliasDialogState = usePopupState({ variant: 'dialog', popupId: 'MonitorAliasDialog' })
   const { enqueueSnackbar } = useSnackbar()
   const { settingsStore: { settings } = {}, updateSettings } = useSettingsStore()
   const developerMode = settings?.developerMode
@@ -76,6 +79,12 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
 
   return (
     <div className={ className } style={ style }>
+      <MonitorAliasDialog
+        monitor={ monitor }
+        open={ aliasDialogState.isOpen }
+        onClose={ aliasDialogState.close }
+      />
+
       <IconButton color="inherit" { ...bindTrigger(popupState) } size={ 'small' }>
         <MoreVert/>
       </IconButton>
@@ -136,6 +145,19 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
             <ListItemText>Show capability string</ListItemText>
           </MenuItem>
         ) }
+
+        <MenuItem
+          { ...bindTrigger(aliasDialogState) }
+          onClick={ event => {
+            bindTrigger(aliasDialogState).onClick(event)
+            popupState.close()
+          } }
+        >
+          <ListItemIcon>
+            <EditIcon/>
+          </ListItemIcon>
+          <ListItemText>Rename</ListItemText>
+        </MenuItem>
 
         <MenuItem
           disabled={ !settings }

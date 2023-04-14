@@ -9,6 +9,8 @@ export interface GetVcpValueOptions {
 export default class GenericDisplay {
   cache: Record<number | string, any> = {}
 
+  alias: string | null = null
+
   constructor(public client: BackendClient, public info: DisplayInfo) {
   }
 
@@ -17,7 +19,7 @@ export default class GenericDisplay {
   }
 
   getDisplayName(): string {
-    return this.info.modelName ?? this.info.displayId
+    return this.alias ?? this.info.modelName ?? this.info.displayId
   }
 
   async supportDDC(useCache: boolean = true): Promise<boolean> {

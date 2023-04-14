@@ -25,4 +25,5 @@ export default interface Settings {
   powerOffMonitorOnShutdown?: Record<string, boolean>
   ignoreWinApi?: boolean
   concurrentDdcRequest?: boolean
+  monitorAliases?: Record<string, string | null>
 }

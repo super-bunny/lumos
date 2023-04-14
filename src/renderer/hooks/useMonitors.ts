@@ -3,25 +3,30 @@ import GenericDisplay from '../../shared/classes/GenericDisplay'
 import IpcBackendClient from '../classes/IpcBackendClient'
 import { useMemo } from 'react'
 import { Backends } from '../../types/EnhancedDDCDisplay'
+import useSettingsStore from './useSettingsStore'
 
-export interface Options {
-  ignoreWinApi?: boolean
-}
+export default function useMonitors() {
+  const { settingsStore } = useSettingsStore()
+  const { ignoreWinApi, monitorAliases } = settingsStore?.settings ?? {}
 
-export default function useMonitors(options?: Options) {
-  const { ignoreWinApi = false } = options ?? {}
-
-  const swrResponse = useSwr('monitors', () => GenericDisplay.list(new IpcBackendClient()), {
+  const swrResponse = useSwr(settingsStore ? 'monitors' : null, () => GenericDisplay.list(new IpcBackendClient()), {
     revalidateOnReconnect: false,
     revalidateOnFocus: false,
     revalidateIfStale: false,
   })
 
   const processedMonitors = useMemo(() => {
-    if (ignoreWinApi) return swrResponse.data?.filter(display => display.info.backend !== Backends.WIN_API)
+    let monitors = swrResponse.data
 
-    return swrResponse?.data
-  }, [ignoreWinApi, swrResponse.data])
+    if (ignoreWinApi) {
+      monitors = monitors?.filter(display => display.info.backend !== Backends.WIN_API)
+    }
+    if (monitorAliases) {
+      monitors?.forEach(display => display.alias = monitorAliases[display.info.displayId] ?? null)
+    }
+
+    return monitors
+  }, [ignoreWinApi, monitorAliases, swrResponse.data])
 
   return {
     monitors: processedMonitors,
