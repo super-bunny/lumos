@@ -5,6 +5,7 @@ import GenericDisplay from '../../../shared/classes/GenericDisplay'
 import { VCPValue } from '../../../types/EnhancedDDCDisplay'
 import { useSnackbar } from 'notistack'
 import DeleteIcon from '@mui/icons-material/Delete'
+import VcpFeatureSelect from '../atoms/VcpFeatureSelect'
 
 export default function VcpDevTool() {
   const { enqueueSnackbar } = useSnackbar()
@@ -46,24 +47,19 @@ export default function VcpDevTool() {
   }, [disabled, enqueueSnackbar, monitor, setMode, vcpFeature, vcpValue])
 
   return (
-    <Stack spacing={ 1 }>
-      <Stack direction={ 'row' } alignItems={ 'center' } spacing={ 1 }>
+    <Stack spacing={ 0 }>
+      <div style={ { width: 400 } }>
+        <MonitorSelect monitor={ monitor } onChange={ setMonitor } size={ 'small' }/>
+      </div>
+
+      <Stack mt={ 2 } direction={ 'row' } alignItems={ 'center' } spacing={ 1 }>
         <Stack direction={ 'row' } alignItems={ 'center' }>
           <Typography variant={ 'body2' }>Get</Typography>
           <Switch checked={ setMode } onChange={ (event, checked) => handleSetMode(checked) }/>
           <Typography variant={ 'body2' }>Set</Typography>
         </Stack>
 
-        <MonitorSelect monitor={ monitor } onChange={ setMonitor } size={ 'small' }/>
-
-        <TextField
-          value={ vcpFeature?.toString(16) ?? '' }
-          onChange={ (event) => setVcpFeature(event.target.value ? parseInt(event.target.value, 16) : 0) }
-          label={ 'VCP feature' }
-          inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
-          InputProps={ { startAdornment: '0x' } }
-          size={ 'small' }
-        />
+        <VcpFeatureSelect vcpFeature={ vcpFeature } onChange={ vcpFeature => setVcpFeature(vcpFeature) }/>
 
         <TextField
           disabled={ !setMode }
@@ -88,7 +84,7 @@ export default function VcpDevTool() {
       </Stack>
 
       <Collapse in={ !!result && !setMode }>
-        <Stack direction={ 'row' } spacing={ 1 }>
+        <Stack mt={ 1 } direction={ 'row' } spacing={ 1 }>
           <code style={ { flexGrow: 1 } }>{ JSON.stringify(result) }</code>
 
           <IconButton size={ 'small' } onClick={ () => setResult(undefined) }>

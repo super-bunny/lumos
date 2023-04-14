@@ -21,7 +21,10 @@ export default function Debug({ settings, onChange, sx }: Props) {
       <Grid item xs={ 12 }>
         <Stack gap={ 2 } divider={ <Divider/> }>
           <Stack spacing={ 2 }>
-            <SettingItem label={ 'Send VCP command' }/>
+            <SettingItem
+              label={ 'VCP debug tool' }
+              description={ 'Send VCP command to get/set a VCP feature on a monitor.' }
+            />
             <VcpDevTool/>
           </Stack>
 
