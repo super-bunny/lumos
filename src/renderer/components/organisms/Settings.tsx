@@ -94,7 +94,7 @@ export default function Settings({ sx }: Props) {
             <Tab label="Global shortcuts" value={ SETTINGS_TABS.GLOBAL_SHORTCUT }/>
             <Tab label="Experimental" value={ SETTINGS_TABS.EXPERIMENTAL }/>
             <Tab label="Advanced" value={ SETTINGS_TABS.ADVANCED }/>
-            { settings?.developerMode && <Tab label="Debug Zone" value={ SETTINGS_TABS.DEBUG }/> }
+            { settings?.developerMode && <Tab label="Debug" value={ SETTINGS_TABS.DEBUG }/> }
           </Tabs>
 
 
