@@ -7,7 +7,7 @@ export interface StoreData {
   }
 }
 
-export type StoreOptions<T> = Pick<Options<T>, 'defaults'>
+export type StoreOptions<T extends Record<string, any>> = Pick<Options<T>, 'defaults'>
 
 export default class SecretStore extends Conf<StoreData> {
   constructor(options?: StoreOptions<StoreData>) {

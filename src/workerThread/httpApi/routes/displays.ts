@@ -21,7 +21,7 @@ router.get(
 router.post(
   '/support-ddc',
   async ctx => {
-    const { id } = ctx.request.body
+    const { id } = ctx.request.body as { id: string }
 
     try {
       const supportDDC = await ctx.displayManager.getDisplayByIdOrThrow(id).supportDDC()
