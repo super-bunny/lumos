@@ -68,7 +68,10 @@ export default function VcpDevTool() {
         <TextField
           disabled={ !setMode }
           value={ vcpValue?.toString(16) ?? '' }
-          onChange={ (event) => setVcpValue(event.target.value ? parseInt(event.target.value, 16) : 0) }
+          onChange={ (event) => {
+            const numberValue = parseInt(event.target.value, 16)
+            setVcpValue(isNaN(numberValue) ? null : numberValue)
+          } }
           label={ 'VCP value' }
           inputProps={ { inputMode: 'numeric', pattern: '[0-9]*' } }
           InputProps={ { startAdornment: '0x' } }
