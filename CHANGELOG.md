@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.1](https://github.com/super-bunny/lumos/releases/tag/v0.1.1) (2023-04-14)
+
+
+### Features
+
+* add option to disable http api authentification ([8d996a0](https://github.com/super-bunny/lumos/commit/8d996a0cda87c52478489da83af22115782fd1e8))
+* add debug option to copy http api session token to clipboard  ([177ba0e](https://github.com/super-bunny/lumos/commit/177ba0e5118e16f87248666c93bd2b56bece97aa))
+* allow to set an alias for each monitor ([f095105](https://github.com/super-bunny/lumos/commit/f095105092acc4456978e381014869809053fc6d))
+* improve VCP debug tool with a vcp feature selector ([9d71a52](https://github.com/super-bunny/lumos/commit/9d71a52a2599ae54f6a1ecc2c1e68974e5ed0a74))
+
+
+### Bug Fixes
+
+* ask for app restart on concurrent DDC request setting change ([bdd443c](https://github.com/super-bunny/lumos/commit/bdd443c95a2ea47be3d247c735b7f27b8e93da57))
+* fix vcp value input in <VcpDevTool/> ([7ec5522](https://github.com/super-bunny/lumos/commit/7ec552236ef1e359e476254771adf77d9fe98225))
+
+
+### Dependencies
+
+* update mui packages ([799b4ca](https://github.com/super-bunny/lumos/commit/799b4ca0697f6cfb34b0589e5f0a25ab67cbf06c))
+
 ### [0.1.1-alpha.3](https://github.com/super-bunny/lumos/releases/tag/v0.1.1-alpha.3) (2023-04-12)
 
 
