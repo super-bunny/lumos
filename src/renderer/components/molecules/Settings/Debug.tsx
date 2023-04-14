@@ -102,6 +102,26 @@ export default function Debug({ settings, onChange, sx }: Props) {
               >Run</Button>
             }
           />
+
+          <SettingItem
+            label={ 'Copy HTTP API session token to clipboard' }
+            action={
+              <Button
+                onClick={ () => {
+                  window.lumos.sessionJwt()
+                    .then(jwt => navigator.clipboard.writeText(jwt))
+                    .then(() => enqueueSnackbar('Session JWT copied to clipboard', { variant: 'success' }))
+                    .catch((error) => {
+                      enqueueSnackbar('Fail to retrieve session JWT', { variant: 'error' })
+                      console.error(error)
+                    })
+                } }
+                variant={ 'contained' }
+                color={ 'secondary' }
+                size={ 'small' }
+              >Copy to clipboard</Button>
+            }
+          />
         </Stack>
       </Grid>
     </Grid>
