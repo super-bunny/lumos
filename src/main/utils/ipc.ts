@@ -11,5 +11,4 @@ export interface IpcDisplayUpdateArgs {
 
 export function sendIpcDisplayUpdate(browserWindow: BrowserWindow, args: IpcDisplayUpdateArgs) {
   browserWindow.webContents.send(IpcEvents.DISPLAY_UPDATE, args)
-
 }
