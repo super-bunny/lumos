@@ -12,7 +12,7 @@ export default function SettingItem({ label, labelFor, description, action }: Pr
   return (
     <Stack>
       <Stack direction={ 'row' } alignItems={ 'center' } justifyContent={ 'space-between' }>
-        <label htmlFor={ labelFor } style={ { flexGrow: 1 } }>{ label }</label>
+        <Typography component={ 'label' } htmlFor={ labelFor } style={ { flexGrow: 1 } }>{ label }</Typography>
         { action }
       </Stack>
 
