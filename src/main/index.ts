@@ -35,6 +35,7 @@ function createMainWindow(): BrowserWindow {
     height: 720,
     width: 1280,
     show: !settings?.store.minimizeAppOnStartup,
+    autoHideMenuBar: true,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: false,
@@ -42,8 +43,6 @@ function createMainWindow(): BrowserWindow {
       sandbox: false,
     },
   })
-
-  // mainWindow.setMenuBarVisibility(false)
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
