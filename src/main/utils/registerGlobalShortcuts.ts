@@ -3,39 +3,44 @@ import GenericDisplayManager from '../classes/GenericDisplayManager'
 import { sendIpcDisplayUpdate } from './ipc'
 import { BrowserWindow, globalShortcut } from 'electron'
 import VCPFeatures from '../../types/VCPFeatures'
+import OverlayWindowManager from '../classes/OverlayWindowManager'
 
 export default function registerGlobalShortcuts(
   shortcuts: Settings['globalShortcuts'],
   displayManager: GenericDisplayManager,
-  browserWindow?: BrowserWindow,
+  browserWindow: BrowserWindow,
+  overlayWindowManager: OverlayWindowManager,
 ) {
-  const globalShortcutHandlers: Record<keyof Settings['globalShortcuts'] | string, (...matches: Array<string>) => Promise<void>> = {
+  const globalShortcutHandlers: Record<keyof Settings['globalShortcuts'] | string, (...matches: Array<string>) => Promise<void | Array<PromiseSettledResult<void>>>> = {
     '^dimAllDisplays$': () => {
-      return Promise.any(
+      return Promise.allSettled(
+        // TODO: ignore win API displays if enabled in settings
         displayManager.list.map(async (display) => {
           if (!await display.supportDDC()) return
           const brightnessPercentage = await display.getBrightnessPercentage(true)
           return display.setBrightnessPercentage(brightnessPercentage - 5)
-            .then(() => {
-              browserWindow && sendIpcDisplayUpdate(browserWindow, {
+            .then(vcpValue => {
+              sendIpcDisplayUpdate([browserWindow, ...overlayWindowManager.browserWindows], {
                 displayId: display.info.displayId,
                 vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+                vcpValue,
               })
-
             })
         }),
       )
     },
     '^brightAllDisplays$': () => {
-      return Promise.any(
+      return Promise.allSettled(
+        // TODO: ignore win API displays if enabled in settings
         displayManager.list.map(async (display) => {
           if (!await display.supportDDC()) return
           const brightnessPercentage = await display.getBrightnessPercentage(true)
-          display.setBrightnessPercentage(brightnessPercentage + 5)
-            .then(() => {
-              browserWindow && sendIpcDisplayUpdate(browserWindow, {
+          return display.setBrightnessPercentage(brightnessPercentage + 5)
+            .then(vcpValue => {
+              sendIpcDisplayUpdate([browserWindow, ...overlayWindowManager.browserWindows], {
                 displayId: display.info.displayId,
                 vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+                vcpValue,
               })
             })
         }))
@@ -46,11 +51,12 @@ export default function registerGlobalShortcuts(
       if (!display || !await display.supportDDC()) return
 
       const brightnessPercentage = await display.getBrightnessPercentage(true)
-      await display.setBrightnessPercentage(brightnessPercentage - 5)
+      const vcpValue = await display.setBrightnessPercentage(brightnessPercentage - 5)
 
-      browserWindow && sendIpcDisplayUpdate(browserWindow, {
+      sendIpcDisplayUpdate([browserWindow, ...overlayWindowManager.browserWindows], {
         displayId: display.info.displayId,
         vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+        vcpValue,
       })
     },
     '^brightDisplay(.*)$': async (key, displayId) => {
@@ -59,11 +65,12 @@ export default function registerGlobalShortcuts(
       if (!display || !await display.supportDDC()) return
 
       const brightnessPercentage = await display.getBrightnessPercentage(true)
-      await display.setBrightnessPercentage(brightnessPercentage + 5)
+      const vcpValue = await display.setBrightnessPercentage(brightnessPercentage + 5)
 
-      browserWindow && sendIpcDisplayUpdate(browserWindow, {
+      sendIpcDisplayUpdate([browserWindow, ...overlayWindowManager.browserWindows], {
         displayId: display.info.displayId,
         vcpFeature: VCPFeatures.ImageAdjustment.Luminance,
+        vcpValue,
       })
     },
   }
@@ -81,7 +88,20 @@ export default function registerGlobalShortcuts(
       const success = globalShortcut.register(accelerator, () => {
         console.info(`Global shortcut "${ key }" (${ accelerator }) triggered`)
         handler(...regExpResult!)
-          .then()
+          .then(result => {
+            if (!result) return
+
+            const failReasons = result
+              .map(promiseResult => promiseResult.status === 'rejected' ? promiseResult.reason : undefined)
+              .filter(reason => reason)
+
+            if (failReasons.length) {
+              console.error(`Error during execution of global shortcut handler: "${ key }" (${ accelerator }). Errors: ${ failReasons.join('; ') }`)
+            }
+          })
+          .catch(error => {
+            console.error(`Failed to execute global shortcut handler: "${ key }" (${ accelerator }). ${ (error as Error).message }`)
+          })
       })
 
       if (!success) {

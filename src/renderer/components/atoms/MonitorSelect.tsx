@@ -25,7 +25,7 @@ export default function MonitorSelect({
   const { monitors } = useMonitors()
 
   return (
-    <FormControl size={ size } fullWidth sx={ sx }>
+    <FormControl size={ size } disabled={ monitors === undefined || disabled } fullWidth sx={ sx }>
       <InputLabel>{ label }</InputLabel>
 
       <Select
@@ -34,7 +34,6 @@ export default function MonitorSelect({
           const monitor = monitors?.find(monitor => monitor.info.displayId === event.target.value)
           if (monitor) onChange?.(monitor)
         } }
-        disabled={ disabled }
         label={ label }
       >
         { monitors?.map(monitor => (

@@ -1,0 +1,15 @@
+.screen:hover {
+    cursor: pointer;
+    border: 2px solid red;
+}
+
+.screen:active {
+    transform: scale(0.99);
+    transition-duration: 100ms;
+    transition-timing-function: linear;
+}
+
+.screen.selected {
+    background-color: lightgray;
+    border: 2px solid red;
+}

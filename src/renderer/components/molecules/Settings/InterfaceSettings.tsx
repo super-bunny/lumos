@@ -1,21 +1,13 @@
-import React, { useMemo } from 'react'
+import React, { Suspense, useMemo } from 'react'
 import SettingsType, { Themes } from '../../../../types/Settings'
-import {
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  Switch,
-  SxProps,
-} from '@mui/material'
+import { Collapse, Divider, FormControl, Grid, MenuItem, Select, Stack, Switch, SxProps } from '@mui/material'
 import { useAppDispatch } from '../../../store/store'
 import { setTheme } from '../../../store/slices/themeSlice'
 import getThemeLabel from '../../../../shared/utils/labelGetters/getThemeLabel'
 import SettingItem from '../SettingItem'
+import OverlayScreenConfig from '../OverlayScreenConfig'
+import BetaTag from '../../atoms/BetaTag'
+import Loader from '../../atoms/Loader'
 
 export interface Props {
   settings: SettingsType
@@ -62,12 +54,44 @@ export default function InterfaceSettings({ settings, onChange, sx }: Props) {
               <Switch
                 checked={ settings.enableAnimations }
                 onChange={ (event) =>
-                  onChange?.({ ...settings, enableAnimations: event.target.checked } as SettingsType)
+                  onChange?.({ ...settings, enableAnimations: event.target.checked })
                 }
                 id={ 'enable-animations' }
               />
             }
           />
+
+          <Stack spacing={ 2 }>
+            <SettingItem
+              label={ <span>Enable overlay <BetaTag/></span> }
+              description={
+                <span>
+              Display an overlay on monitor brightness change from global shortcut trigger.
+              <br/>
+              This settings need an application restart to apply.
+            </span>
+              }
+              labelFor={ 'enable-overlay' }
+              action={
+                <Switch
+                  checked={ settings.overlay.enable }
+                  onChange={ (event) =>
+                    onChange?.({
+                      ...settings,
+                      overlay: { ...settings.overlay, enable: event.target.checked },
+                    })
+                  }
+                  id={ 'enable-overlay' }
+                />
+              }
+            />
+
+            <Collapse in={ settings.overlay.enable }>
+              <Suspense fallback={ <Loader/> }>
+                <OverlayScreenConfig/>
+              </Suspense>
+            </Collapse>
+          </Stack>
         </Stack>
       </Grid>
     </Grid>

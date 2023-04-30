@@ -1,4 +1,4 @@
-import { app, globalShortcut, ipcMain, screen } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain, screen } from 'electron'
 import GenericDisplayManager from './classes/GenericDisplayManager'
 import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
@@ -6,6 +6,7 @@ import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import setupAutoStartup from './utils/setupAutoStartup'
 import { GetVcpValueOptions } from '../shared/classes/GenericDisplay'
 import autoShutdownMonitors from './utils/autoShutdownMonitors'
+import OverlayWindowManager from './classes/OverlayWindowManager'
 
 export interface SetupIpcArgs {
   displayManager: GenericDisplayManager
@@ -72,6 +73,29 @@ export default function setupIpc({
   })
   ipcMain.handle(IpcEvents.UNREGISTER_ALL_SHORTCUTS, () => {
     globalShortcut.unregisterAll()
+  })
+  ipcMain.handle(IpcEvents.SET_WINDOWS_VISIBILITY, (event, show: boolean) => {
+    const webContents = event.sender
+    const browserWindow = BrowserWindow.fromWebContents(webContents)
+    if (browserWindow) {
+      show ? browserWindow.show() : browserWindow.hide()
+    } else {
+      console.error('IpcEvents SET_WINDOWS_VISIBILITY. Could not find browser window for webContents', webContents)
+    }
+  })
+  ipcMain.handle(IpcEvents.SET_OVERLAY_WINDOWS_VISIBILITY, (event, show: boolean) => {
+    const webContents = event.sender
+    const browserWindow = BrowserWindow.fromWebContents(webContents)
+    if (browserWindow) {
+      if (show) {
+        browserWindow.show()
+        OverlayWindowManager.setWindowAlwaysOnTop(browserWindow)
+      } else {
+        browserWindow.hide()
+      }
+    } else {
+      console.error('IpcEvents SET_OVERLAY_WINDOWS_VISIBILITY. Could not find browser window for webContents', webContents)
+    }
   })
   ipcMain.handle(IpcEvents.FORCE_TRIGGER_AUTO_MONITORS_POWER_OFF, () => {
     return autoShutdownMonitors(settingsStore, displayManager)

@@ -21,6 +21,10 @@ export const defaultSettings: Required<Settings> = {
   monitorAliases: {},
   ignoreWinApi: false,
   concurrentDdcRequest: true,
+  overlay: {
+    enable: false,
+    electronDisplayBindings: {},
+  },
 }
 
 export default class SettingsStore extends Conf<Settings> {

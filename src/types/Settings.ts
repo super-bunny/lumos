@@ -27,4 +27,10 @@ export default interface Settings {
   ignoreWinApi?: boolean
   concurrentDdcRequest?: boolean
   monitorAliases?: Record<string, string | null>
+  overlay: {
+    enable: boolean
+    // Bind a DDC display to an Electron display. Format: { "ddcDisplayId": "electronDisplayId" }.
+    // Use undefined or null value to disable.
+    electronDisplayBindings: Record<string, string | null>
+  }
 }

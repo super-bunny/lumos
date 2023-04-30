@@ -9,6 +9,6 @@ export interface IpcDisplayUpdateArgs {
   vcpValue?: VCPValue
 }
 
-export function sendIpcDisplayUpdate(browserWindow: BrowserWindow, args: IpcDisplayUpdateArgs) {
-  browserWindow.webContents.send(IpcEvents.DISPLAY_UPDATE, args)
+export function sendIpcDisplayUpdate(browserWindows: Array<BrowserWindow>, args: IpcDisplayUpdateArgs) {
+  browserWindows.forEach(browserWindow => browserWindow.webContents.send(IpcEvents.DISPLAY_UPDATE, args))
 }

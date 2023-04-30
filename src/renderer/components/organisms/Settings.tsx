@@ -13,6 +13,7 @@ import AdvancedSettings from '../molecules/Settings/AdvancedSettings'
 import PrivacySettings from '../molecules/Settings/PrivacySettings'
 import Debug from '../molecules/Settings/Debug'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import shallowCompareObjects from '../../../shared/utils/shallowCompareObjects'
 
 export interface Props {
   sx?: SxProps
@@ -33,6 +34,8 @@ function checkIfRestartNeeded(settings: SettingsType) {
   else if (window.lumos.initSettings.enableErrorReporting !== settings.enableErrorReporting) return true
   else if (window.lumos.initSettings.concurrentDdcRequest !== settings.concurrentDdcRequest) return true
   else if (window.lumos.initSettings.httpApi?.enableAuthentification !== settings.httpApi?.enableAuthentification) return true
+  else if (window.lumos.initSettings.overlay.enable !== settings.overlay.enable) return true
+  else if (!shallowCompareObjects(window.lumos.initSettings.overlay.electronDisplayBindings, settings.overlay.electronDisplayBindings)) return true
 
   return false
 }

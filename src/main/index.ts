@@ -17,13 +17,16 @@ import ElectronShutdownHandler from '@super-bunny/electron-shutdown-handler'
 import autoShutdownMonitors from './utils/autoShutdownMonitors'
 import AsyncQueue from '../shared/classes/AsyncQueue'
 import { mockDisplays } from './utils/mockDisplays'
+import OverlayWindowManager from './classes/OverlayWindowManager'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
+const isDevelopment = process.env.NODE_ENV === 'development'
 const singleInstanceLock = app.requestSingleInstanceLock()
 const displayManager = new GenericDisplayManager(new DdcBackendClient())
 let mainWindow: BrowserWindow | undefined
+let overlayWindowManager: OverlayWindowManager | undefined
 let settings: SettingsStore | undefined
 // Use to handle window hiding/showing without prevent app from quit by closing all windows
 let shouldQuit: boolean = false
@@ -49,8 +52,8 @@ function createMainWindow(): BrowserWindow {
     .then()
 
   // Open the DevTools in development.
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.webContents.openDevTools()
+  if (isDevelopment) {
+    mainWindow.webContents.openDevTools({ mode: 'right' })
   }
 
   mainWindow.on('close', (event) => {
@@ -188,11 +191,13 @@ export default function main() {
       displayManager,
       sessionJwt,
       httpApiPort,
-      onRegisterGlobalShortcuts: () => registerGlobalShortcuts(settings!.store.globalShortcuts, displayManager, mainWindow),
+      onRegisterGlobalShortcuts: () => registerGlobalShortcuts(settings!.store.globalShortcuts, displayManager, mainWindow!, overlayWindowManager!),
       onOpenDevTools: () => mainWindow?.webContents.openDevTools(),
     })
     mainWindow = createMainWindow()
-    registerGlobalShortcuts(settings.store.globalShortcuts, displayManager, mainWindow)
+    overlayWindowManager = new OverlayWindowManager(settings.store.overlay)
+    overlayWindowManager.init()
+    registerGlobalShortcuts(settings.store.globalShortcuts, displayManager, mainWindow, overlayWindowManager)
 
     // App tray
     try {

@@ -13,9 +13,11 @@ const env = {
   MOCK_DISPLAYS: process.env.MOCK_DISPLAYS,
   NODE_ENV: process.env.NODE_ENV,
   ROUTER_INITIAL_ENTRY: process.env.ROUTER_INITIAL_ENTRY,
+  PROD_OVERLAY: process.env.PROD_OVERLAY,
+  FORCE_SHOW_OVERLAY: process.env.FORCE_SHOW_OVERLAY,
 }
 const sentryEnabled = envVarAllowSentry()
-const validListenableIpcChannels = [IpcEvents.PING, IpcEvents.DISPLAY_UPDATE]
+const validListenableIpcChannels = [IpcEvents.PING, IpcEvents.DISPLAY_UPDATE, IpcEvents.SET_OVERLAY_INFO]
 
 export const LumosApi = {
   display: {
@@ -68,6 +70,8 @@ export const LumosApi = {
   forceTriggerAutoMonitorsPowerOff: () => ipcRenderer.invoke(IpcEvents.FORCE_TRIGGER_AUTO_MONITORS_POWER_OFF),
   openDevTools: () => ipcRenderer.invoke(IpcEvents.OPEN_DEV_TOOLS),
   getElectronDisplays: (): Promise<Array<Electron.Display>> => ipcRenderer.invoke(IpcEvents.GET_ELECTRON_DISPLAYS),
+  setWindowVisibility: (show: boolean): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_WINDOWS_VISIBILITY, show),
+  setOverlayWindowVisibility: (show: boolean): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_OVERLAY_WINDOWS_VISIBILITY, show),
   ipcRenderer,
 }
 

@@ -1,13 +1,20 @@
-import useSwr from 'swr'
+import useSwr, { SWRConfiguration } from 'swr'
 import { useCallback } from 'react'
 import Settings from '../../types/Settings'
 
 const KEY = 'settings'
 
-export default function useSettingsStore() {
+export interface Options {
+  swrConfig?: SWRConfiguration
+}
+
+export default function useSettingsStore(options?: Options) {
+  const { swrConfig } = options ?? {}
+
   const { data, mutate, ...rest } = useSwr(KEY, () => window.lumos.store.getSettings(), {
     revalidateOnReconnect: false,
     revalidateOnFocus: false,
+    ...swrConfig,
   })
 
   const updateSettings = useCallback(async (partialSettings: Partial<Settings>) => {
