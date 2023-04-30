@@ -49,7 +49,7 @@ export default function VcpDevTool() {
   return (
     <Stack spacing={ 0 }>
       <div style={ { width: 400 } }>
-        <MonitorSelect monitor={ monitor } onChange={ setMonitor } size={ 'small' }/>
+        <MonitorSelect monitorId={ monitor?.info.displayId } onChange={ setMonitor } size={ 'small' }/>
       </div>
 
       <Stack mt={ 2 } direction={ 'row' } alignItems={ 'center' } spacing={ 1 }>

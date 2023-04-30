@@ -6,7 +6,7 @@ import useMonitors from '../../hooks/useMonitors'
 export interface Props {
   label?: string
   helperText?: string
-  monitor?: GenericDisplay
+  monitorId?: string
   onChange?: (monitor: GenericDisplay) => void
   disabled?: boolean
   size?: FormControlProps['size']
@@ -16,7 +16,7 @@ export interface Props {
 export default function MonitorSelect({
   label = 'Monitor',
   helperText,
-  monitor,
+  monitorId,
   onChange,
   disabled,
   size,
@@ -29,7 +29,7 @@ export default function MonitorSelect({
       <InputLabel>{ label }</InputLabel>
 
       <Select
-        value={ monitor?.info.displayId ?? '' }
+        value={ monitorId ?? '' }
         onChange={ (event) => {
           const monitor = monitors?.find(monitor => monitor.info.displayId === event.target.value)
           if (monitor) onChange?.(monitor)
