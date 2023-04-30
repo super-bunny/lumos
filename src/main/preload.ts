@@ -12,6 +12,7 @@ const settings = new SettingsStore()
 const env = {
   MOCK_DISPLAYS: process.env.MOCK_DISPLAYS,
   NODE_ENV: process.env.NODE_ENV,
+  ROUTER_INITIAL_ENTRY: process.env.ROUTER_INITIAL_ENTRY,
 }
 const sentryEnabled = envVarAllowSentry()
 const validListenableIpcChannels = [IpcEvents.PING, IpcEvents.DISPLAY_UPDATE]

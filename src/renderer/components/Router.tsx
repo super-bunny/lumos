@@ -5,8 +5,10 @@ import App from '../app'
 import SettingsPage from './pages/SettingsPage'
 
 export default function Router() {
+  const initialEntry = window.lumos.env.ROUTER_INITIAL_ENTRY
+
   return (
-    <MemoryRouter>
+    <MemoryRouter initialEntries={ initialEntry ? [initialEntry] : undefined }>
       <Routes>
         <Route path="/" element={ <App/> }>
           <Route path={ '/settings/*' } element={ <SettingsPage/> }/>
