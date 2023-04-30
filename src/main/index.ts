@@ -147,6 +147,7 @@ export default function main() {
     if (!settings) return
 
     displayManager.client = new DdcBackendClient(settings.store.concurrentDdcRequest ? undefined : new AsyncQueue())
+    displayManager.refresh().then()
 
     if (settings.store.enableErrorReporting) {
       console.info('Error reporting with Sentry is enabled')
