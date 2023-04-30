@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Collapse, Grid, Link, Stack, styled, SxProps, Tab, Tabs } from '@mui/material'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { TabContext, TabPanel } from '@mui/lab'
 import SettingsType from '../../../types/Settings'
 import Center from '../atoms/Center'
@@ -12,22 +12,23 @@ import GlobalShortcutsSettings from '../molecules/Settings/GlobalShortcutsSettin
 import AdvancedSettings from '../molecules/Settings/AdvancedSettings'
 import PrivacySettings from '../molecules/Settings/PrivacySettings'
 import Debug from '../molecules/Settings/Debug'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 
 export interface Props {
   sx?: SxProps
 }
 
 enum SETTINGS_TABS {
-  APPLICATION = 'application',
-  INTERFACE = 'interface',
-  PRIVACY = 'privacy',
-  GLOBAL_SHORTCUT = 'global_shortcut',
-  EXPERIMENTAL = 'experimental',
-  ADVANCED = 'advanced',
-  DEBUG = 'debug',
+  APPLICATION = '/settings/application',
+  INTERFACE = '/settings/interface',
+  PRIVACY = '/settings/privacy',
+  GLOBAL_SHORTCUT = '/settings/global_shortcut',
+  EXPERIMENTAL = '/settings/experimental',
+  ADVANCED = '/settings/advanced',
+  DEBUG = '/settings/debug',
 }
 
-function checkIfNeedRestart(settings: SettingsType) {
+function checkIfRestartNeeded(settings: SettingsType) {
   if (window.lumos.initSettings.enableHttpApi !== settings.enableHttpApi) return true
   else if (window.lumos.initSettings.enableErrorReporting !== settings.enableErrorReporting) return true
   else if (window.lumos.initSettings.concurrentDdcRequest !== settings.concurrentDdcRequest) return true
@@ -44,9 +45,12 @@ export default function Settings({ sx }: Props) {
   const { settingsStore, isLoading, updateSettings } = useSettingsStore()
   const { settings, path } = settingsStore ?? {}
 
-  const [tabIndex, setTabIndex] = useState<SETTINGS_TABS>(SETTINGS_TABS.APPLICATION)
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const needRestart = useMemo(() => settings ? checkIfNeedRestart(settings) : false, [settings])
+  const needRestart = useMemo(() => settings ? checkIfRestartNeeded(settings) : false, [settings])
+
+  if (location.pathname === '/settings') return <Navigate to={ SETTINGS_TABS.APPLICATION } replace/>
 
   if (isLoading) {
     return (
@@ -82,12 +86,12 @@ export default function Settings({ sx }: Props) {
       </Stack>
 
       <Box display={ 'flex' } overflow={ 'hidden' }>
-        <TabContext value={ tabIndex }>
+        <TabContext value={ location.pathname }>
           <Tabs
             orientation="vertical"
             variant="scrollable"
-            value={ tabIndex }
-            onChange={ (event, value) => setTabIndex(value) }
+            value={ location.pathname }
+            onChange={ (event, value) => navigate(value) }
             sx={ { borderRight: 1, borderColor: 'divider', flexShrink: 0 } }
           >
             <Tab label="Application" value={ SETTINGS_TABS.APPLICATION }/>

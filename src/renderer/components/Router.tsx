@@ -9,7 +9,7 @@ export default function Router() {
     <MemoryRouter>
       <Routes>
         <Route path="/" element={ <App/> }>
-          <Route path={ '/settings' } element={ <SettingsPage/> }/>
+          <Route path={ '/settings/*' } element={ <SettingsPage/> }/>
           <Route index element={ <MonitorListPage/> }/>
         </Route>
       </Routes>
