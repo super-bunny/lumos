@@ -102,10 +102,13 @@ export default class GenericDisplay {
     return Math.round(currentValue * 100 / maximumValue)
   }
 
-  async setBrightnessPercentage(value: number): Promise<void> {
-    const { maximumValue } = await this.getVcpLuminance(true)
+  async setBrightnessPercentage(value: number): Promise<Continuous> {
+    const { type, maximumValue } = await this.getVcpLuminance(true)
+    const brightnessValue = Math.round(value * maximumValue / 100)
 
-    return this.setVcpValue(VCPFeatures.ImageAdjustment.Luminance, Math.round(value * maximumValue / 100))
+    await this.setVcpValue(VCPFeatures.ImageAdjustment.Luminance, brightnessValue)
+
+    return { type, maximumValue, currentValue: brightnessValue }
   }
 
   async getPowerMode(): Promise<PowerMode> {
