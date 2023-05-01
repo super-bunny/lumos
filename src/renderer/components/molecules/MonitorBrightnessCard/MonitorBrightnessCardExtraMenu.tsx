@@ -1,17 +1,7 @@
 import React, { CSSProperties, useCallback, useMemo } from 'react'
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks'
 import MoreVert from '@mui/icons-material/MoreVert'
-import {
-  Checkbox,
-  Chip,
-  Divider,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Typography,
-} from '@mui/material'
+import { Checkbox, Divider, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
 import MonitorIcon from '@mui/icons-material/Monitor'
 import { Monitor } from './MonitorBrightnessCard'
 import { useSnackbar } from 'notistack'
@@ -23,6 +13,7 @@ import useSettingsStore from '../../../hooks/useSettingsStore'
 import InfoIcon from '@mui/icons-material/Info'
 import EditIcon from '@mui/icons-material/Edit'
 import MonitorAliasDialog from '../dialogs/MonitorAliasDialog'
+import BetaTag from '../../atoms/BetaTag'
 
 export interface Props {
   monitor: Monitor
@@ -169,12 +160,7 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
             <Checkbox checked={ powerOffOnShutdown ?? false } style={ { padding: 0 } }/>
           </ListItemIcon>
           <ListItemText>Turn off on shutdown</ListItemText>
-          <Chip
-            label={ 'BETA' }
-            color={ 'secondary' }
-            size={ 'small' }
-            sx={ { ml: 1, lineHeight: '1em', fontWeight: 'bold' } }
-          />
+          <BetaTag/>
         </MenuItem>
       </Menu>
     </div>
