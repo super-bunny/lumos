@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.2.0-beta.0](https://github.com/super-bunny/lumos/releases/tag/v0.2.0-beta.0) (2023-05-03)
+
+
+### Features
+
+* add overlay to show brightness change ([8b347ba](https://github.com/super-bunny/lumos/commit/8b347ba337c2a35b9f14f42c3b7a4fc71e99cd6f))
+* auto hide menu bar on app window ([826c192](https://github.com/super-bunny/lumos/commit/826c1924f5a6a60bcbf5f374c2134b6ef18988d0))
+
 ### [0.1.1](https://github.com/super-bunny/lumos/releases/tag/v0.1.1) (2023-04-14)
 
 
