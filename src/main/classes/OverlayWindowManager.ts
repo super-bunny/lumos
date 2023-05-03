@@ -42,9 +42,7 @@ export default class OverlayWindowManager {
   }
 
   static createOverlayWindow(targetDisplay: Electron.Display): BrowserWindow {
-    const isDevelopment = process.env.NODE_ENV === 'development'
-    const prodOverlay = process.env.PROD_OVERLAY === 'true'
-    const devOverlay = isDevelopment && !prodOverlay
+    const devOverlay = process.env.DEV_OVERLAY === 'true'
     const height = devOverlay ? 720 : overlayConstants.overlayHeight
     const width = devOverlay ? 1280 : overlayConstants.overlayWidth
     const x = targetDisplay.bounds.x + targetDisplay.bounds.width * 0.5 - (overlayConstants.overlayWidth / 2)
@@ -75,7 +73,7 @@ export default class OverlayWindowManager {
 
 
     if (process.env.OVERLAY_DEV_TOOLS === 'true') {
-      overlayWindow.webContents.openDevTools({ mode: prodOverlay ? 'undocked' : 'right' })
+      overlayWindow.webContents.openDevTools({ mode: !devOverlay ? 'undocked' : 'right' })
     }
     if (!devOverlay) {
       OverlayWindowManager.setWindowAlwaysOnTop(overlayWindow)
