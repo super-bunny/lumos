@@ -66,7 +66,7 @@ export default function InterfaceSettings({ settings, onChange, sx }: Props) {
               label={ <span>Enable overlay <BetaTag/></span> }
               description={
                 <span>
-              Display an overlay on monitor brightness change from global shortcut trigger.
+              Display an overlay with current monitor brightness level on brightness change from global shortcuts.
               <br/>
               This settings need an application restart to apply.
             </span>
