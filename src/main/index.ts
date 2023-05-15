@@ -101,6 +101,8 @@ export default function main() {
     return
   }
 
+  console.info('App version:', app.getVersion())
+
   if (envVarAllowSentry()) {
     console.info('Sentry is enabled')
     initSentry({
