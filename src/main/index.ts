@@ -18,6 +18,8 @@ import autoShutdownMonitors from './utils/autoShutdownMonitors'
 import AsyncQueue from '../shared/classes/AsyncQueue'
 import { mockDisplays } from './utils/mockDisplays'
 import OverlayWindowManager from './classes/OverlayWindowManager'
+import AutoUpdater from './classes/AutoUpdater'
+import { UpdateChannels } from '../types/Settings'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -31,6 +33,7 @@ let settings: SettingsStore | undefined
 // Use to handle window hiding/showing without prevent app from quit by closing all windows
 let shouldQuit: boolean = false
 let shouldReportError: boolean = false
+let autoUpdater: AutoUpdater | undefined
 
 function createMainWindow(): BrowserWindow {
   // Create the browser window.
@@ -86,6 +89,28 @@ function createMainWindow(): BrowserWindow {
   })
 
   return mainWindow
+}
+
+function initAutoUpdater(settings: SettingsStore): AutoUpdater {
+  const updateChannel = settings.store.updater?.channel
+  const autoUpdater = new AutoUpdater({
+    ignorePreRelease: !updateChannel || updateChannel === UpdateChannels.STABLE,
+    onUpdateDownloaded: (releaseNotes, releaseName, releaseDate, updateURL) => {
+      mainWindow?.webContents.send(IpcEvents.UPDATE_DOWNLOADED)
+    },
+  })
+
+  if (settings.store.updater?.enable !== false) {
+    autoUpdater.init()
+      .then(() => {
+        console.info('Auto updater initialized')
+      })
+      .catch(error => {
+        console.error('Error initializing auto updater:', error)
+      })
+  }
+
+  return autoUpdater
 }
 
 export default function main() {
@@ -149,6 +174,7 @@ export default function main() {
     settings = getSettingsStore()
     if (!settings) return
 
+    // Init display manager
     displayManager.client = new DdcBackendClient(settings.store.concurrentDdcRequest ? undefined : new AsyncQueue())
     displayManager.refresh().then()
 
@@ -210,6 +236,8 @@ export default function main() {
     } catch (e) {
       console.error(e)
     }
+
+    autoUpdater = initAutoUpdater(settings)
   })
 
   app.on('second-instance', () => {
@@ -244,6 +272,7 @@ export default function main() {
 
   app.on('will-quit', () => {
     globalShortcut.unregisterAll()
+    autoUpdater?.updateServer.close()
   })
 
   powerMonitor.on('shutdown', (event: any) => {

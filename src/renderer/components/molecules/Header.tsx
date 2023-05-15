@@ -3,6 +3,7 @@ import { AppBar, IconButton, Stack, Toolbar, Tooltip, Typography } from '@mui/ma
 import HeaderExtraMenu from './HeaderExtraMenu'
 import { Home, Settings } from '@mui/icons-material'
 import { useLocation, useNavigate } from 'react-router-dom'
+import UpdateButton from '../atoms/UpdateButton'
 
 export default function Header() {
   const location = useLocation()
@@ -18,6 +19,8 @@ export default function Header() {
         </Stack>
 
         <Stack direction={ 'row' }>
+          <UpdateButton/>
+
           { location.pathname === '/' && (
             <Tooltip title={ 'Settings' }>
               <IconButton

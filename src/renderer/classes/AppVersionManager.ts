@@ -1,5 +1,6 @@
 import axios from 'axios'
 import semver from 'semver'
+import { UpdateChannels } from '../../types/Settings'
 
 export interface GithubRelease {
   assets: [
@@ -77,11 +78,12 @@ export interface GithubRelease {
 }
 
 export default class AppVersionManager {
-  constructor(public currentVersion: string) {
+  constructor(public currentVersion: string, public channel: UpdateChannels = UpdateChannels.STABLE) {
   }
 
   async getUpdate(): Promise<GithubRelease | null> {
-    const latestRelease = await this.getLatestVersion()
+    const latestRelease = this.channel === UpdateChannels.STABLE
+      ? await this.getLatestStableRelease() : await this.getLatestRelease()
 
     if (semver.lt(this.currentVersion, latestRelease.tag_name)) {
       return latestRelease
@@ -91,18 +93,25 @@ export default class AppVersionManager {
   }
 
   async checkForUpdate(): Promise<boolean> {
-    const latestRelease = await this.getLatestVersion()
+    const latestRelease = this.channel === UpdateChannels.STABLE
+      ? await this.getLatestStableRelease() : await this.getLatestRelease()
 
     return semver.lt(this.currentVersion, latestRelease.tag_name)
   }
 
-  async getLatestVersion(): Promise<GithubRelease> {
-    const response = await axios('https://api.github.com/repos/super-bunny/lumos/releases/latest', {
+  async getLatestStableRelease(): Promise<GithubRelease> {
+    const response = await axios('https://api.github.com/repos/super-bunny/lumos/releases/latest')
+
+    return response.data as GithubRelease
+  }
+
+  async getLatestRelease(): Promise<GithubRelease> {
+    const response = await axios('https://api.github.com/repos/super-bunny/lumos/releases', {
       params: {
         per_page: '1',
       },
     })
 
-    return response.data as GithubRelease
+    return response.data[0] as GithubRelease
   }
 }

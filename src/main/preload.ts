@@ -17,7 +17,12 @@ const env = {
   FORCE_SHOW_OVERLAY: process.env.FORCE_SHOW_OVERLAY,
 }
 const sentryEnabled = envVarAllowSentry()
-const validListenableIpcChannels = [IpcEvents.PING, IpcEvents.DISPLAY_UPDATE, IpcEvents.SET_OVERLAY_INFO]
+const validListenableIpcChannels = [
+  IpcEvents.PING,
+  IpcEvents.DISPLAY_UPDATE,
+  IpcEvents.SET_OVERLAY_INFO,
+  IpcEvents.UPDATE_DOWNLOADED,
+]
 
 export const LumosApi = {
   display: {
@@ -72,6 +77,7 @@ export const LumosApi = {
   getElectronDisplays: (): Promise<Array<Electron.Display>> => ipcRenderer.invoke(IpcEvents.GET_ELECTRON_DISPLAYS),
   setWindowVisibility: (show: boolean): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_WINDOWS_VISIBILITY, show),
   setOverlayWindowVisibility: (show: boolean): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_OVERLAY_WINDOWS_VISIBILITY, show),
+  quitAndInstallUpdate: (): Promise<void> => ipcRenderer.invoke(IpcEvents.QUID_AND_INSTALL_UPDATE),
   ipcRenderer,
   // Node.js process.platform
   platform: process.platform,

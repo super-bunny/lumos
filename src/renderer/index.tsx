@@ -53,3 +53,4 @@ window.lumos.sessionJwt()
   .then(jwt => console.info('Session jwt:', jwt))
 
 window.lumos.ipc.on(IpcEvents.PING, message => console.info('Received ping from main process:', message))
+window.lumos.ipc.on(IpcEvents.UPDATE_DOWNLOADED, () => console.info('[Auto Updater) Update downloaded.'))

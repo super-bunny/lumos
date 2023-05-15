@@ -36,6 +36,8 @@ function checkIfRestartNeeded(settings: SettingsType) {
   else if (window.lumos.initSettings.httpApi?.enableAuthentification !== settings.httpApi?.enableAuthentification) return true
   else if (window.lumos.initSettings.overlay.enable !== settings.overlay.enable) return true
   else if (!shallowCompareObjects(window.lumos.initSettings.overlay.electronDisplayBindings, settings.overlay.electronDisplayBindings)) return true
+  else if (window.lumos.initSettings.updater?.enable !== settings.updater?.enable) return true
+  else if (window.lumos.initSettings.updater?.channel !== settings.updater?.channel) return true
 
   return false
 }

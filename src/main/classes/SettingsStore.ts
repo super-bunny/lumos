@@ -1,5 +1,5 @@
 import Conf from 'conf'
-import Settings, { Themes } from '../../types/Settings'
+import Settings, { Themes, UpdateChannels } from '../../types/Settings'
 import getUserDataPath from '../../shared/utils/getUserDataPath'
 
 export const defaultSettings: Required<Settings> = {
@@ -24,6 +24,10 @@ export const defaultSettings: Required<Settings> = {
   overlay: {
     enable: false,
     electronDisplayBindings: {},
+  },
+  updater: {
+    enable: true,
+    channel: UpdateChannels.STABLE,
   },
 }
 

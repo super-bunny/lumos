@@ -7,18 +7,22 @@ import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Tooltip 
 import packageJson from '../../../../package.json'
 import openInBrowser from '../../utils/openInBrowser'
 import AppVersionManager, { GithubRelease } from '../../classes/AppVersionManager'
+import useSettingsStore from '../../hooks/useSettingsStore'
 
 export default function HeaderExtraMenu() {
+  const { settingsStore } = useSettingsStore()
   const { version } = packageJson
   const popupState = usePopupState({ variant: 'popover', popupId: 'demoMenu' })
   const [newRelease, setNewRelease] = useState<GithubRelease | null>(null)
 
   useEffect(() => {
-    new AppVersionManager(version)
+    if (!settingsStore?.settings) return
+
+    new AppVersionManager(version, settingsStore.settings.updater?.channel)
       .getUpdate()
       .then(update => setNewRelease(update))
       .catch(error => console.error('Can not check for update: ', error))
-  }, [version])
+  }, [settingsStore?.settings, version])
 
   return (
     <div>

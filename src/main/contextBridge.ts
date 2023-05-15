@@ -7,6 +7,7 @@ import setupAutoStartup from './utils/setupAutoStartup'
 import { GetVcpValueOptions } from '../shared/classes/GenericDisplay'
 import autoShutdownMonitors from './utils/autoShutdownMonitors'
 import OverlayWindowManager from './classes/OverlayWindowManager'
+import AutoUpdater from './classes/AutoUpdater'
 
 export interface SetupIpcArgs {
   displayManager: GenericDisplayManager
@@ -108,5 +109,8 @@ export default function setupIpc({
   })
   ipcMain.handle(IpcEvents.GET_ELECTRON_DISPLAYS, () => {
     return screen.getAllDisplays()
+  })
+  ipcMain.handle(IpcEvents.QUID_AND_INSTALL_UPDATE, () => {
+    return AutoUpdater.quitAndInstall()
   })
 }
