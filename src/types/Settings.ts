@@ -1,6 +1,7 @@
 export enum Themes {
-  DEFAULT = 'default',
   MATERIAL_LIGHT = 'materialLight',
+  MATERIAL_DARK = 'materialDark',
+  ORIGIN = 'origin',
 }
 
 export enum GlobalShortcutsStaticActions {

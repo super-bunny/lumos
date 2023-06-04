@@ -72,7 +72,7 @@ export default function BrightnessSlider({}: Props) {
       <Stack direction={ 'row' } alignItems={ 'center' } spacing={ 2 }>
         <BrightnessMediumIcon color={ 'primary' } fontSize={ 'small' }/>
         <Slider value={ brightness } size={ 'small' }/>
-        <Typography variant={ 'body1' } color={ 'body' }>{ brightness }</Typography>
+        <Typography variant={ 'h6' } color={ 'body' }>{ brightness }</Typography>
       </Stack>
     </Stack>
   )

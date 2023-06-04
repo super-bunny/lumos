@@ -1,13 +1,14 @@
 import Conf from 'conf'
-import Settings, { Themes, UpdateChannels } from '../../types/Settings'
+import Settings, { UpdateChannels } from '../../types/Settings'
 import getUserDataPath from '../../shared/utils/getUserDataPath'
+import constants from '../../shared/utils/contants'
 
 export const defaultSettings: Required<Settings> = {
   runAppOnStartup: false,
   minimizeAppOnStartup: false,
   minimizeAppOnWindowClose: true,
   developerMode: false,
-  theme: Themes.DEFAULT,
+  theme: constants.defaultTheme,
   enableAnimations: true,
   enableErrorReporting: true,
   enableHttpApi: false,

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import PageTemplate from './components/templates/PageTemplate'
-import { Themes } from '../types/Settings'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import themeConfigs from './themeConfigs'
 import { useAppSelector } from './store/store'
@@ -8,6 +7,7 @@ import { ConfirmProvider } from 'material-ui-confirm'
 import { SnackbarProvider } from 'notistack'
 import UpdaterContext, { UpdaterContextState } from './context/UpdaterContext'
 import { IpcEvents } from '../types/Ipc'
+import constants from '../shared/utils/contants'
 
 export default function App() {
   const themeContext = useAppSelector(state => state.theme)
@@ -22,7 +22,7 @@ export default function App() {
 
   return (
     <UpdaterContext.Provider value={ updaterState }>
-      <ThemeProvider theme={ themeConfigs[themeContext] ?? themeConfigs[Themes.DEFAULT] }>
+      <ThemeProvider theme={ themeConfigs[themeContext] ?? themeConfigs[constants.defaultTheme] }>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */ }
         <CssBaseline/>
         <SnackbarProvider>

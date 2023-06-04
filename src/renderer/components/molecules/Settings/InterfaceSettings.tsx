@@ -8,6 +8,7 @@ import SettingItem from '../SettingItem'
 import OverlayScreenConfig from '../OverlayScreenConfig'
 import BetaTag from '../../atoms/BetaTag'
 import Loader from '../../atoms/Loader'
+import constants from '../../../../shared/utils/contants'
 
 export interface Props {
   settings: SettingsType
@@ -21,7 +22,7 @@ export default function InterfaceSettings({ settings, onChange, sx }: Props) {
   const currentTheme = useMemo(() => {
     const themes = Object.values(Themes)
     if (settings.theme && themes.includes(settings.theme)) return settings.theme
-    return Themes.DEFAULT
+    return constants.defaultTheme
   }, [settings.theme])
 
   return (

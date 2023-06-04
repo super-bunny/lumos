@@ -20,7 +20,8 @@ export interface Props {
 
 const BRIGHTNESS_STEP = 10
 
-const StyledInput = styled(Input)({
+const StyledInput = styled(Input)(({ theme }) => ({
+  fontFamily: theme.typography.fontFamily,
   '& > input': {
     height: '1.2em',
     marginRight: '-20px',
@@ -29,7 +30,7 @@ const StyledInput = styled(Input)({
   '&:before': {
     display: 'none',
   },
-})
+}))
 
 export default function MonitorBrightnessCard({ monitor }: Props) {
   const { enqueueSnackbar } = useSnackbar()
