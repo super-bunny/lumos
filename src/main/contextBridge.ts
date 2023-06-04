@@ -51,7 +51,10 @@ export default function setupIpc({
   })
   ipcMain.handle(IpcEvents.SET_SETTINGS, (event, settings: SettingsType) => {
     settingsStore.set(settings)
-    setupAutoStartup(settings.runAppOnStartup ?? defaultSettings.runAppOnStartup)
+
+    if (settingsStore.store.runAppOnStartup !== settings.runAppOnStartup) {
+      setupAutoStartup(settings.runAppOnStartup ?? defaultSettings.runAppOnStartup)
+    }
   })
 
   ipcMain.handle(IpcEvents.GET_NODE_ENV, () => ({

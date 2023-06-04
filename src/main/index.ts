@@ -37,7 +37,7 @@ function createMainWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
     height: 720,
     width: 1280,
-    show: !settings?.store.minimizeAppOnStartup,
+    show: !(app.commandLine.hasSwitch('hidden') && settings?.store.minimizeAppOnStartup),
     autoHideMenuBar: true,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
