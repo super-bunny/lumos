@@ -73,6 +73,8 @@ export const LumosApi = {
   setWindowVisibility: (show: boolean): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_WINDOWS_VISIBILITY, show),
   setOverlayWindowVisibility: (show: boolean): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_OVERLAY_WINDOWS_VISIBILITY, show),
   ipcRenderer,
+  // Node.js process.platform
+  platform: process.platform,
 }
 
 contextBridge.exposeInMainWorld('lumos', LumosApi)
