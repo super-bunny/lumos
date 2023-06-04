@@ -67,7 +67,7 @@ export default function Settings({ sx }: Props) {
     <Stack gap={ 4 } sx={ sx }>
       <Stack gap={ 1 }>
         <Grid item xs={ 12 }>
-          <Collapse in={ settings.developerMode }>
+          <Collapse in={ settings?.developerMode }>
             <Alert severity="info">
               <span>Settings are saved in </span>
               <Link
