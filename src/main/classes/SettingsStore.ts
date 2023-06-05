@@ -25,6 +25,7 @@ export const defaultSettings: Required<Settings> = {
   overlay: {
     enable: false,
     electronDisplayBindings: {},
+    showDisplayId: false,
   },
   updater: {
     enable: true,

@@ -41,6 +41,7 @@ export default interface Settings {
     // Bind a DDC display to an Electron display. Format: { "ddcDisplayId": "electronDisplayId" }.
     // Use undefined or null value to disable.
     electronDisplayBindings: Record<string, string | null>
+    showDisplayId?: boolean
   }
   updater?: {
     enable?: boolean

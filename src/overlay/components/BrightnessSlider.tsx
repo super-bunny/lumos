@@ -17,6 +17,8 @@ export default function BrightnessSlider({}: Props) {
   const [brightness, setBrightness] = useState<number>(0)
   const [hideTimeoutId, setHideTimeoutId] = useState<number>()
 
+  const { showDisplayId = false } = window.lumos.initSettings.overlay
+
   useEffect(() => {
     const listener = window.lumos.ipc.on(IpcEvents.DISPLAY_UPDATE, ({
       displayId: eventDisplayId,
@@ -55,18 +57,20 @@ export default function BrightnessSlider({}: Props) {
   return (
     <Stack alignItems={ 'stretch' } justifyContent={ 'center' } style={ { height: '100%', position: 'relative' } }>
       <div style={ { width: '100%', position: 'absolute', top: 0 } }>
-        <Typography
-          mx={ 'auto' }
-          width={ 0.5 }
-          variant={ 'body2' }
-          fontSize={ 'small' }
-          lineHeight={ 'normal' }
-          component={ 'div' }
-          textAlign={ 'center' }
-          color={ 'textSecondary' }
-          style={ { overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' } }
-        >{ displayId }
-        </Typography>
+        { showDisplayId && (
+          <Typography
+            mx={ 'auto' }
+            width={ 0.5 }
+            variant={ 'body2' }
+            fontSize={ 'small' }
+            lineHeight={ 'normal' }
+            component={ 'div' }
+            textAlign={ 'center' }
+            color={ 'textSecondary' }
+            style={ { overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' } }
+          >{ displayId }
+          </Typography>
+        ) }
       </div>
 
       <Stack direction={ 'row' } alignItems={ 'center' } spacing={ 2 }>
