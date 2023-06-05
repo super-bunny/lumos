@@ -176,7 +176,9 @@ export default function main() {
 
     // Init display manager
     displayManager.client = new DdcBackendClient(settings.store.concurrentDdcRequest ? undefined : new AsyncQueue())
-    displayManager.refresh().then()
+    displayManager.refresh().then(() => {
+      if (settings?.store.monitorAliases) displayManager.setMonitorAliases(settings.store.monitorAliases)
+    })
 
     if (settings.store.enableErrorReporting) {
       console.info('Error reporting with Sentry is enabled')

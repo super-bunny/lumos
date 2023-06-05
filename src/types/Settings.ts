@@ -15,6 +15,8 @@ export enum UpdateChannels {
   ALPHA = 'alpha',
 }
 
+export type MonitorAliases = Record<string, string | null>
+
 export default interface Settings {
   runAppOnStartup?: boolean
   minimizeAppOnStartup?: boolean
@@ -33,7 +35,7 @@ export default interface Settings {
   powerOffMonitorOnShutdown?: Record<string, boolean>
   ignoreWinApi?: boolean
   concurrentDdcRequest?: boolean
-  monitorAliases?: Record<string, string | null>
+  monitorAliases?: MonitorAliases
   overlay: {
     enable: boolean
     // Bind a DDC display to an Electron display. Format: { "ddcDisplayId": "electronDisplayId" }.

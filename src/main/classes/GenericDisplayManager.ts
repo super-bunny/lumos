@@ -1,5 +1,6 @@
 import GenericDisplay from '../../shared/classes/GenericDisplay'
 import BackendClient from '../../shared/classes/BackendClient'
+import { MonitorAliases } from '../../types/Settings'
 
 export default class GenericDisplayManager {
   constructor(public client: BackendClient, public list: Array<GenericDisplay> = []) {
@@ -17,6 +18,10 @@ export default class GenericDisplayManager {
     }
 
     return display
+  }
+
+  setMonitorAliases(aliases: MonitorAliases): void {
+    this.list.forEach(display => display.alias = aliases[display.info.displayId] ?? null)
   }
 
   async refresh(): Promise<void> {
