@@ -2,14 +2,19 @@ import Settings from '../../types/Settings'
 import { BrowserWindow, screen } from 'electron'
 import overlayConstants from '../../overlay/constants'
 import { IpcEvents } from '../../types/Ipc'
+import OverlayState from '../../types/OverlayState'
 
 declare const OVERLAY_WINDOW_WEBPACK_ENTRY: string
 declare const OVERLAY_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
 export default class OverlayWindowManager {
-  browserWindows: Array<BrowserWindow> = []
+  overlays: Array<{ browserWindow: BrowserWindow, displayId: string | null }> = []
 
   constructor(public settings: Settings['overlay']) {
+  }
+
+  get browserWindows() {
+    return this.overlays.map(window => window.browserWindow)
   }
 
   init() {
@@ -20,7 +25,7 @@ export default class OverlayWindowManager {
     const electronDisplays = screen.getAllDisplays()
 
     for (const [electronDisplayId, displayId] of Object.entries(this.settings.electronDisplayBindings)) {
-      if (!electronDisplayId) continue
+      if (!displayId) continue
 
       const electronDisplay = electronDisplays.find(display => display.id.toString() === electronDisplayId)
 
@@ -29,16 +34,26 @@ export default class OverlayWindowManager {
       const overlayWindow = OverlayWindowManager.createOverlayWindow(electronDisplay)
 
       overlayWindow.webContents.on('did-finish-load', () => {
-        overlayWindow.webContents.send(IpcEvents.SET_OVERLAY_INFO, { displayId })
+        OverlayWindowManager.sendOverlayState(overlayWindow, { displayId })
       })
 
-      this.browserWindows.push(overlayWindow)
+      this.overlays.push({ browserWindow: overlayWindow, displayId })
     }
+
+    console.debug(`[OverlayWindowManager] ${ this.overlays.length } overlay windows created`)
   }
 
   clear() {
-    this.browserWindows.forEach(overlayWindow => overlayWindow.close())
-    this.browserWindows = []
+    this.overlays.forEach(overlayWindow => overlayWindow.browserWindow.close())
+    this.overlays = []
+  }
+
+  getWindowByDisplayId(displayId: string | null): BrowserWindow | undefined {
+    return this.overlays.find(overlayWindow => overlayWindow.displayId === displayId)?.browserWindow
+  }
+
+  static sendOverlayState(window: BrowserWindow, state: OverlayState) {
+    window.webContents.send(IpcEvents.SET_OVERLAY_INFO, state)
   }
 
   static createOverlayWindow(targetDisplay: Electron.Display): BrowserWindow {

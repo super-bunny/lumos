@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import OverlayState from '../../../types/OverlayState'
 
-type State = { displayId: string } | null
+type State = OverlayState | null
 
 const overlayInfoSlice = createSlice({
   name: 'displayId',
