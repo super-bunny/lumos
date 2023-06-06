@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.2.0-beta.1](https://github.com/super-bunny/lumos/releases/tag/v0.2.0-beta.1) (2023-06-06)
+
+
+### Features
+
+* add material dark theme and set light theme as default ([6d95558](https://github.com/super-bunny/lumos/commit/6d955580201a120ba57a9d660e75ff9902438966))
+* add auto updater ([be6a9dc](https://github.com/super-bunny/lumos/commit/be6a9dc7b284e76aade654aad5199d033f4616b1))
+
+
+### Bug Fixes
+
+* **overlay:** prevent out of range brightness values in overlay ([02c8e67](https://github.com/super-bunny/lumos/commit/02c8e67c8931352afc25641a47e48e991fed4ebe))
+* fix bad behavior of app minimizing on startup ([31f81f4](https://github.com/super-bunny/lumos/commit/31f81f49369ba8dea3cfb6a54777df3f3885b412))
+* remove duplicate display list refresh on startup ([aadc66e](https://github.com/super-bunny/lumos/commit/aadc66eb3fc1cf7b31b3785da1b703ff89bfccda))
+
+
+### Dependencies
+
+* update swr npm packages ([f3ef211](https://github.com/super-bunny/lumos/commit/f3ef211d3071cc6d3967b583cf2a1f1f0ad5ee58))
+
 ## [0.2.0-beta.0](https://github.com/super-bunny/lumos/releases/tag/v0.2.0-beta.0) (2023-05-03)
 
 
