@@ -31,7 +31,7 @@ export default function BrightnessSlider({}: Props) {
         eventDisplayId !== displayId
         || vcpFeature !== VCPFeatures.ImageAdjustment.Luminance
         || vcpValue?.type !== VcpValueType.Continuous
-        || !vcpValue
+        || vcpValue === undefined
       ) return
 
       window.lumos.setWindowVisibility(true)

@@ -104,7 +104,8 @@ export default class GenericDisplay {
 
   async setBrightnessPercentage(value: number): Promise<Continuous> {
     const { type, maximumValue } = await this.getVcpLuminance(true)
-    const brightnessValue = Math.round(value * maximumValue / 100)
+    const rangedValue = Math.min(Math.max(value, 0), 100)
+    const brightnessValue = Math.round(rangedValue * maximumValue / 100)
 
     await this.setVcpValue(VCPFeatures.ImageAdjustment.Luminance, brightnessValue)
 
