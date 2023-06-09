@@ -56,6 +56,14 @@ export default function setupIpc({
     if (settingsStore.store.runAppOnStartup !== settings.runAppOnStartup) {
       setupAutoStartup(settings.runAppOnStartup ?? defaultSettings.runAppOnStartup)
     }
+
+    // Send settings update to all windows except the sender
+    const senderBrowserWindow = BrowserWindow.fromWebContents(event.sender)
+    BrowserWindow.getAllWindows()
+      .filter(window => window.id !== senderBrowserWindow?.id)
+      .forEach(window => {
+        window.webContents.send(IpcEvents.SETTINGS_UPDATE)
+      })
   })
 
   ipcMain.handle(IpcEvents.GET_NODE_ENV, () => ({

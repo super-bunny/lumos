@@ -20,6 +20,7 @@ const sentryEnabled = envVarAllowSentry()
 const validListenableIpcChannels = [
   IpcEvents.PING,
   IpcEvents.DISPLAY_UPDATE,
+  IpcEvents.SETTINGS_UPDATE,
   IpcEvents.SET_OVERLAY_INFO,
   IpcEvents.UPDATE_DOWNLOADED,
 ]

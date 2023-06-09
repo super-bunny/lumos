@@ -1,12 +1,18 @@
-import useSwr, { SWRConfiguration } from 'swr'
+import useSwr, { mutate, SWRConfiguration } from 'swr'
 import { useCallback } from 'react'
 import Settings from '../../types/Settings'
+import { IpcEvents } from '../../types/Ipc'
 
 const KEY = 'settings'
 
 export interface Options {
   swrConfig?: SWRConfiguration
 }
+
+window.lumos.ipc.on(IpcEvents.SETTINGS_UPDATE, () => {
+  console.debug('[useSettingsStore] Received settings update')
+  mutate(KEY).then()
+})
 
 export default function useSettingsStore(options?: Options) {
   const { swrConfig } = options ?? {}
