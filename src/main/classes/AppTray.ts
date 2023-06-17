@@ -4,6 +4,7 @@ import * as path from 'path'
 
 export interface Config {
   onAppOpen?: () => void
+  onAppRestart?: () => void
 }
 
 export default class AppTray {
@@ -35,8 +36,14 @@ export default class AppTray {
       {
         label: `Open Lumos`,
         type: 'normal',
-        click: this.config?.onAppOpen,
-        visible: this.config?.onAppOpen !== undefined,
+        click: this.config.onAppOpen,
+        visible: this.config.onAppOpen !== undefined,
+      },
+      {
+        label: 'Restart',
+        type: 'normal',
+        click: this.config.onAppRestart,
+        visible: this.config.onAppRestart !== undefined,
       },
       { label: 'Quit', type: 'normal', role: 'quit' },
     ]

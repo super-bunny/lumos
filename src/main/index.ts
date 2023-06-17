@@ -231,6 +231,10 @@ export default function main() {
     try {
       const appTray = new AppTray({
         onAppOpen,
+        onAppRestart() {
+          app.relaunch()
+          app.quit()
+        },
       })
 
       appTray.tray.on('double-click', onAppOpen)
