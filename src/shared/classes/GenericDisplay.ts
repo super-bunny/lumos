@@ -86,7 +86,7 @@ export default class GenericDisplay {
     }
   }
 
-  async getVcpLuminance(useCache?: boolean): Promise<Continuous> {
+  async getLuminance(useCache?: boolean): Promise<Continuous> {
     const value = await this.getVcpValueFromCache(VCPFeatures.ImageAdjustment.Luminance, useCache)
 
     if (value.type !== VcpValueType.Continuous) {
@@ -96,18 +96,23 @@ export default class GenericDisplay {
     return value
   }
 
+  async setLuminance(value: number): Promise<void> {
+    console.debug(`[GENERIC DISPLAY ${ this.info.displayId }] Set VCP Luminance: ${ value }`)
+    return this.setVcpValue(VCPFeatures.ImageAdjustment.Luminance, value)
+  }
+
   async getBrightnessPercentage(useCache?: boolean): Promise<number> {
-    const { currentValue, maximumValue } = await this.getVcpLuminance(useCache)
+    const { currentValue, maximumValue } = await this.getLuminance(useCache)
 
     return Math.round(currentValue * 100 / maximumValue)
   }
 
   async setBrightnessPercentage(value: number): Promise<Continuous> {
-    const { type, maximumValue } = await this.getVcpLuminance(true)
+    const { type, maximumValue } = await this.getLuminance(true)
     const rangedValue = Math.min(Math.max(value, 0), 100)
     const brightnessValue = Math.round(rangedValue * maximumValue / 100)
 
-    await this.setVcpValue(VCPFeatures.ImageAdjustment.Luminance, brightnessValue)
+    await this.setLuminance(brightnessValue)
 
     return { type, maximumValue, currentValue: brightnessValue }
   }
