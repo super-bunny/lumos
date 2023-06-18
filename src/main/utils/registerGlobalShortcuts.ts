@@ -4,6 +4,7 @@ import { sendIpcDisplayUpdate } from './ipc'
 import { BrowserWindow, globalShortcut } from 'electron'
 import VCPFeatures from '../../types/VCPFeatures'
 import OverlayWindowManager from '../classes/OverlayWindowManager'
+import throttle from 'lodash/throttle'
 
 export default function registerGlobalShortcuts(
   shortcuts: Settings['globalShortcuts'],
@@ -84,25 +85,27 @@ export default function registerGlobalShortcuts(
 
     const regExpResult = regExp.exec(key)
 
+    const callback = () => {
+      console.info(`Global shortcut "${ key }" (${ accelerator }) triggered`)
+      handler(...regExpResult!)
+        .then(result => {
+          if (!result) return
+
+          const failReasons = result
+            .map(promiseResult => promiseResult.status === 'rejected' ? promiseResult.reason : undefined)
+            .filter(reason => reason)
+
+          if (failReasons.length) {
+            console.error(`Error during execution of global shortcut handler: "${ key }" (${ accelerator }). Errors: ${ failReasons.join('; ') }`)
+          }
+        })
+        .catch(error => {
+          console.error(`Failed to execute global shortcut handler: "${ key }" (${ accelerator }). ${ (error as Error).message }`)
+        })
+    }
+
     try {
-      const success = globalShortcut.register(accelerator, () => {
-        console.info(`Global shortcut "${ key }" (${ accelerator }) triggered`)
-        handler(...regExpResult!)
-          .then(result => {
-            if (!result) return
-
-            const failReasons = result
-              .map(promiseResult => promiseResult.status === 'rejected' ? promiseResult.reason : undefined)
-              .filter(reason => reason)
-
-            if (failReasons.length) {
-              console.error(`Error during execution of global shortcut handler: "${ key }" (${ accelerator }). Errors: ${ failReasons.join('; ') }`)
-            }
-          })
-          .catch(error => {
-            console.error(`Failed to execute global shortcut handler: "${ key }" (${ accelerator }). ${ (error as Error).message }`)
-          })
-      })
+      const success = globalShortcut.register(accelerator, throttle(callback, 300, { leading: true, trailing: false }))
 
       if (!success) {
         console.error(`Failed to register global shortcut: "${ key }" (${ accelerator }). Keybinding already used by other applications`)
