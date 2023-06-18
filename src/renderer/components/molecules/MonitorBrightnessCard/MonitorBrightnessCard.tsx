@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button, Divider, IconButton, Input, Paper, Slider, Stack, styled, Tooltip, Typography } from '@mui/material'
 import Center from '../../atoms/Center'
 import Loader from '../../atoms/Loader'
@@ -11,6 +11,7 @@ import MonitorBrightnessCardExtraMenu from './MonitorBrightnessCardExtraMenu'
 import { useSnackbar } from 'notistack'
 import useSettingsStore from '../../../hooks/useSettingsStore'
 import useSwr from 'swr'
+import throttle from 'lodash/throttle'
 
 export type Monitor = GenericDisplay
 
@@ -19,6 +20,7 @@ export interface Props {
 }
 
 const BRIGHTNESS_STEP = 10
+const THROTTLE_MS = 200
 
 const StyledInput = styled(Input)(({ theme }) => ({
   fontFamily: theme.typography.fontFamily,
@@ -74,18 +76,19 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
     setTimeout(() => setForcedLoading(false), ms)
   }, [])
 
-  const setMonitorBrightness = useCallback(async (brightnessPercentage: number) => {
-    console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightnessPercentage)
+  const setMonitorBrightness = useMemo(() => throttle(
+    async (brightnessPercentage: number) => {
+      console.info(`Set ${ monitor.getDisplayName() } monitor brightness to:`, brightnessPercentage)
 
-    return monitor.setBrightnessPercentage(brightnessPercentage)
-      .catch(error => {
-        console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, error)
-        enqueueSnackbar(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }`, {
-          variant: 'error',
-          preventDuplicate: true,
+      return monitor.setBrightnessPercentage(brightnessPercentage)
+        .catch(error => {
+          console.error(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }.`, error)
+          enqueueSnackbar(`Unable to set brightness of monitor: ${ monitor.getDisplayName() }`, {
+            variant: 'error',
+            preventDuplicate: true,
+          })
         })
-      })
-  }, [enqueueSnackbar, monitor])
+    }, THROTTLE_MS), [enqueueSnackbar, monitor])
 
   const setBrightness = useCallback(async (brightness: number) => {
     await mutateBrightness(brightness, { revalidate: false })

@@ -1,8 +1,15 @@
 import { Display, DisplayManager, VCPFeatureCode } from '@ddc-node/ddc-node'
 import { Backends, DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
+import throttle from 'lodash/throttle'
 
 // Light utility wrapper around Display class from @ddc-node/ddc-node
 export default class EnhancedDDCDisplay {
+  saveVcpSetters: Record<number, Function> = {
+    [VCPFeatureCode.ImageAdjustment.Luminance]: throttle(
+      (value: number) => this.display.setVcpFeature(VCPFeatureCode.ImageAdjustment.Luminance, value), 100,
+    ),
+  }
+
   constructor(readonly display: Display) {
   }
 
@@ -43,6 +50,11 @@ export default class EnhancedDDCDisplay {
 
   async setVcpValue(featureCode: number, value: number): Promise<void> {
     console.debug(`[${ this.info.displayId }] EnhancedDDCDisplay.setVcpValue(featureCode: ${ featureCode }, value: ${ value }) called`)
+
+    const safeVcpSetter = this.saveVcpSetters[featureCode]
+    if (safeVcpSetter) {
+      return safeVcpSetter(value)
+    }
 
     return this.display.setVcpFeature(featureCode, value)
   }
