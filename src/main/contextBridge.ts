@@ -99,12 +99,7 @@ export default function setupIpc({
     const webContents = event.sender
     const browserWindow = BrowserWindow.fromWebContents(webContents)
     if (browserWindow) {
-      if (show) {
-        browserWindow.show()
-        OverlayWindowManager.setWindowAlwaysOnTop(browserWindow)
-      } else {
-        browserWindow.hide()
-      }
+      show ? OverlayWindowManager.showWindow(browserWindow) : OverlayWindowManager.hideWindow(browserWindow)
     } else {
       console.error('IpcEvents SET_OVERLAY_WINDOWS_VISIBILITY. Could not find browser window for webContents', webContents)
     }

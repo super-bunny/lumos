@@ -107,4 +107,13 @@ export default class OverlayWindowManager {
   static setWindowAlwaysOnTop(window: BrowserWindow) {
     window.setAlwaysOnTop(true, 'pop-up-menu', 1)
   }
+
+  static showWindow(browserWindow: BrowserWindow) {
+    OverlayWindowManager.setWindowAlwaysOnTop(browserWindow)
+    browserWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
+    browserWindow.show()
+  }
+  static hideWindow(browserWindow: BrowserWindow) {
+    browserWindow.hide()
+  }
 }
