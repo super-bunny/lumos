@@ -3,12 +3,21 @@ import EnhancedDDCDisplay from './EnhancedDDCDisplay'
 import { DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
 import AsyncQueue from './AsyncQueue'
 
+export interface Options {
+  name?: string
+}
+
 // Backend client for DDC library. Keep an internal DDC display list updated at each list method call.
 export default class DdcBackendClient extends BackendClient {
-  protected displayList: Array<EnhancedDDCDisplay> | null = null
+  public readonly name?: string
 
-  constructor(public asyncQueue?: AsyncQueue) {
+  protected displayList: Array<EnhancedDDCDisplay> | null = null
+  protected listPromise: Promise<EnhancedDDCDisplay[]> | undefined = undefined
+
+  constructor(public asyncQueue?: AsyncQueue, options?: Options) {
     super()
+
+    if (options?.name) this.name = options.name
   }
 
   protected async getDisplayById(id: string): Promise<EnhancedDDCDisplay | undefined> {
@@ -26,7 +35,20 @@ export default class DdcBackendClient extends BackendClient {
   }
 
   async refresh(): Promise<void> {
-    this.displayList = await EnhancedDDCDisplay.list()
+    if (this.listPromise) {
+      console.debug(`[DdcBackendClient: ${ this.name }] refresh() called, a promise is already pending skipping.`)
+      await this.listPromise
+      return
+    }
+
+    console.debug(`[DdcBackendClient: ${ this.name }] refresh() called`)
+
+    const promise = EnhancedDDCDisplay.list()
+
+    this.listPromise = promise
+    this.displayList = await promise
+    this.listPromise = undefined
+    console.debug(`[DdcBackendClient: ${ this.name }] refresh() sub promise EnhancedDDCDisplay.list() done`)
   }
 
   async supportDDC(id: string): Promise<boolean> {

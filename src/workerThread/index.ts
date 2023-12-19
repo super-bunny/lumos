@@ -13,17 +13,20 @@ export default function workerThread(): void {
     sessionJwtSecret,
     enableAuthentification,
   } = workerData as BackendWorkerData
-  const displayManager = new GenericDisplayManager(new DdcBackendClient())
+
+  const displayManager = new GenericDisplayManager(new DdcBackendClient(undefined, {
+    name: 'worker thread',
+  }))
+
+  if (!enableHttpApi) return
 
   displayManager.refresh().then()
 
-  if (enableHttpApi) {
-    initHttpApi({
-      host: httpApiHost,
-      port: httpApiPort ?? 8787,
-      jwtSecret,
-      sessionJwtSecret,
-      context: { displayManager, enableAuthentification },
-    })
-  }
+  initHttpApi({
+    host: httpApiHost,
+    port: httpApiPort ?? 8787,
+    jwtSecret,
+    sessionJwtSecret,
+    context: { displayManager, enableAuthentification },
+  })
 }

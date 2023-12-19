@@ -20,13 +20,14 @@ import { mockDisplays } from './utils/mockDisplays'
 import OverlayWindowManager from './classes/OverlayWindowManager'
 import AutoUpdater from './classes/AutoUpdater'
 import { UpdateChannels } from '../types/Settings'
+import DumbBackendClient from './classes/DumbBackendClient'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
 const isDevelopment = process.env.NODE_ENV === 'development'
 const singleInstanceLock = app.requestSingleInstanceLock()
-const displayManager = new GenericDisplayManager(new DdcBackendClient())
+const displayManager = new GenericDisplayManager(new DumbBackendClient())
 let mainWindow: BrowserWindow | undefined
 let overlayWindowManager: OverlayWindowManager | undefined
 let settings: SettingsStore | undefined
@@ -175,7 +176,9 @@ export default function main() {
     if (!settings) return
 
     // Init display manager
-    displayManager.client = new DdcBackendClient(settings.store.concurrentDdcRequest ? undefined : new AsyncQueue())
+    displayManager.client = new DdcBackendClient(settings.store.concurrentDdcRequest ? undefined : new AsyncQueue(), {
+      name: 'main thread',
+    })
     displayManager.refresh().then(() => {
       if (settings?.store.monitorAliases) displayManager.setMonitorAliases(settings.store.monitorAliases)
     })
