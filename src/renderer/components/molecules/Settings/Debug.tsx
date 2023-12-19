@@ -29,8 +29,8 @@ export default function Debug({ settings, onChange, sx }: Props) {
           </Stack>
 
           <SettingItem
-            label={ 'Auto monitor power off' }
-            description={ 'Test if your monitor wil power off monitor on system shutdown.' }
+            label={ 'Test monitor auto power off' }
+            description={ 'Test if your monitor will power off on system shutdown.' }
             action={
               <Button
                 onClick={ () => {
