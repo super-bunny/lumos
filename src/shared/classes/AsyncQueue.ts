@@ -1,8 +1,6 @@
+// Queue that run sequentially pushed promises
 export default class AsyncQueue {
   stack: Array<Promise<any>> = []
-
-  constructor() {
-  }
 
   push<T>(fn: (...args: Array<any>) => Promise<T>, delay: number = 0, timer = 60000): Promise<T> {
     if (this.stack.length === 0) {
@@ -20,7 +18,6 @@ export default class AsyncQueue {
           .finally(() => this.callback())
       })
     })
-    // .finally(() => this.callback())
 
     this.stack.push(promise)
 
@@ -28,7 +25,6 @@ export default class AsyncQueue {
   }
 
   protected callback() {
-    console.log('callback')
     this.stack.shift()?.then()
   }
 }
