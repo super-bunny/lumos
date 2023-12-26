@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/super-bunny/lumos/dev/schemas/changelogManifest.json",
+  "title": "Lumos Changelog Manifest",
+  "type": "object",
+  "properties": {
+    "v1": {
+      "type": "object",
+      "properties": {
+        "stable": {"type": "string"},
+        "alpha": {"type": "string"},
+        "beta": {"type": "string"}
+      },
+      "minProperties": 1
+    }
+  },
+  "required": ["v1"]
+}
