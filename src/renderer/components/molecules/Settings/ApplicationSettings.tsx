@@ -1,8 +1,9 @@
 import React from 'react'
-import SettingsType, { UpdateChannels } from '../../../../types/Settings'
+import SettingsType from '../../../../types/Settings'
 import { Chip, Divider, FormControl, Grid, MenuItem, Select, Stack, Switch, SxProps, Typography } from '@mui/material'
 import SettingItem from '../SettingItem'
 import usePlatform from '../../../hooks/usePlatform'
+import { UpdateChannels } from '../../../../types/UpdateChannels'
 
 export interface Props {
   settings: SettingsType

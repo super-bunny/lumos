@@ -19,8 +19,8 @@ import AsyncQueue from '../shared/classes/AsyncQueue'
 import { mockDisplays } from './utils/mockDisplays'
 import OverlayWindowManager from './classes/OverlayWindowManager'
 import AutoUpdater from './classes/AutoUpdater'
-import { UpdateChannels } from '../types/Settings'
 import DumbBackendClient from './classes/DumbBackendClient'
+import { UpdateChannels } from '../types/UpdateChannels'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import semver from 'semver'
-import { UpdateChannels } from '../../types/Settings'
+
+import { UpdateChannels } from '../../types/UpdateChannels'
 
 export interface GithubRelease {
   assets: [

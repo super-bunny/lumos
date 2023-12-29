@@ -1,7 +1,8 @@
 import Conf from 'conf'
-import Settings, { UpdateChannels } from '../../types/Settings'
+import Settings from '../../types/Settings'
 import getUserDataPath from '../../shared/utils/getUserDataPath'
 import constants from '../../shared/utils/contants'
+import { UpdateChannels } from '../../types/UpdateChannels'
 
 export const defaultSettings: Required<Settings> = {
   runAppOnStartup: false,

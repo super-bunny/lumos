@@ -1,3 +1,5 @@
+import { UpdateChannels } from './UpdateChannels'
+
 export enum Themes {
   MATERIAL_LIGHT = 'materialLight',
   MATERIAL_DARK = 'materialDark',
@@ -7,12 +9,6 @@ export enum Themes {
 export enum GlobalShortcutsStaticActions {
   DIM_ALL_DISPLAYS = 'dimAllDisplays',
   BRIGHT_ALL_DISPLAYS = 'brightAllDisplays',
-}
-
-export enum UpdateChannels {
-  STABLE = 'stable',
-  BETA = 'beta',
-  ALPHA = 'alpha',
 }
 
 export type MonitorAliases = Record<string, string | null>
