@@ -4,7 +4,7 @@
 
     _After close you can show it again from top right menu or settings._
 
-- App will now auto update at launch on Windows and MacOS.
+- App will now **auto update** at launch on Windows and MacOS.
 
     _You can also apply pending update immediately thanks to a button showing in app header._
 
