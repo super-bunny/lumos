@@ -1,6 +1,18 @@
 import React from 'react'
 import SettingsType from '../../../../types/Settings'
-import { Chip, Divider, FormControl, Grid, MenuItem, Select, Stack, Switch, SxProps, Typography } from '@mui/material'
+import {
+  Chip,
+  Collapse,
+  Divider,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  Stack,
+  Switch,
+  SxProps,
+  Typography,
+} from '@mui/material'
 import SettingItem from '../SettingItem'
 import usePlatform from '../../../hooks/usePlatform'
 import { UpdateChannels } from '../../../../types/UpdateChannels'
@@ -17,7 +29,7 @@ export default function ApplicationSettings({ settings, onChange, sx }: Props) {
   return (
     <Grid container gap={ 2 } sx={ sx }>
       <Grid item xs={ 12 }>
-        <Stack gap={ 4 }>
+        <Stack gap={ 0 } divider={ <Divider sx={ { mt: 2, mb: 4 } }/> }>
           <div>
             <Typography mb={ 2 } variant={ 'h5' }>Application</Typography>
 
@@ -63,17 +75,14 @@ export default function ApplicationSettings({ settings, onChange, sx }: Props) {
                   />
                 }
               />
-
-              <div></div>
-              {/* Empty block to show a divider at end */ }
             </Stack>
           </div>
 
-          <div>
-            <Typography mb={ 2 } variant={ 'h5' }>Update</Typography>
+          { (isWindows || isMac || true) && (
+            <div>
+              <Typography mb={ 2 } variant={ 'h5' }>Update</Typography>
 
-            <Stack gap={ 2 } divider={ <Divider/> }>
-              { (isWindows || isMac) && (
+              <Stack gap={ 2 }>
                 <SettingItem
                   label={ 'Auto update' }
                   labelFor={ 'auto-update' }
@@ -90,30 +99,32 @@ export default function ApplicationSettings({ settings, onChange, sx }: Props) {
                     />
                   }
                 />
-              ) }
 
-              <SettingItem
-                label={ 'Update channel' }
-                description={ 'Choose between stable and pre-release (unstable) update channel.' }
-                action={
-                  <FormControl size={ 'small' }>
-                    <Select
-                      value={ settings.updater?.channel ?? UpdateChannels.STABLE }
-                      onChange={ (event) => {
-                        onChange?.({
-                          ...settings,
-                          updater: { ...settings.updater, channel: event.target.value as UpdateChannels },
-                        })
-                      } }
-                    >
-                      <MenuItem value={ UpdateChannels.STABLE }>Stable</MenuItem>
-                      <MenuItem value={ UpdateChannels.ALPHA }>Pre-release</MenuItem>
-                    </Select>
-                  </FormControl>
-                }
-              />
-            </Stack>
-          </div>
+                <Collapse in={ settings.updater?.enable }>
+                  <SettingItem
+                    label={ 'Update channel' }
+                    description={ 'Choose between stable and pre-release (unstable) update channel.' }
+                    action={
+                      <FormControl size={ 'small' }>
+                        <Select
+                          value={ settings.updater?.channel ?? UpdateChannels.STABLE }
+                          onChange={ (event) => {
+                            onChange?.({
+                              ...settings,
+                              updater: { ...settings.updater, channel: event.target.value as UpdateChannels },
+                            })
+                          } }
+                        >
+                          <MenuItem value={ UpdateChannels.STABLE }>Stable</MenuItem>
+                          <MenuItem value={ UpdateChannels.ALPHA }>Pre-release</MenuItem>
+                        </Select>
+                      </FormControl>
+                    }
+                  />
+                </Collapse>
+              </Stack>
+            </div>
+          ) }
         </Stack>
       </Grid>
     </Grid>
