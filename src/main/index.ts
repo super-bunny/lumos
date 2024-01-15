@@ -21,6 +21,7 @@ import OverlayWindowManager from './classes/OverlayWindowManager'
 import AutoUpdater from './classes/AutoUpdater'
 import DumbBackendClient from './classes/DumbBackendClient'
 import { UpdateChannels } from '../types/UpdateChannels'
+import path from 'path'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -41,6 +42,7 @@ function createMainWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
     height: 720,
     width: 1280,
+    icon: path.resolve(__dirname, '..', 'shared/assets/icons/lumos_icon.ico'),
     show: !(app.commandLine.hasSwitch('hidden') && settings?.store.minimizeAppOnStartup),
     autoHideMenuBar: true,
     webPreferences: {
