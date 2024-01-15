@@ -12,9 +12,9 @@ export default function SettingsPage() {
 
   return (
     <Grow in={ true } appear={ settingsStore?.settings.enableAnimations ?? false } timeout={ 500 }>
-      <Container maxWidth={ 'lg' } sx={ { height: 1, py: 4, flexGrow: 1 } }>
+      <Container maxWidth={ 'lg' } sx={ { height: 1, py: 2, flexGrow: 1 } }>
         <Stack height={ 1 }>
-          <Stack mb={ 4 } direction={ 'row' } justifyContent={ 'space-between' } gap={ 1 }>
+          <Stack mb={ 2 } direction={ 'row' } justifyContent={ 'space-between' } gap={ 1 }>
             <Typography variant={ 'h4' }>Settings</Typography>
 
             <Button onClick={ () => navigate('/') } startIcon={ <ArrowBackIcon/> }>Go back to home</Button>
