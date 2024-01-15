@@ -74,8 +74,10 @@ export function mockDisplays(): void {
     )
   }
 
-  DdcBackendClient.prototype.supportDDC = () => {
+  DdcBackendClient.prototype.supportDDC = (id) => {
     console.debug('Display.supportDDC() mock called')
+
+    if (id === 'Mi Monitor') return Promise.resolve(true)
 
     return Promise.resolve(Math.random() > 0.5)
   }
