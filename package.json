@@ -86,6 +86,8 @@
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.3",
     "lodash.throttle": "^4.1.1",
+    "marked": "^11.1.0",
+    "marked-base-url": "^1.1.2",
     "material-ui-confirm": "^3.0.7",
     "material-ui-popup-state": "^4.0.1",
     "node-cache": "^5.1.2",

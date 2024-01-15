@@ -1,5 +1,5 @@
-import { Alert, Box, Button, Collapse, Grid, Link, Stack, styled, SxProps, Tab, Tabs } from '@mui/material'
-import React, { useMemo } from 'react'
+import { Alert, Box, Button, Collapse, Divider, Grid, Link, Stack, styled, SxProps, Tab, Tabs } from '@mui/material'
+import React, { useMemo, useState } from 'react'
 import { TabContext, TabPanel } from '@mui/lab'
 import SettingsType from '../../../types/Settings'
 import Center from '../atoms/Center'
@@ -14,6 +14,7 @@ import PrivacySettings from '../molecules/Settings/PrivacySettings'
 import Debug from '../molecules/Settings/Debug'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import shallowCompareObjects from '../../../shared/utils/shallowCompareObjects'
+import ChangelogDialog from '../molecules/dialogs/ChangelogDialog'
 
 export interface Props {
   sx?: SxProps
@@ -52,6 +53,8 @@ export default function Settings({ sx }: Props) {
 
   const navigate = useNavigate()
   const location = useLocation()
+
+  const [changelogDialogOpen, setChangelogDialogOpen] = useState<boolean>(false)
 
   const needRestart = useMemo(() => settings ? checkIfRestartNeeded(settings) : false, [settings])
 
@@ -108,6 +111,12 @@ export default function Settings({ sx }: Props) {
             <Tab label="Experimental" value={ SETTINGS_TABS.EXPERIMENTAL }/>
             <Tab label="Advanced" value={ SETTINGS_TABS.ADVANCED }/>
             { settings?.developerMode && <Tab label="Debug" value={ SETTINGS_TABS.DEBUG }/> }
+
+            <Box sx={ { px: 0.5 } }>
+              <Divider sx={ { my: 1, mx: 1 } }/>
+
+              <Button onClick={ () => setChangelogDialogOpen(true) } style={ { width: '100%' } }>What's new?</Button>
+            </Box>
           </Tabs>
 
 
@@ -142,6 +151,8 @@ export default function Settings({ sx }: Props) {
           </Box>
         </TabContext>
       </Box>
+
+      <ChangelogDialog open={ changelogDialogOpen } onClose={ () => setChangelogDialogOpen(false) }/>
     </Stack>
   )
 }

@@ -8,12 +8,16 @@ import packageJson from '../../../../package.json'
 import openInBrowser from '../../utils/openInBrowser'
 import AppVersionManager, { GithubRelease } from '../../classes/AppVersionManager'
 import useSettingsStore from '../../hooks/useSettingsStore'
+import FiberNewIcon from '@mui/icons-material/FiberNew'
+import ChangelogDialog from './dialogs/ChangelogDialog'
 
 export default function HeaderExtraMenu() {
   const { settingsStore } = useSettingsStore()
   const { version } = packageJson
-  const popupState = usePopupState({ variant: 'popover', popupId: 'demoMenu' })
+  const popupState = usePopupState({ variant: 'popover', popupId: 'header-extra-menu' })
   const [newRelease, setNewRelease] = useState<GithubRelease | null>(null)
+
+  const [changelogDialogOpen, setChangelogDialogOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (!settingsStore?.settings) return
@@ -46,6 +50,13 @@ export default function HeaderExtraMenu() {
           </Tooltip>
         ) }
 
+        <MenuItem onClick={ () => setChangelogDialogOpen(true) }>
+          <ListItemIcon>
+            <FiberNewIcon fontSize="small"/>
+          </ListItemIcon>
+          <ListItemText>What's new?</ListItemText>
+        </MenuItem>
+
         <MenuItem onClick={ () => openInBrowser('https://github.com/super-bunny/lumos/releases') }>
           <ListItemIcon>
             <InfoRounded fontSize="small"/>
@@ -53,6 +64,8 @@ export default function HeaderExtraMenu() {
           <ListItemText>Version v{ version }</ListItemText>
         </MenuItem>
       </Menu>
+
+      <ChangelogDialog open={ changelogDialogOpen } onClose={ () => setChangelogDialogOpen(false) }/>
     </div>
   )
 }

@@ -7226,6 +7226,16 @@ map-obj@^4.0.0:
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-4.3.0.tgz#9304f906e93faae70880da102a9f1df0ea8bb05a"
   integrity sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==
 
+marked-base-url@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/marked-base-url/-/marked-base-url-1.1.2.tgz#bc6c61b42ee5addc83172069b6197901c2eea717"
+  integrity sha512-Rgnd6tGrVhyPgQzPvKt1vBA3eUAHNtAXBJ/Xf30/e9kHufBqDK283HTqW9cPinV8lNcIVQ+JLSUwZnEPchyx6Q==
+
+marked@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-11.1.0.tgz#f2d12323e80ba8a97cc8262fe7e94fcc007476ab"
+  integrity sha512-fvKJWAPEafVj1dwGwcPI5mBB/0pvViL6NlCbNDG1HOIRwwAU/jeMoFxfbRLuirO1wRH7m4yPvBqD/O1wyWvayw==
+
 matcher@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/matcher/-/matcher-3.0.0.tgz#bd9060f4c5b70aa8041ccc6f80368760994f30ca"

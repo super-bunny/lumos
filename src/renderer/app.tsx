@@ -8,6 +8,7 @@ import { SnackbarProvider } from 'notistack'
 import UpdaterContext, { UpdaterContextState } from './context/UpdaterContext'
 import { IpcEvents } from '../types/Ipc'
 import constants from '../shared/utils/contants'
+import AutoChangelogPopup from './components/organisms/AutoChangelogPopup'
 
 export default function App() {
   const themeContext = useAppSelector(state => state.theme)
@@ -28,6 +29,7 @@ export default function App() {
         <SnackbarProvider>
           <ConfirmProvider>
             <PageTemplate/>
+            <AutoChangelogPopup/>
           </ConfirmProvider>
         </SnackbarProvider>
       </ThemeProvider>
