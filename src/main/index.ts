@@ -213,7 +213,7 @@ export default function main() {
         responseHeaders: {
           ...details.responseHeaders,
           'Content-Security-Policy': [
-            `default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com http://localhost:${ httpApiPort };`,
+            `default-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src https://raw.githubusercontent.com; connect-src 'self' https://api.github.com https://raw.githubusercontent.com http://localhost:${ httpApiPort };`,
           ],
         },
       })
