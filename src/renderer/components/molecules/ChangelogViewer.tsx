@@ -80,8 +80,6 @@ export async function getChangelog(appVersion: string, updateChannel: UpdateChan
 }
 
 export default function ChangelogViewer({ version, locale = FALLBACK_LOCALE }: Props) {
-  marked.use(baseUrl(`${ BASE_URL }/${ version }`))
-
   const { settingsStore } = useSettingsStore()
   const updateChannel = settingsStore?.settings.updater?.channel
 
@@ -103,6 +101,8 @@ export default function ChangelogViewer({ version, locale = FALLBACK_LOCALE }: P
       <div>Fail to retrieve content: { error.message }</div>
     </Center>
   )
+
+  if (data?.version) marked.use(baseUrl(`${ BASE_URL }/v${ data.version }/`))
 
   return (
     <div>
