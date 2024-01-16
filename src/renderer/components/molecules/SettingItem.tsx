@@ -6,12 +6,18 @@ export interface Props {
   labelFor?: string
   description?: ReactNode
   action?: ReactNode
+  fullLineAction?: boolean
 }
 
-export default function SettingItem({ label, labelFor, description, action }: Props) {
+export default function SettingItem({ label, labelFor, description, action, fullLineAction }: Props) {
   return (
-    <Stack>
-      <Stack direction={ 'row' } alignItems={ 'center' } justifyContent={ 'space-between' }>
+    <Stack gap={ fullLineAction ? 1 : 0 }>
+      <Stack
+        direction={ fullLineAction ? 'column' : 'row' }
+        alignItems={ fullLineAction ? 'flex-start' : 'center' }
+        gap={ fullLineAction ? 1 : 0 }
+        justifyContent={ 'space-between' }
+      >
         <Typography component={ 'label' } htmlFor={ labelFor } style={ { flexGrow: 1 } }>{ label }</Typography>
         { action }
       </Stack>
