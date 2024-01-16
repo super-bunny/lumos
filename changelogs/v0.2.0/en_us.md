@@ -12,6 +12,7 @@
 
     _To enable it go to Interface settings. You will need to "bind" your screens to make it works._
 
+![](overlay.gif)
 https://github.com/super-bunny/lumos/assets/22429252/e14a4305-3876-40a6-9ab7-b699efe1c8dc
 
 - Add a Material Dark theme.
