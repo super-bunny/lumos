@@ -56,7 +56,7 @@ export default function OverlayScreenConfig() {
 
           <Stack direction={ 'row' } spacing={ 2 }>
             <MonitorSelect
-              monitorId={ selectedMonitorId }
+              value={ selectedMonitorId }
               onChange={ monitor => {
                 setOverlayMonitor(selectedDisplay!, monitor)
               } }

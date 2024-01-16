@@ -253,7 +253,7 @@ export default function GlobalShortcutsSettings({ settings, onChange, sx }: Prop
             <Grid item xs={ 4 }>
               <MonitorSelect
                 label={ 'Target monitor' }
-                monitorId={ newActionMonitor?.info.displayId }
+                value={ newActionMonitor?.info.displayId }
                 onChange={ monitor => setNewActionMonitor(monitor) }
               />
             </Grid>
