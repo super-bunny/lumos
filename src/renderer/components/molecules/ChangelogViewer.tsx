@@ -26,9 +26,15 @@ async function requestChangelog(version: string, locale: string): Promise<string
 }
 
 const StyledChangelog = styled('div')`
-  h1 {
-    margin-top: 0;
-  }
+    h1 {
+        margin-top: 0;
+    }
+
+    img {
+        width: 500px;
+        display: block;
+        margin: auto;
+    }
 `
 
 export async function getChangelog(appVersion: string, updateChannel: UpdateChannels, locale: string): Promise<{
