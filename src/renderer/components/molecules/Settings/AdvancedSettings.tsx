@@ -3,6 +3,7 @@ import SettingsType from '../../../../types/Settings'
 import { Divider, Grid, Stack, Switch, SxProps } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import SettingItem from '../SettingItem'
+import MonitorSelect from '../../atoms/MonitorSelect'
 
 export interface Props {
   settings: SettingsType
@@ -55,11 +56,28 @@ export default function AdvancedSettings({ settings, onChange, sx }: Props) {
               <Switch
                 checked={ settings.developerMode }
                 onChange={ (event) =>
-                  onChange?.({ ...settings, developerMode: event.target.checked } as SettingsType)
+                  onChange?.({ ...settings, developerMode: event.target.checked })
                 }
                 id={ 'developer-mode' }
               />
             }
+          />
+
+          <SettingItem
+            labelFor={ 'hidden-monitors' }
+            label={ 'Hidden monitors' }
+            description={ 'Hide selected monitors from monitor list' }
+            action={
+              <MonitorSelect
+                value={ settings.hiddenMonitors ?? [] }
+                onChange={ monitors => onChange?.({
+                  ...settings,
+                  hiddenMonitors: monitors.map(monitor => monitor.info.displayId),
+                }) }
+                multiple
+              />
+            }
+            fullLineAction
           />
         </Stack>
       </Grid>

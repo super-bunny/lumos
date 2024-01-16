@@ -32,6 +32,7 @@ export const defaultSettings: Required<Settings> = {
     enable: true,
     channel: UpdateChannels.STABLE,
   },
+  hiddenMonitors: [],
 }
 
 export default class SettingsStore extends Conf<Settings> {

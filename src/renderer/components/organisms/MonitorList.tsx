@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Alert, Button, Grow, Stack, SxProps, Typography } from '@mui/material'
 import MonitorBrightnessCard from '../molecules/MonitorBrightnessCard/MonitorBrightnessCard'
 import Loader from '../atoms/Loader'
@@ -19,6 +19,12 @@ export default function MonitorList({ sx }: Props) {
     refreshMonitors,
   } = useMonitors()
 
+  const filterMonitors = useMemo(() => monitors
+    ?.filter(monitor => !settingsStore?.settings.hiddenMonitors?.includes(monitor.info.displayId)), [
+    monitors,
+    settingsStore?.settings.hiddenMonitors,
+  ])
+
   return (
     <Stack direction={ 'column' } alignItems={ 'center' } spacing={ 1 } sx={ sx }>
       { loading && <Loader title={ 'Loading monitor list' }/> }
@@ -31,7 +37,7 @@ export default function MonitorList({ sx }: Props) {
           flexWrap={ 'wrap' }
           gap={ 4 }
         >
-          { monitors?.map((monitor, index) => (
+          { filterMonitors?.map((monitor, index) => (
             <Grow
               in={ true }
               appear={ settingsStore?.settings.enableAnimations ?? false }

@@ -43,4 +43,5 @@ export default interface Settings {
     enable?: boolean
     channel?: UpdateChannels
   }
+  hiddenMonitors?: Array<string>
 }
