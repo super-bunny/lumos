@@ -31,9 +31,34 @@ const StyledChangelog = styled('div')`
     }
 
     img {
-        width: 500px;
+        width: 540px;
         display: block;
         margin: auto;
+        border-radius: 8px;
+    }
+
+    p:has(> img) {
+        margin: 0;
+    }
+
+    *:has(> img) + p.img-caption {
+        color: gray;
+        text-align: center;
+        margin: 4px 0 0;
+    }
+
+
+    .caption {
+        color: gray;
+        font-style: italic;
+    }
+
+    p:has(+ .caption) {
+        margin-bottom: 0;
+    }
+
+    p + .caption {
+        margin-top: 0;
     }
 `
 
