@@ -13,9 +13,7 @@ export default function Header() {
     <AppBar position="static">
       <Toolbar variant="dense" disableGutters>
         <Stack ml={ 2 } gap={ 1 } flexGrow={ 1 }>
-          <Typography variant="h6" color="inherit" component="div">
-            Lumos
-          </Typography>
+          {/* Empty left part for now */ }
         </Stack>
 
         <Stack direction={ 'row' }>
