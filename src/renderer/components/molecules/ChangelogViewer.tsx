@@ -9,14 +9,15 @@ import Center from '../atoms/Center'
 import semver from 'semver'
 import deduplicateArray from '../../../shared/utils/deduplicateArray'
 import useSWRImmutable from 'swr/immutable'
-import { styled } from '@mui/material'
+import { Box, styled } from '@mui/material'
 
 interface Props {
   version: string
   locale?: string
 }
 
-const BASE_URL = window.lumos.env.CHANGELOG_BASE_URL ?? 'https://raw.githubusercontent.com/super-bunny/lumos/dev/changelogs'
+const BASE_URL: string = window.lumos.env.CHANGELOG_BASE_URL || 'https://raw.githubusercontent.com/super-bunny/lumos/dev/changelogs'
+const SOURCE_BASE_URL: string | undefined = window.lumos.env.CHANGELOG_BASE_URL || 'https://github.com/super-bunny/lumos/tree/dev/changelogs'
 export const FALLBACK_LOCALE = 'en_us'
 
 async function requestChangelog(version: string, locale: string): Promise<string | null> {
@@ -132,13 +133,20 @@ export default function ChangelogViewer({ version, locale = FALLBACK_LOCALE }: P
   return (
     <div>
       <StyledChangelog dangerouslySetInnerHTML={ { __html: marked.parse(data?.content ?? '') } }/>
-      <div
-        style={ {
-          marginBottom: 12,
-          fontSize: '0.8em',
-        } }
-      >
-        v{ data?.version } ({ data?.locale.toLowerCase() })
+      <div>
+        <Box
+          onClick={ () => window.lumos.openInBrowser(`${ SOURCE_BASE_URL }/v${ data?.version }/${ data?.locale }.md`) }
+          component="span"
+          title={ 'Go to changelog source' }
+          sx={ { '&:hover': { textDecoration: 'underline' } } }
+          style={ {
+            marginBottom: 12,
+            fontSize: '0.8em',
+            cursor: 'pointer',
+          } }
+        >
+          v{ data?.version } ({ data?.locale.toLowerCase() })
+        </Box>
       </div>
     </div>
   )
