@@ -37,6 +37,21 @@ export const OriginTheme = createTheme({
           background: '#232931',
           display: 'block',
         },
+        '*::-webkit-scrollbar-track': {
+          borderRadius: 1000,
+          backgroundColor: 'rgba(0,0,0,.5)',
+        },
+        '*::-webkit-scrollbar': {
+          width: 8,
+          backgroundColor: 'transparent',
+        },
+        '*::-webkit-scrollbar-thumb': {
+          borderRadius: 1000,
+          backgroundColor: theme.palette.primary.main,
+          '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+          },
+        },
       }),
     },
   },
@@ -60,6 +75,21 @@ const materialLight = createTheme({
           color: 'lightgray',
           background: '#232931',
           display: 'block',
+        },
+        '*::-webkit-scrollbar-track': {
+          borderRadius: 1000,
+          backgroundColor: 'rgba(0,0,0,.1)',
+        },
+        '*::-webkit-scrollbar': {
+          width: 8,
+          backgroundColor: 'transparent',
+        },
+        '*::-webkit-scrollbar-thumb': {
+          borderRadius: 1000,
+          backgroundColor: theme.palette.primary.main,
+          '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+          },
         },
       }),
     },
@@ -90,6 +120,21 @@ const materialDark = createTheme({
           color: 'lightgray',
           background: '#232931',
           display: 'block',
+        },
+        '*::-webkit-scrollbar-track': {
+          borderRadius: 1000,
+          backgroundColor: 'rgba(0,0,0,.5)',
+        },
+        '*::-webkit-scrollbar': {
+          width: 8,
+          backgroundColor: 'transparent',
+        },
+        '*::-webkit-scrollbar-thumb': {
+          borderRadius: 1000,
+          backgroundColor: theme.palette.primary.main,
+          '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+          },
         },
       }),
     },
