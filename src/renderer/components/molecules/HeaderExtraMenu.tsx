@@ -50,7 +50,12 @@ export default function HeaderExtraMenu() {
           </Tooltip>
         ) }
 
-        <MenuItem onClick={ () => setChangelogDialogOpen(true) }>
+        <MenuItem
+          onClick={ () => {
+            setChangelogDialogOpen(true)
+            popupState.close()
+          } }
+        >
           <ListItemIcon>
             <FiberNewIcon fontSize="small"/>
           </ListItemIcon>
