@@ -15,6 +15,7 @@ const env = {
   ROUTER_INITIAL_ENTRY: process.env.ROUTER_INITIAL_ENTRY,
   PROD_OVERLAY: process.env.PROD_OVERLAY,
   FORCE_SHOW_OVERLAY: process.env.FORCE_SHOW_OVERLAY,
+  CHANGELOG_BASE_URL: process.env.CHANGELOG_BASE_URL,
 }
 const sentryEnabled = envVarAllowSentry()
 const validListenableIpcChannels = [

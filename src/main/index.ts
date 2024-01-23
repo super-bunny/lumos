@@ -22,6 +22,7 @@ import AutoUpdater from './classes/AutoUpdater'
 import DumbBackendClient from './classes/DumbBackendClient'
 import { UpdateChannels } from '../types/UpdateChannels'
 import path from 'path'
+import process from 'process'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -213,7 +214,9 @@ export default function main() {
         responseHeaders: {
           ...details.responseHeaders,
           'Content-Security-Policy': [
-            `default-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src https://raw.githubusercontent.com; connect-src 'self' https://api.github.com https://raw.githubusercontent.com http://localhost:${ httpApiPort };`,
+            `default-src 'self' 'unsafe-inline' 'unsafe-eval';
+             img-src https://raw.githubusercontent.com ${ process.env.CHANGELOG_BASE_URL ?? '' };
+             connect-src 'self' https://api.github.com https://raw.githubusercontent.com http://localhost:${ httpApiPort } ${ process.env.CHANGELOG_BASE_URL ?? '' };`,
           ],
         },
       })

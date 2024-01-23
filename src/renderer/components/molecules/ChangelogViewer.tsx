@@ -16,7 +16,7 @@ interface Props {
   locale?: string
 }
 
-const BASE_URL = 'https://raw.githubusercontent.com/super-bunny/lumos/dev/changelogs'
+const BASE_URL = window.lumos.env.CHANGELOG_BASE_URL ?? 'https://raw.githubusercontent.com/super-bunny/lumos/dev/changelogs'
 export const FALLBACK_LOCALE = 'en_us'
 
 async function requestChangelog(version: string, locale: string): Promise<string | null> {
