@@ -4,16 +4,16 @@
 
 # Features
 
-- This brand-new **changelog popup** that will now inform you of the last changes and new features after each update!
+- **This brand-new news popup** that will now inform you of new features and changes after each update!
   <p class="caption">After close, you can show it again from top right menu or settings.</p>
 
-- App will now **auto update** at launch on Windows and MacOS.
+- **App will now auto update at launch on Windows and macOS.**
   <p class="caption">You can also apply pending update immediately thanks to a button showing in app header.</p>
 
-- The **brightness overlay** allow you to see brightness changes on top of all applications (like for volume on most operating systems).
+- **The new brightness overlay** allow you to see brightness changes on top of all applications (like for volume on most operating systems).
   <p class="caption">To enable it go to Interface settings. You will need to "bind" your screens to make it works.</p>
 
-# Fixes
+# Bug fixes
 
 - Fixed the app asking 2 times the monitor list to the operating system at startup, often leading to missing monitors in
   list.
