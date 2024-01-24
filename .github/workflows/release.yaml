@@ -17,7 +17,7 @@ jobs:
       - name: Install libudev-dev on Linux
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
-               sudo apt-get install libudev-dev -y
+               sudo apt-get update && sudo apt-get install libudev-dev -y
           fi
         shell: bash
 
