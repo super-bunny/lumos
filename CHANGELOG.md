@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.2.0](https://github.com/super-bunny/lumos/releases/tag/v0.2.0) (2024-01-24)
+
+
+### Features
+
+* add custom style for scrollbars in app ([8ca605d](https://github.com/super-bunny/lumos/commit/8ca605d5c67ae5aef64c51df375313895213efcb))
+* add a setting to hide monitors from monitor list ([5bfbbb8](https://github.com/super-bunny/lumos/commit/5bfbbb8d4b3f920097d3c75778daeecff1c04f6a))
+* add in app changelog ([c76ab87](https://github.com/super-bunny/lumos/commit/c76ab871e24e1cfe468ca0848da43e83edd5f544))
+* throttle brightness change ([75041f2](https://github.com/super-bunny/lumos/commit/75041f2062539c1102e67751258f97c82eb30ced))
+* throttle global shortcut handlers ([b046664](https://github.com/super-bunny/lumos/commit/b0466644f22bef18d5127554dd4620545c1eb5d2))
+* add restart action in app tray menu ([d818788](https://github.com/super-bunny/lumos/commit/d818788b968f7674d629156a98e0d3dd5eb51eca))
+* **overlay:** add fade in/out animation for overlay ([90d97fa](https://github.com/super-bunny/lumos/commit/90d97fae86881bc59d858ffc7634119a65607ea0))
+
+
+### Bug Fixes
+
+* fix missing app window icon on windows os ([926640f](https://github.com/super-bunny/lumos/commit/926640fc1e8837da9ed6c5022657ea241015d531))
+* avoid concurrent monitor listing across processes ([7482ef1](https://github.com/super-bunny/lumos/commit/7482ef14ea0a4cfc69a12c61f4ee9577d99039cd))
+* **overlay:** make overlay visible on all workspaces ([760be73](https://github.com/super-bunny/lumos/commit/760be73c72746c0e7254f2a48d4adf46356c1a01))
+* **overlay:** reduce size of brightness value ([61e3783](https://github.com/super-bunny/lumos/commit/61e3783d674345877edee449d9d8accc21cad124))
+
+
+### Dependencies
+
+* update react related npm packages ([db577de](https://github.com/super-bunny/lumos/commit/db577dec1402467da4ec5c9f50a8c601576bc130))
+* update eslint npm packages ([2c58753](https://github.com/super-bunny/lumos/commit/2c5875381cf6e08f8174fef399a67f027411ac4e))
+* update build related deps like electron forge and webpack plugins ([60a52d3](https://github.com/super-bunny/lumos/commit/60a52d399af3e044a1959f11e61ed28dbbf1a519))
+* update jsonwebtoken npm package ([a787703](https://github.com/super-bunny/lumos/commit/a78770379b36438c9262f2ff8f166514ed1ac7bb))
+* update typescript npm package ([2690fd3](https://github.com/super-bunny/lumos/commit/2690fd382761d45d99e24a96acff9d11a6c11f96))
+
 ## [0.2.0-beta.1](https://github.com/super-bunny/lumos/releases/tag/v0.2.0-beta.1) (2023-06-06)
 
 
