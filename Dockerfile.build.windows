@@ -1,4 +1,4 @@
-FROM node:18 AS builder
+FROM node:18-bullseye AS builder
 
 ARG SENTRY_AUTH_TOKEN
 ARG NODE_ENV="production"
