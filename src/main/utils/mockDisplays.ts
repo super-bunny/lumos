@@ -21,8 +21,9 @@ export function mockDisplays(): void {
         },
         {
           index: 2,
-          backend: Backends.WIN_API,
-          displayId: 'K96G7jda79KL9JIY56D5753poa',
+          backend: Backends.NV_API,
+          displayId: 'AOC',
+          capabilities: '(vcp(02 04 05 08 10 12 14(01 05 06 08 0B) 16 18 1A 60(01 03)62 6C 6E 70 C8 C9 B0 B6 D6 DF F8)prot(monitor)type(LCD)cmds(01 02 03 07 0C F3)mccs_ver(2.1)asset_eep(64)mpu_ver(001)model(I2490PXQU)mswhql(1))',
         },
         {
           index: 3,
@@ -39,7 +40,7 @@ export function mockDisplays(): void {
           index: 5,
           backend: Backends.NV_API,
           displayId: '632du689TT6YDtcnonzdoz753poa',
-          capabilities: '(prot(monitor)type(lcd)MStarcmds(01 02 03 07 0C E3 F3)vcp(02 04 05 08 10 12 14(05 08 0B 0C) 16 18 1A 52 60( 11 12 0F) AA(01 02) AC AE B2 B6 C6 C8 C9 D6(01 04 05) DC(00 02 03 05 ) DF FD)mccs_ver(2.1)mswhql(1))',
+          capabilities: '(prot(monitor)type(LCD)model(550)mccs_ver(2.0)vcp(04 05 08 10 12 14(03 04 02 07 08 0B) 16 18 1A 60(01 05 06) 87 B0(01 02) B6 C6 C8 C9 D6(01 04) DC(01 02 03 04 05 06 F0 F1 F2 F9 FA FB) DB(00 04 FD FE) DF EB(00 01 09 FD) EC(00 01 02 03 04 06 05) F2 F3(00 01 02) F6 F7(00 02 03) )mswhql(1))',
         },
       ],
     )
