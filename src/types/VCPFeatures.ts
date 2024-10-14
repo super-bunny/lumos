@@ -131,7 +131,7 @@ export enum Miscellaneous {
   AuxiliaryPowerOutput = 215,
   Degauss = 1,
   DisplayDescriptorLength = 194,
-  DisplayIdentificationDataOperation = 135,
+  DisplayIdentificationDataOperation = 120,
   DisplayTechnologyType = 182,
   EnableDisplayOfDisplayDescriptor = 196,
   FlatPanelSubPixelLayout = 178,
