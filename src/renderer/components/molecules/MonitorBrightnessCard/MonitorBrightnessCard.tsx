@@ -12,6 +12,7 @@ import { useSnackbar } from 'notistack'
 import useSettingsStore from '../../../hooks/useSettingsStore'
 import useSwr from 'swr'
 import throttle from 'lodash/throttle'
+import { Continuous } from '../../../../types/EnhancedDDCDisplay'
 
 export type Monitor = GenericDisplay
 
@@ -45,7 +46,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
 
   const { data: supportDDC, isLoading: supportDDCLoading, mutate: mutateSupportDDC } = useSwr(
     `${ monitor.info.displayId }-supportDDC`
-    , () => monitor.supportDDC(false), {
+    , () => monitor.supportDDC(), {
       revalidateOnReconnect: false,
       revalidateOnFocus: false,
       revalidateIfStale: false,
@@ -57,7 +58,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
     })
   const { data: brightness, isLoading: brightnessLoading, mutate: mutateBrightness } = useSwr(
     supportDDC === true ? `${ monitor.info.displayId }-getBrightnessPercentage` : null,
-    () => monitor.getBrightnessPercentage(false)
+    () => monitor.noCache().getBrightnessPercentage()
     , {
       revalidateOnReconnect: false,
       revalidateOnFocus: true,
@@ -67,7 +68,8 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
       onError: error => {
         console.error(`Error while getting brightness of monitor ${ monitor.getDisplayName() }:`, error)
       },
-    })
+    },
+  )
 
   const loading = brightnessLoading || supportDDCLoading || forcedLoading
 
@@ -111,9 +113,21 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
     const listener = window.lumos.ipc.on(IpcEvents.DISPLAY_UPDATE, ({
       displayId,
       vcpFeature,
+      vcpValue,
     }: IpcDisplayUpdateArgs) => {
       if (displayId === monitor.info.displayId && vcpFeature === VCPFeatures.ImageAdjustment.Luminance) {
-        refreshBrightness()
+        if (vcpValue) {
+          try {
+            const luminance = vcpValue as Continuous
+            const percentage = Math.round(luminance.currentValue * 100 / luminance.maximumValue)
+            mutateBrightness(percentage, { revalidate: false }).then()
+          } catch (error) {
+            console.error('Failed to process lumiance value from display update event:', error)
+          }
+          return
+        }
+        refreshBrightness().catch(() => {
+        }) // discard error
       }
     })
 

@@ -35,10 +35,13 @@ export default function setupIpc({
     return displayManager.list.map(display => display.info)
   })
   ipcMain.handle(IpcEvents.SUPPORT_DDC, (event, id: string) => {
-    return displayManager.getDisplayByIdOrThrow(id).supportDDC(false)
+    return displayManager.getDisplayByIdOrThrow(id).noCache().supportDDC()
   })
   ipcMain.handle(IpcEvents.GET_VCP_VALUE, (event, id: string, featureCode: number, options?: GetVcpValueOptions) => {
-    return displayManager.getDisplayByIdOrThrow(id).getVcpValue(featureCode, options)
+    const display = displayManager.getDisplayByIdOrThrow(id)
+    return options?.useCache
+      ? display.getVcpValue(featureCode)
+      : display.noCache().getVcpValue(featureCode)
   })
   ipcMain.handle(IpcEvents.SET_VCP_VALUE, (event, id: string, featureCode: number, value: number) => {
     return displayManager.getDisplayByIdOrThrow(id).setVcpValue(featureCode, value)
@@ -101,7 +104,10 @@ export default function setupIpc({
     if (browserWindow) {
       show ? OverlayWindowManager.showWindow(browserWindow) : OverlayWindowManager.hideWindow(browserWindow)
     } else {
-      console.error('IpcEvents SET_OVERLAY_WINDOWS_VISIBILITY. Could not find browser window for webContents', webContents)
+      console.error(
+        'IpcEvents SET_OVERLAY_WINDOWS_VISIBILITY. Could not find browser window for webContents',
+        webContents,
+      )
     }
   })
   ipcMain.handle(IpcEvents.FORCE_TRIGGER_AUTO_MONITORS_POWER_OFF, () => {

@@ -181,6 +181,7 @@ export default function main() {
     // Init display manager
     displayManager.client = new DdcBackendClient(settings.store.concurrentDdcRequest ? undefined : new AsyncQueue(), {
       name: 'main thread',
+      withCache: true,
     })
     displayManager.refresh().then(() => {
       if (settings?.store.monitorAliases) displayManager.setMonitorAliases(settings.store.monitorAliases)
@@ -216,7 +217,8 @@ export default function main() {
           'Content-Security-Policy': [
             `default-src 'self' 'unsafe-inline' 'unsafe-eval';
              img-src https://raw.githubusercontent.com ${ process.env.CHANGELOG_BASE_URL ?? '' };
-             connect-src 'self' https://api.github.com https://raw.githubusercontent.com http://localhost:${ httpApiPort } ${ process.env.CHANGELOG_BASE_URL ?? '' };`,
+             connect-src 'self' https://api.github.com https://raw.githubusercontent.com http://localhost:${ httpApiPort } ${ process.env.CHANGELOG_BASE_URL
+            ?? '' };`,
           ],
         },
       })
@@ -227,7 +229,12 @@ export default function main() {
       displayManager,
       sessionJwt,
       httpApiPort,
-      onRegisterGlobalShortcuts: () => registerGlobalShortcuts(settings!.store.globalShortcuts, displayManager, mainWindow!, overlayWindowManager!),
+      onRegisterGlobalShortcuts: () => registerGlobalShortcuts(
+        settings!.store.globalShortcuts,
+        displayManager,
+        mainWindow!,
+        overlayWindowManager!,
+      ),
       onOpenDevTools: () => mainWindow?.webContents.openDevTools(),
     })
     mainWindow = createMainWindow()

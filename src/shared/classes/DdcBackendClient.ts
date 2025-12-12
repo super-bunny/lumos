@@ -2,12 +2,15 @@ import BackendClient from '../../shared/classes/BackendClient'
 import EnhancedDDCDisplay from './EnhancedDDCDisplay'
 import { DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
 import AsyncQueue from './AsyncQueue'
+import BackendClientCache from './BackendClientCache'
 
 export interface Options {
   name?: string
+  // TODO: invert and enable cache by default
+  withCache?: boolean
 }
 
-// Backend client for DDC library. Keep an internal DDC display list updated at each list method call.
+// Backend client for the DDC library. Keep an internal DDC display list updated at each list method call.
 export default class DdcBackendClient extends BackendClient {
   public readonly name?: string
 
@@ -18,6 +21,15 @@ export default class DdcBackendClient extends BackendClient {
     super()
 
     if (options?.name) this.name = options.name
+    if (options?.withCache) this.cache = new BackendClientCache()
+  }
+
+  clone(): DdcBackendClient {
+    const client = new DdcBackendClient(this.asyncQueue, { name: this.name })
+    client.cache = this.cache
+    client.displayList = this.displayList
+    client.listPromise = this.listPromise
+    return client
   }
 
   protected async getDisplayById(id: string): Promise<EnhancedDDCDisplay | undefined> {
@@ -49,36 +61,61 @@ export default class DdcBackendClient extends BackendClient {
     this.displayList = await promise
     this.listPromise = undefined
     console.debug(`[DdcBackendClient: ${ this.name }] refresh() sub promise EnhancedDDCDisplay.list() done`)
+    if (this.hasCache()) this.resetCache()
   }
 
   async supportDDC(id: string): Promise<boolean> {
-    const display = await this.getDisplayByIdOrThrow(id)
-
-    if (this.asyncQueue) {
-      return this.asyncQueue.push(() => display.supportDDC())
+    const cache = this.cache?.display(id)
+    const cachedValue = cache?.['supportDDC']
+    if (cachedValue) {
+      console.debug(`[DdcBackendClient / ${ id }] Support DDC - CACHE HIT`)
+      return cachedValue
     }
+    if (cache) console.debug(`[DdcBackendClient / ${ id }] Support DDC - CACHE MISS`)
 
-    return display.supportDDC()
+    const display = await this.getDisplayByIdOrThrow(id)
+    const promise: Promise<boolean> = this.asyncQueue
+      ? this.asyncQueue.push(() => display.supportDDC())
+      : display.supportDDC()
+
+    return promise
+      .then(value => {
+        if (cache) cache['supportDDC'] = value
+        return value
+      })
   }
 
   async getVcpValue(id: string, featureCode: number): Promise<VCPValue> {
-    const display = await this.getDisplayByIdOrThrow(id)
-
-    if (this.asyncQueue) {
-      return this.asyncQueue.push(() => display.getVcpValue(featureCode))
+    const cache = this.cache?.display(id)
+    const cachedValue = cache?.[featureCode]
+    if (cachedValue) {
+      console.debug(`[DdcBackendClient / ${ id }] Get VCP feature: ${ featureCode } - CACHE HIT`)
+      return cachedValue
     }
+    if (cache) console.debug(`[DdcBackendClient / ${ id }] Get VCP feature: ${ featureCode } - CACHE MISS`)
 
-    return display.getVcpValue(featureCode)
+    const display = await this.getDisplayByIdOrThrow(id)
+    const promise: Promise<VCPValue> = this.asyncQueue
+      ? this.asyncQueue.push(() => display.getVcpValue(featureCode))
+      : display.getVcpValue(featureCode)
+
+    return promise
+      .then(value => {
+        if (cache) cache[featureCode] = value
+        return value
+      })
   }
 
   async setVcpValue(id: string, featureCode: number, value: number): Promise<void> {
+    const cache = this.cache?.display(id)
     const display = await this.getDisplayByIdOrThrow(id)
 
-    if (this.asyncQueue) {
-      return this.asyncQueue.push(() => display.setVcpValue(featureCode, value))
-    }
+    if (this.asyncQueue) await this.asyncQueue.push(() => display.setVcpValue(featureCode, value))
+    else await display.setVcpValue(featureCode, value)
 
-    return display.setVcpValue(featureCode, value)
+    if (!cache) return
+
+    this.cache?.setValue(id, featureCode, value)
   }
 
   async list(): Promise<Array<DisplayInfo>> {
