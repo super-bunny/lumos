@@ -13,6 +13,7 @@ import useSettingsStore from '../../../hooks/useSettingsStore'
 import useSwr from 'swr'
 import throttle from 'lodash/throttle'
 import { Continuous } from '../../../../types/EnhancedDDCDisplay'
+import getSwrKeyForDisplay from '../../../utils/getSwrKeyForDisplay'
 
 export type Monitor = GenericDisplay
 
@@ -45,7 +46,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   const [forcedLoading, setForcedLoading] = useState<boolean>(false)
 
   const { data: supportDDC, isLoading: supportDDCLoading, mutate: mutateSupportDDC } = useSwr(
-    `${ monitor.info.displayId }-supportDDC`
+    getSwrKeyForDisplay(monitor.info.displayId, 'supportDDC')
     , () => monitor.supportDDC(), {
       revalidateOnReconnect: false,
       revalidateOnFocus: false,
@@ -57,7 +58,7 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
       },
     })
   const { data: brightness, isLoading: brightnessLoading, mutate: mutateBrightness } = useSwr(
-    supportDDC === true ? `${ monitor.info.displayId }-getBrightnessPercentage` : null,
+    supportDDC !== true ? null : getSwrKeyForDisplay(monitor.info.displayId, 'getBrightnessPercentage'),
     () => monitor.noCache().getBrightnessPercentage()
     , {
       revalidateOnReconnect: false,
@@ -107,32 +108,6 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   }, [brightness, setBrightness])
 
   const refreshBrightness = useCallback(() => mutateBrightness(), [mutateBrightness])
-
-  // Refresh brightness on monitor update event from main process
-  useEffect(() => {
-    const listener = window.lumos.ipc.on(IpcEvents.DISPLAY_UPDATE, ({
-      displayId,
-      vcpFeature,
-      vcpValue,
-    }: IpcDisplayUpdateArgs) => {
-      if (displayId === monitor.info.displayId && vcpFeature === VCPFeatures.ImageAdjustment.Luminance) {
-        if (vcpValue) {
-          try {
-            const luminance = vcpValue as Continuous
-            const percentage = Math.round(luminance.currentValue * 100 / luminance.maximumValue)
-            mutateBrightness(percentage, { revalidate: false }).then()
-          } catch (error) {
-            console.error('Failed to process lumiance value from display update event:', error)
-          }
-          return
-        }
-        refreshBrightness().catch(() => {
-        }) // discard error
-      }
-    })
-
-    return () => window.lumos.ipc.removeListener(IpcEvents.DISPLAY_UPDATE, listener)
-  }, [monitor.info.displayId, refreshBrightness])
 
   // Register scroll event to set monitor brightness
   useEffect(() => {

@@ -1,6 +1,6 @@
 import VCPFeatures, { PowerMode } from '../../types/VCPFeatures'
 import BackendClient from './BackendClient'
-import { Continuous, DisplayInfo, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
+import { Continuous, DisplayInfo, NonContinuous, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
 
 export interface GetVcpValueOptions {
   useCache?: boolean
@@ -112,6 +112,10 @@ export default class GenericDisplay {
   async setPowerMode(powerMode: PowerMode): Promise<void> {
     console.debug(`[GENERIC DISPLAY ${ this.info.displayId }] Set VCP Power mode: ${ powerMode }`)
     return this.setVcpValue(VCPFeatures.DisplayControl.PowerMode, powerMode)
+  }
+
+  static getVcpContinuousValuePercentage(vcpValue: Continuous ): number {
+    return Math.round(vcpValue.currentValue * 100 / vcpValue.maximumValue)
   }
 
   static async list(client: BackendClient): Promise<Array<GenericDisplay>> {
