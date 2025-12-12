@@ -6,6 +6,8 @@ import VCPFeatures from '../../types/VCPFeatures'
 import OverlayWindowManager from '../classes/OverlayWindowManager'
 import throttle from 'lodash/throttle'
 
+const THROTTLE_TIMEOUT: number = 50 // ms
+
 export default function registerGlobalShortcuts(
   shortcuts: Settings['globalShortcuts'],
   displayManager: GenericDisplayManager,
@@ -106,7 +108,10 @@ export default function registerGlobalShortcuts(
     }
 
     try {
-      const success = globalShortcut.register(accelerator, throttle(callback, 300, { leading: true, trailing: false }))
+      const success = globalShortcut.register(
+        accelerator,
+        throttle(callback, THROTTLE_TIMEOUT, { leading: true, trailing: false }),
+      )
 
       if (!success) {
         console.error(`Failed to register global shortcut: "${ key }" (${ accelerator }). Keybinding already used by other applications`)
