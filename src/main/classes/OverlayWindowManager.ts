@@ -44,7 +44,7 @@ export default class OverlayWindowManager {
   }
 
   clear() {
-    this.overlays.forEach(overlayWindow => overlayWindow.browserWindow.close())
+    this.overlays.forEach(overlayWindow => overlayWindow.browserWindow.destroy())
     this.overlays = []
   }
 
