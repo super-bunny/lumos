@@ -9,7 +9,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts .",
+    "lint": "eslint src/",
     "release": "commit-and-tag-version",
     "typecheck": "tsc --noEmit",
     "prepare": "husky install"
