@@ -7,7 +7,6 @@ import { Provider } from 'react-redux'
 import * as Sentry from '@sentry/electron/renderer'
 import { sentryBaseDefaultOptions } from '../shared/utils/sentry'
 import { init as reactInit, Replay } from '@sentry/react'
-import { IpcEvents } from '../types/Ipc'
 import setupIpcEventsHandlers from './utils/setupIpcEventsHandlers'
 
 if (window.lumos.sentryEnabled) {

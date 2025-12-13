@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import ChangelogDialog from '../molecules/dialogs/ChangelogDialog'
 import packageJson from '../../../../package.json'
-import useSwr from 'swr'
 import useSettingsStore from '../../hooks/useSettingsStore'
 import { FALLBACK_LOCALE, getChangelog } from '../molecules/ChangelogViewer'
 import semver from 'semver/preload'

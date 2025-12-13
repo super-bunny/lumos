@@ -1,7 +1,6 @@
 import React from 'react'
 import SettingsType from '../../../../types/Settings'
-import { Divider, FormControlLabel, Grid, Link, Stack, Switch, SxProps } from '@mui/material'
-import InfoIcon from '../../atoms/InfoIcon'
+import { Divider, Grid, Link, Stack, Switch, SxProps } from '@mui/material'
 import SettingItem from '../SettingItem'
 import openInBrowser from '../../../utils/openInBrowser'
 

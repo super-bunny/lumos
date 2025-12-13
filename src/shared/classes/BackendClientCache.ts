@@ -1,4 +1,4 @@
-import { Continuous, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
+import { VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
 
 export type CacheDisplayData = Record<number | string, any>
 export type CacheData = Record<string, CacheDisplayData>

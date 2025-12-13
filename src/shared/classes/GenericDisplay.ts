@@ -1,6 +1,6 @@
 import VCPFeatures, { PowerMode } from '../../types/VCPFeatures'
 import BackendClient from './BackendClient'
-import { Continuous, DisplayInfo, NonContinuous, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
+import { Continuous, DisplayInfo, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
 
 export interface GetVcpValueOptions {
   useCache?: boolean
