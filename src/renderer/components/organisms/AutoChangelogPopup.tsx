@@ -31,7 +31,7 @@ export default function AutoChangelogPopup() {
   useEffect(() => {
     const lastShownVersion = localStorage.getItem(LOCAL_STORAGE_KEY)
 
-    // Prevent changelog display on the first app startup
+    // Prevent changelog display on the first app startup by saving the current version to localStorage
     if (!lastShownVersion) {
       localStorage.setItem(LOCAL_STORAGE_KEY, APP_VERSION)
       return
