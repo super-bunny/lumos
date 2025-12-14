@@ -30,20 +30,23 @@ export default function setupIpc({
     event.returnValue = app.getPath('userData')
   })
 
-  ipcMain.handle(IpcEvents.LIST_DISPLAYS, async () => {
-    await displayManager.refresh()
+  ipcMain.handle(IpcEvents.LIST_DISPLAYS, async (_, useCache?: boolean) => {
+    if (!useCache) await displayManager.refresh()
     return displayManager.list.map(display => display.info)
   })
-  ipcMain.handle(IpcEvents.SUPPORT_DDC, (event, id: string) => {
-    return displayManager.getDisplayByIdOrThrow(id).noCache().supportDDC()
+  ipcMain.handle(IpcEvents.SUPPORT_DDC, (_, id: string, useCache?: boolean) => {
+    const display = displayManager.getDisplayByIdOrThrow(id)
+    return useCache
+      ? display.supportDDC()
+      : display.noCache().supportDDC()
   })
-  ipcMain.handle(IpcEvents.GET_VCP_VALUE, (event, id: string, featureCode: number, options?: GetVcpValueOptions) => {
+  ipcMain.handle(IpcEvents.GET_VCP_VALUE, (_, id: string, featureCode: number, options?: GetVcpValueOptions) => {
     const display = displayManager.getDisplayByIdOrThrow(id)
     return options?.useCache
       ? display.getVcpValue(featureCode)
       : display.noCache().getVcpValue(featureCode)
   })
-  ipcMain.handle(IpcEvents.SET_VCP_VALUE, (event, id: string, featureCode: number, value: number) => {
+  ipcMain.handle(IpcEvents.SET_VCP_VALUE, (_, id: string, featureCode: number, value: number) => {
     return displayManager.getDisplayByIdOrThrow(id).setVcpValue(featureCode, value)
   })
 

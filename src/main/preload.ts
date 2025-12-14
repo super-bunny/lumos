@@ -34,10 +34,10 @@ export const LumosApi = {
     setVcpValue: (id: string, featureCode: number, value: number): Promise<void> => {
       return ipcRenderer.invoke(IpcEvents.SET_VCP_VALUE, id, featureCode, value)
     },
-    supportDDC: (id: string): Promise<boolean> => {
-      return ipcRenderer.invoke(IpcEvents.SUPPORT_DDC, id)
+    supportDDC: (id: string, useCache?: boolean): Promise<boolean> => {
+      return ipcRenderer.invoke(IpcEvents.SUPPORT_DDC, id, useCache)
     },
-    list: (): Promise<Array<DisplayInfo>> => ipcRenderer.invoke(IpcEvents.LIST_DISPLAYS),
+    list: (useCache?: boolean): Promise<Array<DisplayInfo>> => ipcRenderer.invoke(IpcEvents.LIST_DISPLAYS, useCache),
   },
   store: {
     getSettings: (): Promise<{ settings: SettingsType, path: string }> => ipcRenderer.invoke(IpcEvents.GET_SETTINGS),
@@ -78,7 +78,10 @@ export const LumosApi = {
   openDevTools: () => ipcRenderer.invoke(IpcEvents.OPEN_DEV_TOOLS),
   getElectronDisplays: (): Promise<Array<Electron.Display>> => ipcRenderer.invoke(IpcEvents.GET_ELECTRON_DISPLAYS),
   setWindowVisibility: (show: boolean): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_WINDOWS_VISIBILITY, show),
-  setOverlayWindowVisibility: (show: boolean): Promise<void> => ipcRenderer.invoke(IpcEvents.SET_OVERLAY_WINDOWS_VISIBILITY, show),
+  setOverlayWindowVisibility: (show: boolean): Promise<void> => ipcRenderer.invoke(
+    IpcEvents.SET_OVERLAY_WINDOWS_VISIBILITY,
+    show,
+  ),
   quitAndInstallUpdate: (): Promise<void> => ipcRenderer.invoke(IpcEvents.QUID_AND_INSTALL_UPDATE),
   ipcRenderer,
   // Node.js process.platform

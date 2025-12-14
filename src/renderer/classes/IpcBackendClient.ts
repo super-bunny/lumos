@@ -13,7 +13,7 @@ export default class IpcBackendClient extends BackendClient {
 
   // This method never uses cache
   async supportDDC(id: string): Promise<boolean> {
-    return window.lumos.display.supportDDC(id)
+    return window.lumos.display.supportDDC(id, this.hasCache())
   }
 
   async getVcpValue(id: string, featureCode: number): Promise<VCPValue> {
@@ -25,6 +25,6 @@ export default class IpcBackendClient extends BackendClient {
   }
 
   async list(): Promise<Array<DisplayInfo>> {
-    return window.lumos.display.list()
+    return window.lumos.display.list(this.hasCache())
   }
 }
