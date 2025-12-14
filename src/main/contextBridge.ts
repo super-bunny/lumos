@@ -4,7 +4,6 @@ import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import setupAutoStartup from './utils/setupAutoStartup'
-import { GetVcpValueOptions } from '../shared/classes/GenericDisplay'
 import autoShutdownMonitors from './utils/autoShutdownMonitors'
 import OverlayWindowManager from './classes/OverlayWindowManager'
 import AutoUpdater from './classes/AutoUpdater'
@@ -40,9 +39,9 @@ export default function setupIpc({
       ? display.supportDDC()
       : display.noCache().supportDDC()
   })
-  ipcMain.handle(IpcEvents.GET_VCP_VALUE, (_, id: string, featureCode: number, options?: GetVcpValueOptions) => {
+  ipcMain.handle(IpcEvents.GET_VCP_VALUE, (_, id: string, featureCode: number, useCache?: boolean) => {
     const display = displayManager.getDisplayByIdOrThrow(id)
-    return options?.useCache
+    return useCache
       ? display.getVcpValue(featureCode)
       : display.noCache().getVcpValue(featureCode)
   })

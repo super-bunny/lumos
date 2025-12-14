@@ -3,7 +3,6 @@ import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore from './classes/SettingsStore'
 import { envVarAllowSentry } from '../shared/utils/sentry'
-import type { GetVcpValueOptions } from '../shared/classes/GenericDisplay'
 import { DisplayInfo, VCPValue } from '../types/EnhancedDDCDisplay'
 
 export type IpcWrappedListener = (event: Electron.IpcRendererEvent, ...args: Array<any>) => void
@@ -28,8 +27,8 @@ const validListenableIpcChannels = [
 
 export const LumosApi = {
   display: {
-    getVcpValue: (id: string, featureCode: number, options?: GetVcpValueOptions): Promise<VCPValue> => {
-      return ipcRenderer.invoke(IpcEvents.GET_VCP_VALUE, id, featureCode, options)
+    getVcpValue: (id: string, featureCode: number, useCache?: boolean): Promise<VCPValue> => {
+      return ipcRenderer.invoke(IpcEvents.GET_VCP_VALUE, id, featureCode, useCache)
     },
     setVcpValue: (id: string, featureCode: number, value: number): Promise<void> => {
       return ipcRenderer.invoke(IpcEvents.SET_VCP_VALUE, id, featureCode, value)

@@ -2,10 +2,6 @@ import VCPFeatures, { PowerMode } from '../../types/VCPFeatures'
 import BackendClient from './BackendClient'
 import { Continuous, DisplayInfo, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
 
-export interface GetVcpValueOptions {
-  useCache?: boolean
-}
-
 export default class GenericDisplay {
   alias: string | null = null
 
@@ -114,7 +110,7 @@ export default class GenericDisplay {
     return this.setVcpValue(VCPFeatures.DisplayControl.PowerMode, powerMode)
   }
 
-  static getVcpContinuousValuePercentage(vcpValue: Continuous ): number {
+  static getVcpContinuousValuePercentage(vcpValue: Continuous): number {
     return Math.round(vcpValue.currentValue * 100 / vcpValue.maximumValue)
   }
 
