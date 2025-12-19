@@ -6,6 +6,8 @@ import VCPFeatures from '../../types/VCPFeatures'
 import OverlayWindowManager from '../classes/OverlayWindowManager'
 import throttle from 'lodash/throttle'
 
+const THROTTLE_TIMEOUT: number = 50 // ms
+
 export default function registerGlobalShortcuts(
   shortcuts: Settings['globalShortcuts'],
   displayManager: GenericDisplayManager,
@@ -18,7 +20,7 @@ export default function registerGlobalShortcuts(
         // TODO: ignore win API displays if enabled in settings
         displayManager.list.map(async (display) => {
           if (!await display.supportDDC()) return
-          const brightnessPercentage = await display.getBrightnessPercentage(true)
+          const brightnessPercentage = await display.getBrightnessPercentage()
           return display.setBrightnessPercentage(brightnessPercentage - 5)
             .then(vcpValue => {
               sendIpcDisplayUpdate([browserWindow, ...overlayWindowManager.browserWindows], {
@@ -35,7 +37,7 @@ export default function registerGlobalShortcuts(
         // TODO: ignore win API displays if enabled in settings
         displayManager.list.map(async (display) => {
           if (!await display.supportDDC()) return
-          const brightnessPercentage = await display.getBrightnessPercentage(true)
+          const brightnessPercentage = await display.getBrightnessPercentage()
           return display.setBrightnessPercentage(brightnessPercentage + 5)
             .then(vcpValue => {
               sendIpcDisplayUpdate([browserWindow, ...overlayWindowManager.browserWindows], {
@@ -51,7 +53,7 @@ export default function registerGlobalShortcuts(
 
       if (!display || !await display.supportDDC()) return
 
-      const brightnessPercentage = await display.getBrightnessPercentage(true)
+      const brightnessPercentage = await display.getBrightnessPercentage()
       const vcpValue = await display.setBrightnessPercentage(brightnessPercentage - 5)
 
       sendIpcDisplayUpdate([browserWindow, ...overlayWindowManager.browserWindows], {
@@ -65,7 +67,7 @@ export default function registerGlobalShortcuts(
 
       if (!display || !await display.supportDDC()) return
 
-      const brightnessPercentage = await display.getBrightnessPercentage(true)
+      const brightnessPercentage = await display.getBrightnessPercentage()
       const vcpValue = await display.setBrightnessPercentage(brightnessPercentage + 5)
 
       sendIpcDisplayUpdate([browserWindow, ...overlayWindowManager.browserWindows], {
@@ -96,7 +98,8 @@ export default function registerGlobalShortcuts(
             .filter(reason => reason)
 
           if (failReasons.length) {
-            console.error(`Error during execution of global shortcut handler: "${ key }" (${ accelerator }). Errors: ${ failReasons.join('; ') }`)
+            console.error(`Error during execution of global shortcut handler: "${ key }" (${ accelerator }). Errors: ${ failReasons.join(
+              '; ') }`)
           }
         })
         .catch(error => {
@@ -105,7 +108,10 @@ export default function registerGlobalShortcuts(
     }
 
     try {
-      const success = globalShortcut.register(accelerator, throttle(callback, 300, { leading: true, trailing: false }))
+      const success = globalShortcut.register(
+        accelerator,
+        throttle(callback, THROTTLE_TIMEOUT, { leading: true, trailing: false }),
+      )
 
       if (!success) {
         console.error(`Failed to register global shortcut: "${ key }" (${ accelerator }). Keybinding already used by other applications`)

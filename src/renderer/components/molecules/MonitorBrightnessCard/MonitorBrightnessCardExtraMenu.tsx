@@ -14,6 +14,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import EditIcon from '@mui/icons-material/Edit'
 import MonitorAliasDialog from '../dialogs/MonitorAliasDialog'
 import BetaTag from '../../atoms/BetaTag'
+import getSwrKeyForDisplay from '../../../utils/getSwrKeyForDisplay'
 
 export interface Props {
   monitor: Monitor
@@ -30,13 +31,14 @@ export default function MonitorBrightnessCardExtraMenu({ monitor, className, sty
   const developerMode = settings?.developerMode
 
   const { data: supportDDC } = useSwr(
-    `${ monitor.info.displayId }-supportDDC`,
-    () => monitor.supportDDC(false)
+    getSwrKeyForDisplay(monitor.info.displayId, 'supportDDC'),
+    () => monitor.supportDDC()
     , {
       revalidateOnReconnect: false,
       revalidateOnFocus: false,
       revalidateIfStale: false,
-    })
+    },
+  )
   const { data: vcpVersion } = useSwr([
       supportDDC === true ? `${ monitor.info.displayId }-getVcpVersion` : null,
     ], () => monitor.getVcpVersion()

@@ -4,14 +4,12 @@ import Center from '../../atoms/Center'
 import Loader from '../../atoms/Loader'
 import GenericDisplay from '../../../../shared/classes/GenericDisplay'
 import RefreshIcon from '@mui/icons-material/Refresh'
-import { IpcEvents } from '../../../../types/Ipc'
-import type { IpcDisplayUpdateArgs } from '../../../../main/utils/ipc'
-import VCPFeatures from '../../../../types/VCPFeatures'
 import MonitorBrightnessCardExtraMenu from './MonitorBrightnessCardExtraMenu'
 import { useSnackbar } from 'notistack'
 import useSettingsStore from '../../../hooks/useSettingsStore'
 import useSwr from 'swr'
 import throttle from 'lodash/throttle'
+import getSwrKeyForDisplay from '../../../utils/getSwrKeyForDisplay'
 
 export type Monitor = GenericDisplay
 
@@ -44,8 +42,8 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   const [forcedLoading, setForcedLoading] = useState<boolean>(false)
 
   const { data: supportDDC, isLoading: supportDDCLoading, mutate: mutateSupportDDC } = useSwr(
-    `${ monitor.info.displayId }-supportDDC`
-    , () => monitor.supportDDC(false), {
+    getSwrKeyForDisplay(monitor.info.displayId, 'supportDDC')
+    , () => monitor.supportDDC(), {
       revalidateOnReconnect: false,
       revalidateOnFocus: false,
       revalidateIfStale: false,
@@ -56,8 +54,8 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
       },
     })
   const { data: brightness, isLoading: brightnessLoading, mutate: mutateBrightness } = useSwr(
-    supportDDC === true ? `${ monitor.info.displayId }-getBrightnessPercentage` : null,
-    () => monitor.getBrightnessPercentage(false)
+    supportDDC !== true ? null : getSwrKeyForDisplay(monitor.info.displayId, 'getBrightnessPercentage'),
+    () => monitor.noCache().getBrightnessPercentage()
     , {
       revalidateOnReconnect: false,
       revalidateOnFocus: true,
@@ -67,7 +65,8 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
       onError: error => {
         console.error(`Error while getting brightness of monitor ${ monitor.getDisplayName() }:`, error)
       },
-    })
+    },
+  )
 
   const loading = brightnessLoading || supportDDCLoading || forcedLoading
 
@@ -105,20 +104,6 @@ export default function MonitorBrightnessCard({ monitor }: Props) {
   }, [brightness, setBrightness])
 
   const refreshBrightness = useCallback(() => mutateBrightness(), [mutateBrightness])
-
-  // Refresh brightness on monitor update event from main process
-  useEffect(() => {
-    const listener = window.lumos.ipc.on(IpcEvents.DISPLAY_UPDATE, ({
-      displayId,
-      vcpFeature,
-    }: IpcDisplayUpdateArgs) => {
-      if (displayId === monitor.info.displayId && vcpFeature === VCPFeatures.ImageAdjustment.Luminance) {
-        refreshBrightness()
-      }
-    })
-
-    return () => window.lumos.ipc.removeListener(IpcEvents.DISPLAY_UPDATE, listener)
-  }, [monitor.info.displayId, refreshBrightness])
 
   // Register scroll event to set monitor brightness
   useEffect(() => {

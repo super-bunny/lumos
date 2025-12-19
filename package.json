@@ -1,7 +1,7 @@
 {
   "name": "lumos",
   "productName": "lumos",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Control your monitors brightness",
   "main": ".webpack/main",
   "scripts": {
@@ -9,7 +9,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts .",
+    "lint": "eslint src/",
     "release": "commit-and-tag-version",
     "typecheck": "tsc --noEmit",
     "prepare": "husky install"

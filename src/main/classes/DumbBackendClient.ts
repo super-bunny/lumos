@@ -2,6 +2,10 @@ import BackendClient from '../../shared/classes/BackendClient'
 import { DisplayInfo, VCPValue } from '../../types/EnhancedDDCDisplay'
 
 export default class DumbBackendClient extends BackendClient {
+  clone(): DumbBackendClient {
+    return new DumbBackendClient()
+  }
+
   getVcpValue(id: string, featureCode: number): Promise<VCPValue> {
     throw new Error('DumbBackendClient must not be used')
   }

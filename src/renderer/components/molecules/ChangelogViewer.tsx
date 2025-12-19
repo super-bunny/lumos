@@ -16,8 +16,10 @@ interface Props {
   locale?: string
 }
 
-const BASE_URL: string = window.lumos.env.CHANGELOG_BASE_URL || 'https://raw.githubusercontent.com/super-bunny/lumos/dev/changelogs'
-const SOURCE_BASE_URL: string | undefined = window.lumos.env.CHANGELOG_BASE_URL || 'https://github.com/super-bunny/lumos/tree/dev/changelogs'
+const BASE_URL: string = window.lumos.env.CHANGELOG_BASE_URL
+  || 'https://raw.githubusercontent.com/super-bunny/lumos/dev/changelogs'
+const SOURCE_BASE_URL: string | undefined = window.lumos.env.CHANGELOG_BASE_URL
+  || 'https://github.com/super-bunny/lumos/tree/dev/changelogs'
 export const FALLBACK_LOCALE = 'en_us'
 
 async function requestChangelog(version: string, locale: string): Promise<string | null> {
@@ -82,9 +84,7 @@ export async function getChangelog(appVersion: string, updateChannel: UpdateChan
     // .sort((a, b) => semver.valid(a) && semver.valid(b) ? semver.compare(b, a) : 0),
   )
 
-  for (const key in versionToTry) {
-    const version = versionToTry[key]
-
+  for (const version of versionToTry) {
     const content = await requestChangelog(version, locale)
     if (content) return {
       version,
@@ -115,7 +115,7 @@ export default function ChangelogViewer({ version, locale = FALLBACK_LOCALE }: P
     error,
   } = useSWRImmutable(
     // Waiting for update channel from settings
-    updateChannel ? ['getChangelog', version, updateChannel, locale] : null,
+    updateChannel ? [getChangelog, version, updateChannel, locale] : null,
     () => getChangelog(version, updateChannel!, locale),
     { errorRetryCount: 1 },
   )

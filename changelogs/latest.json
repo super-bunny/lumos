@@ -1,8 +1,8 @@
 {
   "$schema": "../schemas/changelogManifest.json",
   "v1": {
-    "stable": "0.1.1",
-    "alpha": "0.2.0-beta.1",
-    "beta": "0.2.0-beta.1"
+    "stable": "0.3.0",
+    "alpha": "0.3.0",
+    "beta": "0.3.0"
   }
 }

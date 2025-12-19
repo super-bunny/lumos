@@ -7,16 +7,21 @@ export interface Options {
   port?: number
 }
 
-export default class HttpBackendClient implements BackendClient {
+export default class HttpBackendClient extends BackendClient {
   readonly axios: AxiosInstance
 
-  constructor(public jwt: string, options?: Options) {
+  constructor(public jwt: string, public readonly options?: Options) {
+    super()
     this.axios = axios.create({
       baseURL: `http://${ options?.host ?? 'localhost' }:${ options?.port ?? 8787 }/displays`,
       headers: {
         'Authorization': `Bearer ${ jwt }`,
       },
     })
+  }
+
+  clone(): HttpBackendClient {
+    return new HttpBackendClient(this.jwt, this.options)
   }
 
   async supportDDC(id: string): Promise<boolean> {

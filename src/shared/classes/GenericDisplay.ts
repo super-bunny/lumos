@@ -2,74 +2,40 @@ import VCPFeatures, { PowerMode } from '../../types/VCPFeatures'
 import BackendClient from './BackendClient'
 import { Continuous, DisplayInfo, VCPValue, VcpValueType } from '../../types/EnhancedDDCDisplay'
 
-export interface GetVcpValueOptions {
-  useCache?: boolean
-}
-
 export default class GenericDisplay {
-  cache: Record<number | string, any> = {}
-
   alias: string | null = null
 
   constructor(public client: BackendClient, public info: DisplayInfo) {
   }
 
-  clearCache(): void {
-    this.cache = {}
+  /**
+   * Return a new instance with a cloned {@link client} without cache. If no cache, return itself
+   */
+  noCache(): GenericDisplay {
+    // if the client does not have cache, return itself
+    if (!this.client.cache) return this
+
+    return new GenericDisplay(this.client.clone().destroyCache(), this.info)
   }
 
   getDisplayName(): string {
     return this.alias ?? this.info.modelName ?? this.info.displayId
   }
 
-  async supportDDC(useCache: boolean = true): Promise<boolean> {
-    const cachedValue = this.cache['supportDDC']
-
-    if (useCache && cachedValue) {
-      console.debug(`[GENERIC DISPLAY ${ this.info.displayId }] Support DDC - CACHE HIT`)
-      return cachedValue
-    }
-
-    const supportDDCPromise = this.client.supportDDC(this.info.displayId)
-
-    this.cache['supportDDC'] = supportDDCPromise
-
-    return supportDDCPromise
+  async supportDDC(): Promise<boolean> {
+    return this.client.supportDDC(this.info.displayId)
   }
 
-  async getVcpValue(featureCode: number, options?: GetVcpValueOptions): Promise<VCPValue> {
-    const { useCache = false } = options ?? {}
-
-    const cachedValue = this.cache[featureCode]
-
-    if (useCache && cachedValue) {
-      return cachedValue as VCPValue
-    }
-
-    const value = await this.client.getVcpValue(this.info.displayId, featureCode)
-
-    this.cache[featureCode] = value
-
-    return value
+  async getVcpValue(featureCode: number): Promise<VCPValue> {
+    return await this.client.getVcpValue(this.info.displayId, featureCode)
   }
 
   async setVcpValue(featureCode: number, value: number): Promise<void> {
     return this.client.setVcpValue(this.info.displayId, featureCode, value)
   }
 
-  async getVcpValueFromCache(featureCode: number, useCache: boolean = true): Promise<VCPValue> {
-    const cachedValue = this.cache[featureCode]
-
-    if (useCache && cachedValue) {
-      console.debug(`[GENERIC DISPLAY ${ this.info.displayId }] Get VCP feature: ${ featureCode } - CACHE HIT`)
-      return cachedValue
-    }
-
-    const value = await this.getVcpValue(featureCode)
-
-    this.cache[featureCode] = value
-
-    return value
+  async getVcpValueFromCache(featureCode: number): Promise<VCPValue> {
+    return this.getVcpValue(featureCode)
   }
 
   async getVcpVersion() {
@@ -80,17 +46,17 @@ export default class GenericDisplay {
     }
 
     return {
-      version: value.currentValue >> 8, // High order byte of value is the version
-      revision: value.currentValue & 0xFF, // Low order byte of value is the revision
+      version: value.currentValue >> 8, // High-order byte of value is the version
+      revision: value.currentValue & 0xFF, // Low-order byte of value is the revision
       rawValue: value.currentValue,
     }
   }
 
   async getLuminance(useCache?: boolean): Promise<Continuous> {
-    const value = await this.getVcpValueFromCache(VCPFeatures.ImageAdjustment.Luminance, useCache)
+    const value = await this.getVcpValueFromCache(VCPFeatures.ImageAdjustment.Luminance)
 
     if (value.type !== VcpValueType.Continuous) {
-      throw new Error('VCP Luminance (brightness) value type not supported')
+      throw new Error('VCP Luminance (brightness) value type is not supported')
     }
 
     return value
@@ -101,8 +67,8 @@ export default class GenericDisplay {
     return this.setVcpValue(VCPFeatures.ImageAdjustment.Luminance, value)
   }
 
-  async getBrightnessPercentage(useCache?: boolean): Promise<number> {
-    const { currentValue, maximumValue } = await this.getLuminance(useCache)
+  async getBrightnessPercentage(): Promise<number> {
+    const { currentValue, maximumValue } = await this.getLuminance()
 
     return Math.round(currentValue * 100 / maximumValue)
   }
@@ -111,6 +77,18 @@ export default class GenericDisplay {
     const { type, maximumValue } = await this.getLuminance(true)
     const rangedValue = Math.min(Math.max(value, 0), 100)
     const brightnessValue = Math.round(rangedValue * maximumValue / 100)
+
+    await this.setLuminance(brightnessValue)
+
+    return { type, maximumValue, currentValue: brightnessValue }
+  }
+
+  async setRelativeBrightnessPercentage(relativeValue: number, useCache: boolean = true): Promise<Continuous> {
+    const { type, maximumValue, currentValue } = await this.getLuminance(useCache)
+    const currentPercentage = Math.round(currentValue * 100 / maximumValue)
+    const rangedRelativePercentage = Math.min(Math.max(relativeValue, -100), 100)
+    const newPercentage = currentPercentage + rangedRelativePercentage
+    const brightnessValue = Math.round(newPercentage * maximumValue / 100)
 
     await this.setLuminance(brightnessValue)
 
@@ -130,6 +108,10 @@ export default class GenericDisplay {
   async setPowerMode(powerMode: PowerMode): Promise<void> {
     console.debug(`[GENERIC DISPLAY ${ this.info.displayId }] Set VCP Power mode: ${ powerMode }`)
     return this.setVcpValue(VCPFeatures.DisplayControl.PowerMode, powerMode)
+  }
+
+  static getVcpContinuousValuePercentage(vcpValue: Continuous): number {
+    return Math.round(vcpValue.currentValue * 100 / vcpValue.maximumValue)
   }
 
   static async list(client: BackendClient): Promise<Array<GenericDisplay>> {

@@ -1,5 +1,5 @@
 import UpdateServer from './UpdateServer/UpdateServer'
-import { app, autoUpdater, dialog } from 'electron'
+import { app, autoUpdater } from 'electron'
 import WithRequired from '../../types/WithRequired'
 
 export interface Options {

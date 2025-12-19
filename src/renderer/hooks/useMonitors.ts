@@ -9,7 +9,7 @@ export default function useMonitors() {
   const { settingsStore } = useSettingsStore()
   const { ignoreWinApi, monitorAliases } = settingsStore?.settings ?? {}
 
-  const swrResponse = useSwr(settingsStore ? 'monitors' : null, () => GenericDisplay.list(new IpcBackendClient()), {
+  const swrResponse = useSwr(settingsStore ? 'monitors' : null, () => GenericDisplay.list(new IpcBackendClient(false)), {
     revalidateOnReconnect: false,
     revalidateOnFocus: false,
     revalidateIfStale: false,

@@ -3,6 +3,7 @@ import BackendClient from '../../shared/classes/BackendClient'
 import { MonitorAliases } from '../../types/Settings'
 
 export default class GenericDisplayManager {
+  // TODO: make client readonly. Imply changes in index file
   constructor(public client: BackendClient, public list: Array<GenericDisplay> = []) {
   }
 
@@ -26,5 +27,11 @@ export default class GenericDisplayManager {
 
   async refresh(): Promise<void> {
     this.list = await GenericDisplay.list(this.client)
+  }
+
+  static async create(client: BackendClient): Promise<GenericDisplayManager> {
+    const manager = new GenericDisplayManager(client)
+    await manager.refresh()
+    return manager
   }
 }

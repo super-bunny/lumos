@@ -4,7 +4,6 @@ import SettingsType from '../types/Settings'
 import { IpcEvents } from '../types/Ipc'
 import SettingsStore, { defaultSettings } from './classes/SettingsStore'
 import setupAutoStartup from './utils/setupAutoStartup'
-import { GetVcpValueOptions } from '../shared/classes/GenericDisplay'
 import autoShutdownMonitors from './utils/autoShutdownMonitors'
 import OverlayWindowManager from './classes/OverlayWindowManager'
 import AutoUpdater from './classes/AutoUpdater'
@@ -30,17 +29,23 @@ export default function setupIpc({
     event.returnValue = app.getPath('userData')
   })
 
-  ipcMain.handle(IpcEvents.LIST_DISPLAYS, async () => {
-    await displayManager.refresh()
+  ipcMain.handle(IpcEvents.LIST_DISPLAYS, async (_, useCache?: boolean) => {
+    if (!useCache) await displayManager.refresh()
     return displayManager.list.map(display => display.info)
   })
-  ipcMain.handle(IpcEvents.SUPPORT_DDC, (event, id: string) => {
-    return displayManager.getDisplayByIdOrThrow(id).supportDDC(false)
+  ipcMain.handle(IpcEvents.SUPPORT_DDC, (_, id: string, useCache?: boolean) => {
+    const display = displayManager.getDisplayByIdOrThrow(id)
+    return useCache
+      ? display.supportDDC()
+      : display.noCache().supportDDC()
   })
-  ipcMain.handle(IpcEvents.GET_VCP_VALUE, (event, id: string, featureCode: number, options?: GetVcpValueOptions) => {
-    return displayManager.getDisplayByIdOrThrow(id).getVcpValue(featureCode, options)
+  ipcMain.handle(IpcEvents.GET_VCP_VALUE, (_, id: string, featureCode: number, useCache?: boolean) => {
+    const display = displayManager.getDisplayByIdOrThrow(id)
+    return useCache
+      ? display.getVcpValue(featureCode)
+      : display.noCache().getVcpValue(featureCode)
   })
-  ipcMain.handle(IpcEvents.SET_VCP_VALUE, (event, id: string, featureCode: number, value: number) => {
+  ipcMain.handle(IpcEvents.SET_VCP_VALUE, (_, id: string, featureCode: number, value: number) => {
     return displayManager.getDisplayByIdOrThrow(id).setVcpValue(featureCode, value)
   })
 
@@ -101,7 +106,10 @@ export default function setupIpc({
     if (browserWindow) {
       show ? OverlayWindowManager.showWindow(browserWindow) : OverlayWindowManager.hideWindow(browserWindow)
     } else {
-      console.error('IpcEvents SET_OVERLAY_WINDOWS_VISIBILITY. Could not find browser window for webContents', webContents)
+      console.error(
+        'IpcEvents SET_OVERLAY_WINDOWS_VISIBILITY. Could not find browser window for webContents',
+        webContents,
+      )
     }
   })
   ipcMain.handle(IpcEvents.FORCE_TRIGGER_AUTO_MONITORS_POWER_OFF, () => {

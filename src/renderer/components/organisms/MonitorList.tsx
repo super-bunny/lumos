@@ -69,7 +69,7 @@ export default function MonitorList({ sx }: Props) {
             { revalidate: false },
           ).then(() => refreshMonitors()) }
           variant={ 'text' }
-        >{ error ? 'Retry' : 'Refresh' }</Button> }
+        >{ error ? 'Retry' : 'Reload monitors' }</Button> }
     </Stack>
   )
 }

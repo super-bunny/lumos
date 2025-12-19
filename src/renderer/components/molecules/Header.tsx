@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, IconButton, Stack, Toolbar, Tooltip, Typography } from '@mui/material'
+import { AppBar, IconButton, Stack, Toolbar, Tooltip } from '@mui/material'
 import HeaderExtraMenu from './HeaderExtraMenu'
 import { Home, Settings } from '@mui/icons-material'
 import { useLocation, useNavigate } from 'react-router-dom'

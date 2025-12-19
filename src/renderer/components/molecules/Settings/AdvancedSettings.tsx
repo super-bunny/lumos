@@ -1,7 +1,6 @@
 import React from 'react'
 import SettingsType from '../../../../types/Settings'
 import { Divider, Grid, Stack, Switch, SxProps } from '@mui/material'
-import { useSnackbar } from 'notistack'
 import SettingItem from '../SettingItem'
 import MonitorSelect from '../../atoms/MonitorSelect'
 
@@ -12,8 +11,6 @@ export interface Props {
 }
 
 export default function AdvancedSettings({ settings, onChange, sx }: Props) {
-  const { enqueueSnackbar } = useSnackbar()
-
   return (
     <Grid container gap={ 2 } sx={ sx }>
       <Grid item xs={ 12 }>
