@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.3.0](https://github.com/super-bunny/lumos/releases/tag/v0.3.0) (2025-12-19)
+
+
+### Features
+
+* reduce global shortcut input throttle ([73b0b69](https://github.com/super-bunny/lumos/commit/73b0b69b0e33368a2eadeaf1fb4458905f196ff1))
+
+
+### Bug Fixes
+
+* prevent changelog popup opening of first app startup ([835a1be](https://github.com/super-bunny/lumos/commit/835a1be3fd7289395a46fb642ce9437f6938e360))
+* fix loosed brightness values sync while on settings pages ([6c7e56d](https://github.com/super-bunny/lumos/commit/6c7e56d3938d0f0dc6932409b7a26c478d23b1a9))
+* sync brightness value of app and global shortcuts ([54e745b](https://github.com/super-bunny/lumos/commit/54e745bd13de5709ee8010926d6aa860f0b552a8))
+
 ## [0.2.0](https://github.com/super-bunny/lumos/releases/tag/v0.2.0) (2024-01-24)
 
 
