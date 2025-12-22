@@ -2,7 +2,9 @@ name: Build binaries for Linux/Windows/macOS and create GitHub release
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - 'master'
+      - 'ci/debug/release'
 
 jobs:
   build_and_release:
@@ -10,16 +12,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 24.x ]
+        node-version: [ 18.x ]
         os: [ ubuntu-latest, macos-latest, windows-latest ]
 
     steps:
       - name: Install libudev-dev on Linux
+        shell: bash
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
                sudo apt-get update && sudo apt-get install libudev-dev -y
           fi
-        shell: bash
 
       - name: Set git to use LF
         run: |
@@ -44,7 +46,13 @@ jobs:
         run: yarn install --network-timeout 100000
 
       - name: Build binaries (will create GitHub release)
-        run: yarn run publish
+        shell: bash
+        run: |
+          if [ ${{ github.ref }} = "refs/heads/master" ]; then
+            yarn run publish
+          else
+            yarn run publish --dry-run
+          fi
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
