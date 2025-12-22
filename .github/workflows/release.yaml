@@ -17,11 +17,11 @@ jobs:
 
     steps:
       - name: Install libudev-dev on Linux
+        shell: bash
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
                sudo apt-get update && sudo apt-get install libudev-dev -y
           fi
-        shell: bash
 
       - name: Set git to use LF
         run: |
@@ -46,6 +46,7 @@ jobs:
         run: yarn install --network-timeout 100000
 
       - name: Build binaries (will create GitHub release)
+        shell: bash
         run: |
           if [ ${{ github.ref }} = "refs/heads/master" ]; then
             yarn run publish
